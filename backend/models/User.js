@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       min: 6,
+    },
+    displayName: {
+      type: String,
+      default: '',
     },
     profilePicture: {
       type: String,
@@ -30,19 +34,15 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
     followers: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
     },
-    followee: {
-      type: Number,
-      default: 0,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
+    followings: {
+      type: Array,
+      default: [],
     },
   },
   { timestamps: true }
 )
 
-model.export = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('User', UserSchema)
