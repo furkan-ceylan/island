@@ -1,13 +1,14 @@
 :root {
   --light: #ffedea;
-  --lightest: #fffaf9;
+  --lightest: #f8eeec;
   --white: #ffffff;
   --red: #fe7b77;
   --purple: #7e74f8;
   --orange: #fea94f;
+  --pink: #d38d8c;
   --green: #7bc133;
   --blue: #6691fa;
-  --txt-dark: #1b1b34;
+  --txt-dark: #0c0c18;
   --txt-darkest: #525060;
   --txt-light: #a4a2ab;
 }
