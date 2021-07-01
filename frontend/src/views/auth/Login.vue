@@ -32,17 +32,9 @@ export default { name: 'Login' }
 </script>
 
 <style lang="scss" scoped>
-mark {
-  background: var(--color-accent);
-  color: var(--color-text);
-  font-weight: bold;
-  padding: 0 0.2em;
-}
-
 .card {
   background: var(--white);
   padding: calc(4 * var(--size-bezel));
-  margin-top: calc(4 * var(--size-bezel));
   border-radius: var(--size-radius);
   border: 3px solid var(--color-shadow, currentColor);
   box-shadow: 0.5rem 0.5rem 0 var(--color-shadow, currentColor);
