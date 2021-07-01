@@ -60,12 +60,17 @@ export default {
 .left-sidebar {
   background-color: white;
   border-radius: 2rem;
-  position: sticky;
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: 16%;
   height: 500px;
   margin-left: 1rem;
+  margin-top: 5rem;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
 }
 
 .left-sidebar__menu {
