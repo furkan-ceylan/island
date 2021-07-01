@@ -12,7 +12,7 @@
             <input type="text" placeholder="Search" />
             <i class="material-icons">search</i>
           </div>
-          <button class="btn">Add a Post</button>
+          <button class="btn btn-add">Add a Post</button>
         </div>
       </div>
       <div class="header__user">
@@ -37,6 +37,11 @@ export default {}
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1.5rem;
+  position: fixed;
+  z-index: 9999;
+  width: 95%;
+  height: 10%;
+  background-color: var(--lightest);
 }
 
 .header__left {
@@ -66,6 +71,7 @@ export default {}
 .header__main-text {
   font-size: 1.3rem;
   font-weight: 700;
+  margin-left: 2.3rem;
 }
 
 .header__main-right {
@@ -117,5 +123,17 @@ export default {}
   width: 40px;
   height: 40px;
   border-radius: 100%;
+}
+
+.btn-add {
+  transform: translate(0, 3px);
+  transition: 0.4s;
+}
+
+.btn-add:hover {
+  background-color: #e64e49;
+  transition: 0.4s;
+  box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
+  transform: translate(0, -3px);
 }
 </style>
