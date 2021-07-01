@@ -3,7 +3,9 @@
     <div class="home__left-sidebar">
       <LeftSidebar />
     </div>
-    <div class="home__container"></div>
+    <div class="home__container">
+      <Timeline />
+    </div>
     <div class="home__right-sidebar">
       <RightSidebar />
     </div>
@@ -13,22 +15,22 @@
 <script>
 import LeftSidebar from '@/components/LeftSidebar'
 import RightSidebar from '@/components/RightSidebar'
+import Timeline from '@/components/Timeline'
 
 export default {
   name: 'Home',
-  components: { LeftSidebar, RightSidebar },
+  components: { LeftSidebar, RightSidebar, Timeline },
 }
 </script>
 
 <style scoped>
 .home {
   display: grid;
-  grid-template-columns: 3fr 10fr 3fr;
+  grid-template-columns: 3fr 10fr 4fr;
   grid-gap: 3.3rem;
 }
 
 .home__container {
-  background-color: white;
   border-radius: 2rem;
   position: sticky;
   display: flex;
