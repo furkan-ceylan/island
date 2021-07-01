@@ -1,13 +1,16 @@
 <template>
   <div class="home">
-    <div class="home__left-sidebar">
-      <LeftSidebar />
-    </div>
-    <div class="home__container">
-      <Timeline />
-    </div>
-    <div class="home__right-sidebar">
-      <RightSidebar />
+    <TheHeader />
+    <div class="home__content">
+      <div class="home__left-sidebar">
+        <LeftSidebar />
+      </div>
+      <div class="home__container">
+        <Timeline />
+      </div>
+      <div class="home__right-sidebar">
+        <RightSidebar />
+      </div>
     </div>
   </div>
 </template>
@@ -16,15 +19,16 @@
 import LeftSidebar from '@/components/LeftSidebar'
 import RightSidebar from '@/components/RightSidebar'
 import Timeline from '@/components/Timeline'
+import TheHeader from '@/components/TheHeader'
 
 export default {
   name: 'Home',
-  components: { LeftSidebar, RightSidebar, Timeline },
+  components: { LeftSidebar, RightSidebar, Timeline, TheHeader },
 }
 </script>
 
 <style scoped>
-.home {
+.home__content {
   display: grid;
   grid-template-columns: 3fr 10fr 4fr;
   grid-gap: 3.3rem;

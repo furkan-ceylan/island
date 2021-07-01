@@ -114,7 +114,7 @@ export default {}
 }
 
 .header__user-username {
-  font-weight: 500;
+  font-weight: bold;
   font-size: 0.9em;
   margin-right: 0.5em;
 }
