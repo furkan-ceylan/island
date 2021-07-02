@@ -1,16 +1,13 @@
 <template>
   <div class="timeline">
-    <div class="timeline__text-post">
+    <div class="timeline__text-post" v-for="post in posts" :key="post._id">
       <img
         src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
       />
       <div class="text-post__user-post">
-        <a>username</a>
+        <a>{{ displayName }}</a>
         <p class="text-post__content">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos
-          accusantium architecto iure soluta quod quam commodi unde sunt
-          perspiciatis officiis illum laboriosam voluptate quia nisi atque,
-          assumenda eos, maxime accusamus.
+          {{ post.description }}
         </p>
       </div>
     </div>
@@ -31,8 +28,32 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Timeline',
+  data() {
+    return {
+      posts: [],
+      description: '',
+      img: '',
+      displayName: '',
+      isTextPost: false,
+      isImagePost: false,
+      createdAt: '',
+    }
+  },
+  async mounted() {
+    const responsePost = await axios.get(
+      'http://localhost:3000/api/posts/timeline/60df467d44d54d0adc94f760'
+    )
+    this.posts = responsePost.data
+
+    const responseUser = await axios.get(
+      'http://localhost:3000/api/users/60df467d44d54d0adc94f760'
+    )
+    this.displayName = responseUser.data.displayName
+  },
 }
 </script>
 
@@ -96,9 +117,15 @@ export default {
   cursor: pointer;
 }
 
+.image-post__user-post {
+  display: flex;
+  flex-direction: column;
+}
+
 .image-post__user-post a {
   font-weight: bold;
   font-size: 0.9rem;
+  margin-bottom: 1rem;
 }
 
 .image-post__avatar {
@@ -111,7 +138,6 @@ export default {
 .image-post__user-post img {
   width: 100%;
   height: 100%;
-  padding-top: 1rem;
   margin-right: 1rem;
   border-radius: 7px;
   max-height: 350px;
