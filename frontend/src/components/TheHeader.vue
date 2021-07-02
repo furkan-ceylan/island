@@ -6,7 +6,7 @@
         <i class="material-icons">home</i>
       </div>
       <div class="header__main">
-        <h2 class="header__main-text">Home</h2>
+        <h2 class="header__main-text">{{ $route.name }}</h2>
         <div class="header__main-right">
           <div class="header__main-right-search">
             <input type="text" placeholder="Search" />
