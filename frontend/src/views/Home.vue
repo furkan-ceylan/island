@@ -41,7 +41,7 @@ export default {
   flex-direction: row;
   width: 100%;
   height: 800px;
-  margin-top: 5rem;
+  margin-top: 6rem;
 }
 
 .home__right-sidebar {
