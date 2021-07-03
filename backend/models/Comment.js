@@ -13,6 +13,12 @@ const CommentSchema = new mongoose.Schema(
     comment: {
       type: String,
       default: '',
+      required: true,
+    },
+    displayName: {
+      type: String,
+      default: '',
+      required: true,
     },
   },
   { timestamps: true }
