@@ -63,10 +63,6 @@ export default {
 
     const responseUsers = await axios.get('http://localhost:3000/api/users/')
     this.users = responseUsers.data
-
-    console.log(this.posts)
-
-    // this.displayName = this.users.filter((user) => user._id === post.userId)[0]
   },
 }
 </script>
