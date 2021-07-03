@@ -27,9 +27,10 @@ const routes = [
     component: Profile,
   },
   {
-    path: '/post-detail',
+    path: '/post-detail/:id',
     name: 'PostDetail',
     component: PostDetail,
+    props: true,
   },
   // {
   //   path: '/about',
