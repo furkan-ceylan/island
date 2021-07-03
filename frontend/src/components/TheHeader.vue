@@ -26,7 +26,7 @@
             "
             class="btn btn-imageadd"
           >
-            Add a Image Post
+            Add an Image Post
           </button>
         </div>
       </div>
