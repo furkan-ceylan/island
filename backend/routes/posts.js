@@ -76,4 +76,16 @@ router.get('/timeline/:userId', async (req, res) => {
     res.status(500).json(err)
   }
 })
+
+//GET USER'S POSTS
+router.get('/:userId/posts', async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.params.userId)
+    const userPosts = await Post.find({ userId: currentUser._id })
+
+    res.status(200).json(userPosts)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+})
 module.exports = router
