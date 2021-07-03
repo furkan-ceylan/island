@@ -4,22 +4,22 @@ const User = require('../models/User.js')
 const Comment = require('../models/Comment.js')
 
 //CREATE POST
-
 router.post('/', async (req, res) => {
   const newPost = new Post(req.body)
-  // if (!req.body.isImagePost && req.body.isTextPost) {
+  await newPost.updateOne({
+    $push: {
+      displayName: req.body.displayName,
+    },
+  })
   try {
     const createPost = await newPost.save()
     res.status(200).json(createPost)
   } catch (err) {
     res.status(500).json(err)
   }
-  // } else {
-  // }
 })
 
 //COMMENT POST
-
 router.put('/:id/comment', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)

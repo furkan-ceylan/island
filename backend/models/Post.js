@@ -16,6 +16,10 @@ const PostSchema = new mongoose.Schema(
       max: 500,
       default: '',
     },
+    displayName: {
+      type: String,
+      default: '',
+    },
     img: {
       type: String,
       default: '',
