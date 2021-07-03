@@ -14,7 +14,7 @@
           </div>
         </router-link>
         <router-link to="/profile">
-          <div v-if="$route.name === 'profile'" class="on-page">
+          <div v-if="$route.name === 'Profile'" class="on-page">
             <span class="material-icons w3-xxlarge">account_circle</span>
             <span class="nav-icon">Profile</span>
           </div>
