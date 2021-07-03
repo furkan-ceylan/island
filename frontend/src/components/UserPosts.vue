@@ -1,20 +1,17 @@
 <template>
   <div class="user-posts">
-    <div class="user-posts__text-post">
+    <div class="user-posts__text-post" v-for="post in posts" :key="post._id">
       <img
         src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
       />
       <div class="text-post__user-post">
-        <a>username</a>
+        <a>{{ post.displayName }}</a>
         <p class="text-post__content">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos
-          accusantium architecto iure soluta quod quam commodi unde sunt
-          perspiciatis officiis illum laboriosam voluptate quia nisi atque,
-          assumenda eos, maxime accusamus.
+          {{ post.description }}
         </p>
       </div>
     </div>
-    <div class="user-posts__image-post">
+    <!-- <div class="user-posts__image-post">
       <img
         src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
         class="image-post__avatar"
@@ -26,13 +23,27 @@
           src="http://seattlemag.com/sites/default/files/field/image/views%20lead%20780%20x%20505.jpg"
         />
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'UserPosts',
+  props: ['id'],
+  data() {
+    return {
+      posts: [],
+    }
+  },
+  async mounted() {
+    const responsePosts = await axios.get(
+      'http://localhost:3000/api/posts/' + this.id + '/posts'
+    )
+    this.posts = responsePosts.data
+  },
 }
 </script>
 
