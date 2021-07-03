@@ -117,6 +117,7 @@ export default {
   data() {
     return {
       posts: [],
+      user: [],
       textTitle: '',
       imageTitle: '',
       textDescription: '',
@@ -130,14 +131,22 @@ export default {
   },
   methods: {
     async addTextPost() {
+      const currentUser = '60df466844d54d0adc94f75e'
+
       if (this.textDescription === '' || this.textTitle === '') {
         this.fillError = true
       } else {
+        const responseUsers = await axios.get(
+          'http://localhost:3000/api/users/' + currentUser
+        )
+        this.user = responseUsers.data
+
         const response = await axios.post('http://localhost:3000/api/posts/', {
           description: this.textDescription,
           title: this.textTitle,
           isTextPost: true,
           userId: '60df466844d54d0adc94f75e',
+          displayName: this.user.displayName,
         })
 
         this.posts.push(response.data)
@@ -179,7 +188,6 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  height: 10vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -187,7 +195,7 @@ export default {
   position: fixed;
   z-index: 9999;
   width: 95%;
-  height: 10%;
+  height: 65px;
   background-color: var(--lightest);
 }
 
