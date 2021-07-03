@@ -29,11 +29,23 @@ router.put('/:id/comment', async (req, res) => {
         userId: req.body.userId,
         postId: req.params.id,
         comment: req.body.comment,
+        displayName: req.body.displayName,
       },
     })
     await post.updateOne({ $push: { comments: req.body } })
     const addComment = await comment.save()
     res.status(200).json(addComment)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+})
+
+//GET POSTS COMMENTS
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    const comment = await Comment.find({ postId: post._id })
+    res.status(200).json(comment)
   } catch (err) {
     res.status(500).json(err)
   }
