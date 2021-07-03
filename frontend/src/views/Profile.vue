@@ -6,7 +6,7 @@
         <LeftSidebar />
       </div>
       <div class="profile__container">
-        <ProfileDetail />
+        <ProfileDetail :id="id" />
       </div>
       <div class="profile__right-sidebar">
         <RightSidebar />
@@ -23,6 +23,7 @@ import ProfileDetail from '@/components/ProfileDetail'
 
 export default {
   name: 'Profile',
+  props: ['id'],
   components: { LeftSidebar, RightSidebar, TheHeader, ProfileDetail },
 }
 </script>
