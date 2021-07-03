@@ -13,7 +13,14 @@
             <span class="nav-icon">Home</span>
           </div>
         </router-link>
-        <router-link to="/profile">
+        <router-link
+          :to="{
+            name: 'Profile',
+            params: {
+              id: currentUser,
+            },
+          }"
+        >
           <div v-if="$route.name === 'Profile'" class="on-page">
             <span class="material-icons w3-xxlarge">account_circle</span>
             <span class="nav-icon">Profile</span>
@@ -53,6 +60,11 @@
 <script>
 export default {
   name: 'LeftSidebar',
+  data() {
+    return {
+      currentUser: '60df466844d54d0adc94f75e',
+    }
+  },
 }
 </script>
 
