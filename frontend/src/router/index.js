@@ -22,9 +22,10 @@ const routes = [
     component: Signup,
   },
   {
-    path: '/profile',
+    path: '/profile/:id',
     name: 'Profile',
     component: Profile,
+    props: true,
   },
   {
     path: '/post-detail/:id',
