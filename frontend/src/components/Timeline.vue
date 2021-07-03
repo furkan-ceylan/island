@@ -1,15 +1,26 @@
 <template>
   <div class="timeline">
     <div class="timeline__text-post" v-for="post in posts" :key="post._id">
-      <img
-        src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
-      />
-      <div class="text-post__user-post">
-        <a>{{ displayName }}</a>
-        <p class="text-post__content">
-          {{ post.description }}
-        </p>
-      </div>
+      <router-link
+        :to="{
+          name: 'PostDetail',
+          params: {
+            id: post._id,
+          },
+        }"
+      >
+        <div class="text-post">
+          <img
+            src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
+          />
+          <div class="text-post__user-post">
+            <a>{{ post.displayName }}</a>
+            <p class="text-post__content">
+              {{ post.description }}
+            </p>
+          </div>
+        </div>
+      </router-link>
     </div>
     <div class="timeline__image-post">
       <img
@@ -35,6 +46,7 @@ export default {
   data() {
     return {
       posts: [],
+      users: [],
       description: '',
       img: '',
       displayName: '',
@@ -49,10 +61,12 @@ export default {
     )
     this.posts = responsePost.data
 
-    const responseUser = await axios.get(
-      'http://localhost:3000/api/users/60df467d44d54d0adc94f760'
-    )
-    this.displayName = responseUser.data.displayName
+    const responseUsers = await axios.get('http://localhost:3000/api/users/')
+    this.users = responseUsers.data
+
+    console.log(this.posts)
+
+    // this.displayName = this.users.filter((user) => user._id === post.userId)[0]
   },
 }
 </script>
@@ -87,6 +101,12 @@ export default {
   height: 54px;
   border-radius: 35%;
   margin-right: 1rem;
+}
+
+.text-post {
+  display: flex;
+  justify-content: flex-start;
+  width: 700px;
 }
 
 .text-post__user-post a {
