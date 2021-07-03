@@ -30,8 +30,8 @@ const UserSchema = new mongoose.Schema(
       default: '',
     },
     hobbies: {
-      type: Array,
-      default: [],
+      type: String,
+      default: '',
     },
     followers: {
       type: Array,
