@@ -9,10 +9,20 @@
       <div class="profile__detail">
         <div class="detail__user">
           <div class="detail__user-top">
-            <a class="user-top__name">username</a>
+            <a class="user-top__name">{{ user.displayName }}</a>
             <div class="user-top__birth">
               <a>Birth Date:</a>
-              <span>11/10/1990</span>
+              <span>{{ user.birthDate }}</span>
+            </div>
+            <div class="user-follow">
+              <div class="user-top__birth">
+                <a>Followers:</a>
+                <span>{{ followers }}</span>
+              </div>
+              <div class="user-top__birth">
+                <a>Following:</a>
+                <span>{{ following }}</span>
+              </div>
             </div>
           </div>
           <div class="detail__user-bot"></div>
@@ -22,30 +32,43 @@
     <div class="profile-desc">
       <h5>About Me</h5>
       <p class="detail__content">
-        Hello there, my name is John. Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Nulla sapiente maxime velit architecto corporis ut at
-        pariatur.
+        {{ user.description }}
       </p>
       <h5 class="detail__hobbies">My Hobbies</h5>
       <p class="detail__content">
-        Hello there, my name is John. Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Nulla sapiente maxime velit architecto corporis ut at
-        pariatur.
+        {{ user.hobbies }}
       </p>
     </div>
     <div class="profile-posts">
       <h3>Posts</h3>
-      <UserPosts />
+      <UserPosts :id="id" />
     </div>
   </div>
 </template>
 
 <script>
 import UserPosts from '@/components/UserPosts'
+import axios from 'axios'
 
 export default {
   name: 'ProfileDetail',
+  props: ['id'],
   components: { UserPosts },
+  data() {
+    return {
+      user: [],
+      followers: '',
+      following: '',
+    }
+  },
+  async mounted() {
+    const responseUser = await axios.get(
+      'http://localhost:3000/api/users/' + this.id
+    )
+    this.user = responseUser.data
+    this.followers = this.user.followers.length
+    this.following = this.user.followings.length
+  },
 }
 </script>
 
@@ -108,6 +131,10 @@ export default {
 
 .user-top__birth span {
   margin-left: 0.5rem;
+}
+
+.user-follow {
+  display: flex;
 }
 
 .detail__content {
