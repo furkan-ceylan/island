@@ -6,7 +6,7 @@
         <LeftSidebar />
       </div>
       <div class="home__container">
-        <PostDetail />
+        <PostDetail :id="id" />
       </div>
       <div class="home__right-sidebar">
         <RightSidebar />
@@ -23,6 +23,7 @@ import TheHeader from '@/components/TheHeader'
 
 export default {
   components: { LeftSidebar, RightSidebar, PostDetail, TheHeader },
+  props: ['id'],
 }
 </script>
 
