@@ -6,27 +6,57 @@
         Sign Up to Island Social Platform
       </h2>
       <label class="input">
-        <input class="input__field" type="text" placeholder=" " />
+        <input
+          class="input__field"
+          type="email"
+          placeholder=" "
+          v-model="email"
+        />
         <span class="input__label">E-mail</span>
       </label>
       <label class="input">
-        <input class="input__field" type="text" placeholder=" " />
+        <input
+          class="input__field"
+          type="password"
+          placeholder=" "
+          v-model="password"
+        />
         <span class="input__label">Password</span>
       </label>
       <label class="input">
-        <input class="input__field" type="text" placeholder=" " />
+        <input
+          class="input__field"
+          type="text"
+          placeholder=" "
+          v-model="displayName"
+        />
         <span class="input__label">Display Name</span>
       </label>
       <label class="input">
-        <input class="input__field" type="date" placeholder=" " />
+        <input
+          class="input__field"
+          type="date"
+          placeholder=" "
+          v-model="birthDate"
+        />
         <span class="input__label">Birth Date</span>
       </label>
       <label class="input">
-        <textarea class="input__field" type="text" placeholder=" " />
+        <textarea
+          class="input__field"
+          type="text"
+          placeholder=" "
+          v-model="description"
+        />
         <span class="input__label">About You</span>
       </label>
       <label class="input">
-        <input class="input__field" type="text" placeholder=" " />
+        <input
+          class="input__field"
+          type="text"
+          placeholder=" "
+          v-model="hobbies"
+        />
         <span class="input__label">Hobbies</span>
       </label>
       <label class="input">
@@ -38,15 +68,69 @@
         />
         <span class="input__label">Upload a Profile Picture</span>
       </label>
+      <p class="warn" v-if="fillError">
+        Please fill in all fields
+      </p>
       <div class="button-group">
-        <button>Sign Up</button>
+        <button @click="signUp">Sign Up</button>
       </div>
     </div>
   </article>
 </template>
 
 <script>
-export default { name: 'Signup' }
+import axios from 'axios'
+
+export default {
+  name: 'Signup',
+  data() {
+    return {
+      user: [],
+      email: '',
+      password: '',
+      description: '',
+      img: '',
+      displayName: '',
+      birthDate: '',
+      hobbies: '',
+      fillError: false,
+    }
+  },
+  methods: {
+    async signUp() {
+      if (
+        this.email === '' ||
+        this.password === '' ||
+        this.description === '' ||
+        this.displayName === '' ||
+        this.birthDate === '' ||
+        this.hobbies === ''
+      ) {
+        this.fillError = true
+      } else {
+        const response = await axios.post(
+          'http://localhost:3000/api/auth/register',
+          {
+            email: this.email,
+            password: this.password,
+            description: this.description,
+            displayName: this.displayName,
+            birthDate: this.birthDate,
+            hobbies: this.hobbies,
+          }
+        )
+        this.user.push(response.data)
+        this.email = ''
+        this.password = ''
+        this.description = ''
+        this.displayName = ''
+        this.birthDate = ''
+        this.hobbies = ''
+        await this.$router.push('/login')
+      }
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -155,5 +239,9 @@ button + button {
 
 .hidden {
   display: none;
+}
+
+.warn {
+  color: var(--red);
 }
 </style>
