@@ -8,8 +8,7 @@ const userRoute = require('./routes/users')
 const authRoute = require('./routes/auth')
 const postRoute = require('./routes/posts')
 const cors = require('cors')
-
-app.use(cors())
+const cookieParser = require('cookie-parser')
 
 dotenv.config()
 
@@ -27,6 +26,8 @@ mongoose.connect(
 app.use(express.json())
 app.use(helmet())
 app.use(morgan('common'))
+app.use(cors({ credentials: true, origin: 'http://localhost:8080' }))
+app.use(cookieParser())
 
 app.use('/api/users', userRoute)
 app.use('/api/auth', authRoute)
