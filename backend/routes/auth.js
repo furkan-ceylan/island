@@ -42,39 +42,30 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: userLogin._id }, process.env.SECRET_KEY)
 
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    })
-
-    res.status(200).json({
-      title: 'login success',
-    })
+    res.status(200).json({ user: userLogin, token: token })
   } catch (err) {
     res.status(500).json(err)
   }
 })
 
 router.get('/user', async (req, res) => {
-  try {
-    const cookie = req.cookies['jwt']
-    const claims = jwt.verify(cookie, process.env.SECRET_KEY)
+  let token = req.headers.token
 
-    if (!claims) {
-      res.status(401).send({
-        error: 'unauthenticated',
+  jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
+    if (err) {
+      res.status(401).json({
+        title: 'unauthorized',
       })
     }
 
-    const user = await User.findOne({ id: claims.id })
-    const { password, ...data } = await user.toJSON()
-
-    res.send(data)
-  } catch (err) {
-    res.status(401).send({
-      error: 'unauthenticated',
+    await User.findOne({ _id: decoded.userId }, (err, user) => {
+      if (err) return console.log(err)
+      return res.status(200).json({
+        title: 'user grabbed',
+        user: user,
+      })
     })
-  }
+  })
 })
 
 router.post('/logout', async (req, res) => {
