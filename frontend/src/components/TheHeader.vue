@@ -30,12 +30,27 @@
           </button>
         </div>
       </div>
-      <div class="header__user">
-        <label class="header__user-username">username</label>
+      <div class="header__user" v-if="!auth">
+        <label class="header__user-username">{{ username }}</label>
         <img
           class="header__user-image"
           src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
         />
+        <button @click="logout" class="btn btn-imageadd">
+          Logout
+        </button>
+      </div>
+      <div class="header__user" v-if="auth">
+        <router-link to="/login">
+          <button class="btn btn-imageadd">
+            Sign in
+          </button>
+        </router-link>
+        <router-link to="/signup">
+          <button class="btn btn-imageadd">
+            Sign Up
+          </button>
+        </router-link>
       </div>
     </div>
     <div class="add-post" v-if="openAddTextPost">
@@ -127,6 +142,8 @@ export default {
       openAddTextPost: false,
       openAddImagePost: false,
       fillError: false,
+      auth: false,
+      username: '',
     }
   },
   methods: {
@@ -182,6 +199,21 @@ export default {
         this.imageTitle = ''
       }
     },
+    async logout() {
+      localStorage.clear()
+      this.$router.push('/login')
+    },
+  },
+  async mounted() {
+    const response = await axios.get('http://localhost:3000/api/auth/user', {
+      headers: { token: localStorage.getItem('token') },
+    })
+    this.username = response.data.user.displayName
+    console.log(response.data.user)
+  },
+  computed() {
+    this.auth = localStorage.getItem('token')
+    console.log(localStorage.getItem('token'))
   },
 }
 </script>
