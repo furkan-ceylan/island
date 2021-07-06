@@ -20,10 +20,34 @@ import LeftSidebar from '@/components/LeftSidebar'
 import RightSidebar from '@/components/RightSidebar'
 import Timeline from '@/components/Timeline'
 import TheHeader from '@/components/TheHeader'
+import axios from 'axios'
+import { useStore } from 'vuex'
 
 export default {
   name: 'Home',
   components: { LeftSidebar, RightSidebar, Timeline, TheHeader },
+  data() {
+    return {
+      user: [],
+      message: 'giriş yap',
+    }
+  },
+  async mounted() {
+    const response = await axios.get('http://localhost:3000/api/auth/user', {
+      headers: { token: localStorage.getItem('token') },
+    })
+    this.username = response.data.user.displayName
+    console.log(response.data.user)
+  },
+  computed() {
+    this.auth = localStorage.getItem('token')
+    console.log(localStorage.getItem('token'))
+  },
+  created() {
+    if (localStorage.getItem('token') === null) {
+      this.$router.push('/login')
+    }
+  },
 }
 </script>
 
