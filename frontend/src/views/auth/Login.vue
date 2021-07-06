@@ -6,17 +6,27 @@
         Log In to Island Social Platform
       </h2>
       <label class="input">
-        <input class="input__field" type="text" placeholder=" " />
+        <input
+          class="input__field"
+          type="text"
+          placeholder=" "
+          v-model="email"
+        />
         <span class="input__label">E-mail</span>
       </label>
       <label class="input">
-        <input class="input__field" type="text" placeholder=" " />
+        <input
+          class="input__field"
+          type="text"
+          placeholder=" "
+          v-model="password"
+        />
         <span class="input__label">Password</span>
       </label>
 
       <div class="button-group">
         <div class="button-group-left">
-          <button>Login</button>
+          <button @click="login">Login</button>
           <button type="reset">Forgot Password?</button>
         </div>
         <div class="button-group-right">
@@ -28,7 +38,44 @@
 </template>
 
 <script>
-export default { name: 'Login' }
+import axios from 'axios'
+
+export default {
+  name: 'Login',
+  data() {
+    return {
+      user: [],
+      email: '',
+      password: '',
+    }
+  },
+  methods: {
+    async login() {
+      axios.defaults.withCredentials = true
+
+      if (this.email === '' || this.password === '') {
+        this.fillError = true
+      } else {
+        const data = {
+          email: this.email,
+          password: this.password,
+        }
+        const response = await axios.post(
+          'http://localhost:3000/api/auth/login',
+          data
+        )
+        if (response.status === 200) {
+          console.log(response),
+            localStorage.setItem('token', response.data.token)
+        }
+
+        this.user.push(response.data)
+        this.password = ''
+      }
+      await this.$router.push('/')
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
