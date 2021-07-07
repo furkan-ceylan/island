@@ -11,6 +11,7 @@
           type="email"
           placeholder=" "
           v-model="email"
+          @blur="validateEmail"
         />
         <span class="input__label">E-mail</span>
       </label>
@@ -71,8 +72,11 @@
       <p class="warn" v-if="fillError">
         Please fill in all fields
       </p>
+      <p class="warn" v-if="!emailError">
+        Please enter a valid email address
+      </p>
       <div class="button-group">
-        <button @click="signUp">Sign Up</button>
+        <button @click="signUp" v-if="emailError">Sign Up</button>
       </div>
     </div>
   </article>
@@ -94,9 +98,17 @@ export default {
       birthDate: '',
       hobbies: '',
       fillError: false,
+      emailError: false,
     }
   },
   methods: {
+    validateEmail() {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
+        this.emailError = true
+      } else {
+        this.emailError = false
+      }
+    },
     async signUp() {
       if (
         this.email === '' ||
@@ -104,10 +116,13 @@ export default {
         this.description === '' ||
         this.displayName === '' ||
         this.birthDate === '' ||
-        this.hobbies === ''
+        this.hobbies === '' ||
+        this.emailError === true
       ) {
         this.fillError = true
       } else {
+        this.fillError = false
+
         const response = await axios.post(
           'http://localhost:3000/api/auth/register',
           {
