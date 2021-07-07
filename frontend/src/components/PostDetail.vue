@@ -72,7 +72,10 @@ export default {
     }
   },
   async mounted() {
-    const currentUser = '60df466844d54d0adc94f75e'
+    const response = await axios.get('http://localhost:3000/api/auth/user', {
+      headers: { token: localStorage.getItem('token') },
+    })
+    const currentUser = response.data.user._id
 
     const responseUser = await axios.get(
       'http://localhost:3000/api/users/' + currentUser
@@ -93,7 +96,13 @@ export default {
   },
   methods: {
     async addComment() {
-      const currentUser = '60df466844d54d0adc94f75e'
+      const responseId = await axios.get(
+        'http://localhost:3000/api/auth/user',
+        {
+          headers: { token: localStorage.getItem('token') },
+        }
+      )
+      const currentUser = responseId.data.user._id
 
       const responseUser = await axios.get(
         'http://localhost:3000/api/users/' + currentUser

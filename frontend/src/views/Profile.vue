@@ -25,6 +25,15 @@ export default {
   name: 'Profile',
   props: ['id'],
   components: { LeftSidebar, RightSidebar, TheHeader, ProfileDetail },
+  computed() {
+    this.auth = localStorage.getItem('token')
+    console.log(localStorage.getItem('token'))
+  },
+  created() {
+    if (localStorage.getItem('token') === null) {
+      this.$router.push('/login')
+    }
+  },
 }
 </script>
 

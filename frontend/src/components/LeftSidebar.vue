@@ -58,12 +58,20 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'LeftSidebar',
   data() {
     return {
-      currentUser: '60df466844d54d0adc94f75e',
+      currentUser: '1',
     }
+  },
+  async mounted() {
+    const response = await axios.get('http://localhost:3000/api/auth/user', {
+      headers: { token: localStorage.getItem('token') },
+    })
+    this.currentUser = response.data.user._id
   },
 }
 </script>

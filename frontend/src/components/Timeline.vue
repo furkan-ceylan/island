@@ -52,12 +52,16 @@ export default {
       displayName: '',
       isTextPost: false,
       isImagePost: false,
-      createdAt: '',
     }
   },
   async mounted() {
+    const responseId = await axios.get('http://localhost:3000/api/auth/user', {
+      headers: { token: localStorage.getItem('token') },
+    })
+    const currentUser = responseId.data.user._id
+
     const responsePost = await axios.get(
-      'http://localhost:3000/api/posts/timeline/60df467d44d54d0adc94f760'
+      'http://localhost:3000/api/posts/timeline/' + currentUser
     )
     this.posts = responsePost.data
 
