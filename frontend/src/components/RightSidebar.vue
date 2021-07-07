@@ -1,56 +1,34 @@
 <template>
   <div class="right-sidebar">
     <div class="friends">
-      <h4 class="friends-title">Friends</h4>
-      <div class="friend">
-        <div class="friend-info">
-          <img src="https://picsum.photos/50/50?random=143" />
-          <label>username</label>
-        </div>
-        <span class="online"></span>
-      </div>
-      <div class="friend">
-        <div class="friend-info">
-          <img src="https://picsum.photos/50/50?random=165" />
-          <label>username</label>
-        </div>
-        <span class="online"></span>
-      </div>
-      <div class="friend">
-        <div class="friend-info">
-          <img src="https://picsum.photos/50/50?random=132" />
-          <label>username</label>
-        </div>
-        <span class="online"></span>
-      </div>
-      <div class="friend">
-        <div class="friend-info">
-          <img src="https://picsum.photos/50/50?random=112" />
-          <label>username</label>
-        </div>
-        <span class="online"></span>
-      </div>
-      <div class="friend">
-        <div class="friend-info">
-          <img src="https://picsum.photos/50/50?random=125" />
-          <label>username</label>
-        </div>
-        <span class="online"></span>
-      </div>
-      <div class="friend">
-        <div class="friend-info">
-          <img src="https://picsum.photos/50/50?random=128" />
-          <label>username</label>
-        </div>
-        <span class="online"></span>
+      <h4 class="friends-title">People</h4>
+
+      <div class="friend" v-for="user in users" :key="user._id">
+        <router-link :to="`/profile/${user._id}`">
+          <div class="friend-info">
+            <img src="https://picsum.photos/50/50?random=143" />
+            <label>{{ user.displayName }}</label>
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'RightSidebar',
+  data() {
+    return {
+      users: [],
+    }
+  },
+  async mounted() {
+    const responseUsers = await axios.get('http://localhost:3000/api/users/')
+    this.users = responseUsers.data
+  },
 }
 </script>
 
