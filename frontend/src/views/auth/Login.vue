@@ -30,7 +30,7 @@
           <button type="reset">Forgot Password?</button>
         </div>
         <div class="button-group-right">
-          <button>Sign Up</button>
+          <router-link to="/signup"> <button>Sign Up</button></router-link>
         </div>
       </div>
     </div>
