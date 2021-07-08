@@ -10,9 +10,7 @@
         }"
       >
         <div class="text-post">
-          <img
-            src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
-          />
+          <ProfileImage :id="post.userId" class="text-post__img" />
           <div class="text-post__user-post" v-if="post.isTextPost">
             <a>{{ post.displayName }}</a>
             <p class="text-post__content">
@@ -29,28 +27,16 @@
         </div>
       </router-link>
     </div>
-    <!-- <div class="timeline__image-post">
-      <img
-        src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
-        class="image-post__avatar"
-      />
-      <div class="image-post__user-post">
-        <a>username</a>
-        <img
-          class="image-post__img"
-          src="http://localhost:3000/uploads/0c38c18c98bed5415d85ae52379a4001.jpg"
-        />
-        <p class="text-post__content"></p>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import ProfileImage from '@/components/ProfileImage'
 
 export default {
   name: 'Timeline',
+  components: { ProfileImage },
   data() {
     return {
       posts: [],
@@ -104,7 +90,7 @@ export default {
   cursor: pointer;
 }
 
-.timeline__text-post img {
+.text-post__img {
   width: 54px;
   height: 54px;
   border-radius: 35%;

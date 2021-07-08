@@ -2,9 +2,7 @@
   <div class="post-detail">
     <div class="timeline__text-post">
       <div class="main-post">
-        <img
-          src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
-        />
+        <ProfileImage :id="posts.userId" class="text-post__img" />
         <div class="text-post__user-post" v-if="posts.isTextPost">
           <a>{{ posts.displayName }}</a>
           <p class="text-post__content">
@@ -21,9 +19,7 @@
       </div>
       <div class="comments">
         <div class="comment" v-for="comment in comments" :key="comment._id">
-          <img
-            src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
-          />
+          <ProfileImage :id="comment.userId" class="text-post__img" />
           <div class="text-post__user-post" v-if="comment.isTextComment">
             <a>{{ comment.displayName }}</a>
             <p class="text-post__content">
@@ -125,10 +121,12 @@
 
 <script>
 import axios from 'axios'
+import ProfileImage from '@/components/ProfileImage'
 
 export default {
   name: 'PostDetail',
   props: ['id'],
+  components: { ProfileImage },
   data() {
     return {
       posts: [],
@@ -141,6 +139,7 @@ export default {
       file: '',
       imageTitle: '',
       isTextComment: false,
+      userId: '',
     }
   },
   async mounted() {
@@ -163,8 +162,6 @@ export default {
       'http://localhost:3000/api/posts/' + this.id + '/comments'
     )
     this.comments = responseComment.data
-
-    console.log(responseComment.data)
   },
   methods: {
     onFileChange() {
@@ -235,7 +232,6 @@ export default {
         this.comments.push(response.data)
         try {
           await axios.post('http://localhost:3000/api/posts/upload', formData)
-          console.log('its ok')
         } catch (err) {
           console.log(err)
         }

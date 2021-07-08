@@ -6,7 +6,10 @@
       <div class="friend" v-for="user in users" :key="user._id">
         <router-link :to="`/profile/${user._id}`">
           <div class="friend-info">
-            <img src="https://picsum.photos/50/50?random=143" />
+            <img
+              class="image-post__img"
+              :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
+            />
             <label>{{ user.displayName }}</label>
           </div>
         </router-link>
@@ -81,5 +84,11 @@ export default {
   border-radius: 100%;
   background-color: var(--green);
   margin-left: 1em;
+}
+
+.image-post__img {
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
 }
 </style>

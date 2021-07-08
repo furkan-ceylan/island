@@ -33,10 +33,10 @@
       <div class="header__user" v-if="!auth">
         <label class="header__user-username">{{ username }}</label>
         <img
-          class="header__user-image"
-          src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
+          class="image-post__img"
+          :src="`http://localhost:3000/uploads/user/${profilePicture}`"
         />
-        <button @click="logout" class="btn btn-imageadd">
+        <button @click="logout" class="btn btn-logout">
           Logout
         </button>
       </div>
@@ -149,6 +149,7 @@ export default {
       auth: '',
       username: '',
       file: null,
+      profilePicture: '',
     }
   },
   methods: {
@@ -229,6 +230,7 @@ export default {
       headers: { token: localStorage.getItem('token') },
     })
     this.username = response.data.user.displayName
+    this.profilePicture = response.data.user.profilePicture
   },
   computed() {
     this.auth = localStorage.getItem('token')
@@ -338,10 +340,11 @@ export default {
 .btn-textadd {
   transform: translate(0, 3px);
   transition: 0.4s;
+  background-color: var(--orange);
 }
 
 .btn-textadd:hover {
-  background-color: #e64e49;
+  background-color: #eba12a;
   transition: 0.4s;
   box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
   transform: translate(0, -3px);
@@ -355,6 +358,19 @@ export default {
 
 .btn-imageadd:hover {
   background-color: #5863c8;
+  transition: 0.4s;
+  box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
+  transform: translate(0, -3px);
+}
+
+.btn-logout {
+  transform: translate(0, 3px);
+  transition: 0.4s;
+  background-color: var(--red);
+}
+
+.btn-logout:hover {
+  background-color: #e64e49;
   transition: 0.4s;
   box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
   transform: translate(0, -3px);
@@ -463,6 +479,12 @@ export default {
       }
     }
   }
+}
+
+.image-post__img {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
 }
 
 .warn {

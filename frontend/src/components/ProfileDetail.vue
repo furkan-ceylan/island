@@ -3,7 +3,8 @@
     <div class="profile-info">
       <div class="profile-avatar">
         <img
-          src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
+          class="image-post__img"
+          :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
         />
       </div>
       <div class="profile__detail">
