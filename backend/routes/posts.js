@@ -4,18 +4,33 @@ const User = require('../models/User.js')
 const Comment = require('../models/Comment.js')
 const multer = require('multer')
 
+const storage = multer.diskStorage({
+  //destination for files
+  destination: (req, file, callback) => {
+    callback(null, './images/')
+  },
+
+  //add back the extension
+  filename: (req, file, callback) => {
+    callback(null, Date.now() + file.originalname)
+  },
+})
+
+//upload parameters for multer
 const upload = multer({
-  dest: './uploads/',
+  storage: storage,
 })
 
 //CREATE POST
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', async (req, res) => {
   const newPost = new Post(req.body)
   await newPost.updateOne({
     $push: {
       displayName: req.body.displayName,
+      file: req.body.file,
     },
   })
+
   try {
     const createPost = await newPost.save()
     res.status(200).json({ createPost })
@@ -24,15 +39,11 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 })
 
-// router.post('/upload', upload.single('file'), async (req, res) => {
-//   const newPost = new Post(req.body)
-
-//   try {X
-//     res.status(200).json({ createPost })
-//   } catch (err) {
-//     res.status(500).json(err)
-//   }
-// })
+//UPLOAD
+router.post('/upload', upload.single('file'), (req, res) => {
+  res.json({ file: req.file })
+  console.log('file:' + req.file)
+})
 
 //COMMENT POST
 router.put('/:id/comment', async (req, res) => {

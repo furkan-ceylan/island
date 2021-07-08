@@ -106,8 +106,6 @@
         <input
           class="input__field"
           type="file"
-          accept="image/*"
-          placeholder=" "
           @change="onFileChange"
           ref="file"
         />
@@ -181,7 +179,8 @@ export default {
       }
     },
     onFileChange() {
-      this.file = this.$refs.file.files[0]
+      const file = this.$refs.file.files[0]
+      this.file = file
     },
     async addImagePost() {
       const response = await axios.get('http://localhost:3000/api/auth/user', {
@@ -189,32 +188,29 @@ export default {
       })
       const currentUser = response.data.user._id
 
+      const formData = new FormData()
+      formData.append('file', this.file)
+
       if (this.imageTitle === '' || this.file === '') {
         this.fillError = true
       } else {
-        const formData = new FormData()
-        formData.append('file', this.file)
-
         const responseUsers = await axios.get(
           'http://localhost:3000/api/users/' + currentUser
         )
         this.user = responseUsers.data
 
-        console.log(this.file)
+        const response = await axios.post('http://localhost:3000/api/posts/', {
+          title: this.imageTitle,
+          isImagePost: true,
+          displayName: this.user.displayName,
+          userId: currentUser,
+          file: this.file.name,
+        })
 
-        const response = await axios.post(
-          'http://localhost:3000/api/posts/',
-          {
-            title: this.imageTitle,
-            isImagePost: true,
-            displayName: this.user.displayName,
-            userId: currentUser,
-          },
-          formData
-        )
+        await axios.post('http://localhost:3000/api/posts/upload', formData)
+
         this.posts.push(response.data)
         this.imageTitle = ''
-        this.file = ''
       }
     },
     async logout() {
