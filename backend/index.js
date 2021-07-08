@@ -29,6 +29,7 @@ app.use(helmet())
 app.use(morgan('common'))
 app.use(cors({ credentials: true, origin: 'http://localhost:8080' }))
 app.use(fileupload())
+app.use('/uploads', express.static('uploads'))
 
 app.use('/api/users', userRoute)
 app.use('/api/auth', authRoute)

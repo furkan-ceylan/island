@@ -89,6 +89,7 @@
       class="add-post"
       @submit.prevent="addImagePost"
       v-if="openAddImagePost"
+      enctype="multipart/form-data"
     >
       <h2 class="add-post__title">
         Add an Image Post
@@ -108,6 +109,7 @@
           type="file"
           @change="onFileChange"
           ref="file"
+          name="file"
         />
         <span class="input__label">Image</span>
       </label>
@@ -146,7 +148,7 @@ export default {
       fillError: false,
       auth: '',
       username: '',
-      file: '',
+      file: null,
     }
   },
   methods: {
@@ -206,14 +208,18 @@ export default {
           userId: currentUser,
           file: this.file.name,
         })
-
-        await axios.post('http://localhost:3000/api/posts/upload', formData)
+        try {
+          await axios.post('http://localhost:3000/api/posts/upload', formData)
+          console.log('its ok')
+        } catch (err) {
+          console.log(err)
+        }
 
         this.posts.push(response.data)
         this.imageTitle = ''
       }
     },
-    async logout() {
+    logout() {
       localStorage.clear()
       this.$router.push('/login')
     },

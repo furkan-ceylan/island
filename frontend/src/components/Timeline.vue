@@ -13,16 +13,23 @@
           <img
             src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
           />
-          <div class="text-post__user-post">
+          <div class="text-post__user-post" v-if="post.isTextPost">
             <a>{{ post.displayName }}</a>
             <p class="text-post__content">
               {{ post.description }}
             </p>
           </div>
+          <div class="image-post__user-post" v-else>
+            <a>{{ post.displayName }}</a>
+            <img
+              class="image-post__img"
+              :src="`http://localhost:3000/uploads/${post.file}`"
+            />
+          </div>
         </div>
       </router-link>
     </div>
-    <div class="timeline__image-post">
+    <!-- <div class="timeline__image-post">
       <img
         src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
         class="image-post__avatar"
@@ -31,10 +38,11 @@
         <a>username</a>
         <img
           class="image-post__img"
-          src="http://seattlemag.com/sites/default/files/field/image/views%20lead%20780%20x%20505.jpg"
+          src="http://localhost:3000/uploads/0c38c18c98bed5415d85ae52379a4001.jpg"
         />
+        <p class="text-post__content"></p>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

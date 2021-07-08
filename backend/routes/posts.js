@@ -2,24 +2,6 @@ const router = require('express').Router()
 const Post = require('../models/Post.js')
 const User = require('../models/User.js')
 const Comment = require('../models/Comment.js')
-const multer = require('multer')
-
-const storage = multer.diskStorage({
-  //destination for files
-  destination: (req, file, callback) => {
-    callback(null, './images/')
-  },
-
-  //add back the extension
-  filename: (req, file, callback) => {
-    callback(null, Date.now() + file.originalname)
-  },
-})
-
-//upload parameters for multer
-const upload = multer({
-  storage: storage,
-})
 
 //CREATE POST
 router.post('/', async (req, res) => {
@@ -40,9 +22,17 @@ router.post('/', async (req, res) => {
 })
 
 //UPLOAD
-router.post('/upload', upload.single('file'), (req, res) => {
-  res.json({ file: req.file })
-  console.log('file:' + req.file)
+router.post('/upload', (req, res) => {
+  const file = req.files.file
+  file.mv('uploads/' + file.name, function (err) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log('uploaded')
+    }
+  })
+  res.json({ file: req.body.file })
+  console.log('file:' + req.body.file)
 })
 
 //COMMENT POST
@@ -56,6 +46,7 @@ router.put('/:id/comment', async (req, res) => {
         postId: req.params.id,
         comment: req.body.comment,
         displayName: req.body.displayName,
+        file: req.body.file,
       },
     })
     await post.updateOne({ $push: { comments: req.body } })
