@@ -2,9 +2,14 @@ const router = require('express').Router()
 const Post = require('../models/Post.js')
 const User = require('../models/User.js')
 const Comment = require('../models/Comment.js')
+const multer = require('multer')
+
+const upload = multer({
+  dest: './uploads/',
+})
 
 //CREATE POST
-router.post('/', async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
   const newPost = new Post(req.body)
   await newPost.updateOne({
     $push: {
@@ -13,11 +18,21 @@ router.post('/', async (req, res) => {
   })
   try {
     const createPost = await newPost.save()
-    res.status(200).json(createPost)
+    res.status(200).json({ createPost })
   } catch (err) {
     res.status(500).json(err)
   }
 })
+
+// router.post('/upload', upload.single('file'), async (req, res) => {
+//   const newPost = new Post(req.body)
+
+//   try {X
+//     res.status(200).json({ createPost })
+//   } catch (err) {
+//     res.status(500).json(err)
+//   }
+// })
 
 //COMMENT POST
 router.put('/:id/comment', async (req, res) => {
