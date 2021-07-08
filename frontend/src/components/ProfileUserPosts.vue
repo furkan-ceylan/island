@@ -9,42 +9,41 @@
           },
         }"
       >
-        <img
-          src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
-        />
-        <div class="text-post__user-post">
-          <a>{{ post.displayName }}</a>
-          <p class="text-post__content">
-            {{ post.description }}
-          </p>
+        <div class="text-post">
+          <ProfileImage :id="post.userId" />
+          <div class="text-post__user-post">
+            <a>{{ post.displayName }}</a>
+            <p class="text-post__content" v-if="post.isTextPost">
+              {{ post.description }}
+            </p>
+            <img
+              class="image-post__img"
+              :src="`http://localhost:3000/uploads/${post.file}`"
+              v-else
+            />
+          </div>
         </div>
       </router-link>
     </div>
-    <!-- <div class="user-posts__image-post">
-      <img
-        src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
-        class="image-post__avatar"
-      />
-      <div class="image-post__user-post">
-        <a>username</a>
-        <img
-          class="image-post__img"
-          src="http://seattlemag.com/sites/default/files/field/image/views%20lead%20780%20x%20505.jpg"
-        />
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import ProfileImage from '@/components/ProfileImage'
 
 export default {
   name: 'ProfileUserPosts',
+  components: {
+    ProfileImage,
+  },
   props: ['id'],
   data() {
     return {
       posts: [],
+      user: [],
+      profilePicture: '',
+      userId: '',
     }
   },
   async mounted() {
@@ -52,6 +51,11 @@ export default {
       'http://localhost:3000/api/posts/' + this.id + '/posts'
     )
     this.posts = responsePosts.data
+
+    const responseUser = await axios.get(
+      'http://localhost:3000/api/users/' + this.userId
+    )
+    this.user = responseUser.data
   },
 }
 </script>
@@ -134,11 +138,16 @@ export default {
   margin-right: 1rem;
 }
 
-.image-post__user-post img {
+.text-post__user-post img {
   width: 100%;
   height: 100%;
   margin-right: 1rem;
   border-radius: 7px;
   max-height: 350px;
+}
+
+.text-post {
+  display: flex;
+  flex-direction: row;
 }
 </style>
