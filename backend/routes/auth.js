@@ -13,7 +13,7 @@ router.post('/register', async (req, res) => {
       email: req.body.email,
       password: hashedPass,
       displayName: req.body.displayName,
-      profilePicture: req.body.profilePicture,
+      profilePicture: req.body.file,
       description: req.body.description,
       birthDate: req.body.birthDate,
       hobbies: req.body.hobbies,
@@ -24,6 +24,20 @@ router.post('/register', async (req, res) => {
   } catch (err) {
     res.status(500).json(err)
   }
+})
+
+//UPLOAD
+router.post('/upload', (req, res) => {
+  const file = req.files.file
+  file.mv('uploads/user/' + file.name, function (err) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log('uploaded')
+    }
+  })
+  res.json({ file: req.body.file })
+  console.log('file:' + req.body.file)
 })
 
 //LOGIN
