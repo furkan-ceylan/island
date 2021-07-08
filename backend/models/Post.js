@@ -20,9 +20,9 @@ const PostSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    img: {
-      type: String,
-      default: '',
+    file: {
+      type: Array,
+      default: [],
     },
     comments: {
       type: Array,
