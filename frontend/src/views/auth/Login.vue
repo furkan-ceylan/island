@@ -23,7 +23,6 @@
         />
         <span class="input__label">Password</span>
       </label>
-
       <div class="button-group">
         <div class="button-group-left">
           <button @click="login">Login</button>
@@ -75,9 +74,8 @@ export default {
           }
         } catch (err) {
           this.error = true
+          this.password = ''
         }
-
-        this.password = ''
       }
     },
   },
