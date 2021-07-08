@@ -64,8 +64,10 @@
         <input
           class="input__field"
           type="file"
+          @change="onFileChange"
+          ref="file"
+          name="file"
           accept="image/*"
-          placeholder=" "
         />
         <span class="input__label">Upload a Profile Picture</span>
       </label>
@@ -76,7 +78,9 @@
         Please enter a valid email address
       </p>
       <div class="button-group">
-        <button @click="signUp" v-if="emailError">Sign Up</button>
+        <button @click="signUp">
+          Sign Up
+        </button>
       </div>
     </div>
   </article>
@@ -89,11 +93,10 @@ export default {
   name: 'Signup',
   data() {
     return {
-      user: [],
       email: '',
       password: '',
       description: '',
-      img: '',
+      file: '',
       displayName: '',
       birthDate: '',
       hobbies: '',
@@ -109,6 +112,10 @@ export default {
         this.emailError = false
       }
     },
+    onFileChange() {
+      const file = this.$refs.file.files[0]
+      this.file = file
+    },
     async signUp() {
       if (
         this.email === '' ||
@@ -116,11 +123,15 @@ export default {
         this.description === '' ||
         this.displayName === '' ||
         this.birthDate === '' ||
-        this.hobbies === ''
+        this.hobbies === '' ||
+        this.file.name === ''
       ) {
         this.fillError = true
       } else {
         this.fillError = false
+
+        const formData = new FormData()
+        formData.append('file', this.file)
 
         const response = await axios.post(
           'http://localhost:3000/api/auth/register',
@@ -131,16 +142,22 @@ export default {
             displayName: this.displayName,
             birthDate: this.birthDate,
             hobbies: this.hobbies,
+            file: this.file.name,
           }
         )
-        this.user.push(response.data)
+        try {
+          await axios.post('http://localhost:3000/api/auth/upload', formData)
+          await this.$router.push('/login')
+        } catch (err) {
+          console.log(err)
+        }
         this.email = ''
         this.password = ''
         this.description = ''
         this.displayName = ''
         this.birthDate = ''
         this.hobbies = ''
-        await this.$router.push('/login')
+        this.file.name = ''
       }
     },
   },
