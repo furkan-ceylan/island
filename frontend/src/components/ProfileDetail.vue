@@ -23,6 +23,16 @@
                 <a>Following:</a>
                 <span>{{ following }}</span>
               </div>
+              <div class="user-top__birth" v-if="!isFollowing">
+                <button class="btn btn-imageadd" @click="followUser">
+                  Follow
+                </button>
+              </div>
+              <div class="user-top__birth" v-else>
+                <button class="btn btn-unfollow" @click="unFollowUser">
+                  Unfollow
+                </button>
+              </div>
             </div>
           </div>
           <div class="detail__user-bot"></div>
@@ -41,33 +51,92 @@
     </div>
     <div class="profile-posts">
       <h3>Posts</h3>
-      <UserPosts :id="id" />
+      <ProfileUserPosts :id="id" />
     </div>
   </div>
 </template>
 
 <script>
-import UserPosts from '@/components/UserPosts'
+import ProfileUserPosts from '@/components/ProfileUserPosts'
 import axios from 'axios'
 
 export default {
   name: 'ProfileDetail',
   props: ['id'],
-  components: { UserPosts },
+  components: { ProfileUserPosts },
   data() {
     return {
       user: [],
       followers: '',
       following: '',
+      isFollowing: true,
     }
   },
   async mounted() {
     const responseUser = await axios.get(
       'http://localhost:3000/api/users/' + this.id
     )
-    this.user = responseUser.data
-    this.followers = this.user.followers.length
-    this.following = this.user.followings.length
+
+    const response = await axios.get('http://localhost:3000/api/auth/user', {
+      headers: { token: localStorage.getItem('token') },
+    })
+    const currentUser = response.data.user._id
+
+    const userData = responseUser.data
+    this.user = userData
+    this.followers = userData.followers.length
+    this.following = userData.followings.length
+    this.isFollowing = userData.followers.includes(currentUser)
+  },
+  methods: {
+    async followUser() {
+      const response = await axios.get('http://localhost:3000/api/auth/user', {
+        headers: { token: localStorage.getItem('token') },
+      })
+      const currentUser = response.data.user._id
+
+      const responseUser = await axios.get(
+        'http://localhost:3000/api/users/' + this.id
+      )
+
+      const userData = responseUser.data
+
+      const profileUser = response.data
+
+      const responseFollow = await axios.put(
+        'http://localhost:3000/api/users/' + this.id + '/follow',
+        {
+          userId: currentUser,
+        }
+      )
+
+      this.isFollowing = !profileUser.user.followers.includes(currentUser)
+      this.followers++
+      this.following = userData.followings.length
+    },
+    async unFollowUser() {
+      const response = await axios.get('http://localhost:3000/api/auth/user', {
+        headers: { token: localStorage.getItem('token') },
+      })
+      const currentUser = response.data.user._id
+
+      const responseUser = await axios.get(
+        'http://localhost:3000/api/users/' + this.id
+      )
+      const userData = responseUser.data
+
+      const profileUser = response.data
+
+      const responseunFollow = await axios.put(
+        'http://localhost:3000/api/users/' + this.id + '/unfollow',
+        {
+          userId: currentUser,
+        }
+      )
+      this.isFollowing = profileUser.user.followers.includes(currentUser)
+      this.followers--
+      this.following = userData.followings.length
+    },
   },
 }
 </script>
@@ -92,8 +161,8 @@ export default {
   border-radius: 0.3rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  width: 300px;
-  height: 70px;
+  width: 350px;
+  height: 80px;
   left: 7.8rem;
   top: 1.2rem;
 }
@@ -162,5 +231,33 @@ export default {
 
 .profile-posts h3 {
   margin-bottom: 1rem;
+}
+
+.btn-imageadd {
+  transform: translate(0, 3px);
+  transition: 0.4s;
+  background-color: var(--green);
+  margin-left: 2rem;
+}
+
+.btn-imageadd:hover {
+  background-color: #6dc271;
+  transition: 0.4s;
+  box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
+  transform: translate(0, -3px);
+}
+
+.btn-unfollow {
+  transform: translate(0, 3px);
+  transition: 0.4s;
+  background-color: var(--red);
+  margin-left: 2rem;
+}
+
+.btn-unfollow:hover {
+  background-color: #e64e49;
+  transition: 0.4s;
+  box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
+  transform: translate(0, -3px);
 }
 </style>
