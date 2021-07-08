@@ -3,28 +3,26 @@
     <TheHeader />
     <div class="profile__content">
       <div class="profile__left-sidebar">
-        <LeftSidebar />
+        <SidebarLeft />
       </div>
       <div class="profile__container">
         <ProfileDetail :id="id" />
       </div>
-      <div class="profile__right-sidebar">
-        <RightSidebar />
-      </div>
+      <div class="profile__right-sidebar"></div>
     </div>
   </div>
 </template>
 
 <script>
-import LeftSidebar from '@/components/LeftSidebar'
-import RightSidebar from '@/components/RightSidebar'
+import SidebarLeft from '@/components/SidebarLeft'
+import SidebarRight from '@/components/SidebarRight'
 import TheHeader from '@/components/TheHeader'
 import ProfileDetail from '@/components/ProfileDetail'
 
 export default {
   name: 'Profile',
   props: ['id'],
-  components: { LeftSidebar, RightSidebar, TheHeader, ProfileDetail },
+  components: { SidebarLeft, SidebarRight, TheHeader, ProfileDetail },
   computed() {
     this.auth = localStorage.getItem('token')
     console.log(localStorage.getItem('token'))

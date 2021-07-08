@@ -19,7 +19,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'RightSidebar',
+  name: 'SidebarRight',
   data() {
     return {
       users: [],

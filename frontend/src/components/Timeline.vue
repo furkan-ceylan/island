@@ -90,7 +90,7 @@ export default {
 
 .timeline__text-post:hover {
   transition: 0.4s;
-  box-shadow: rgb(233, 191, 191) 3px 3px 6px 0px inset,
+  box-shadow: rgb(211, 155, 155) 3px 3px 6px 0px inset,
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
   transform: translate(0, -3px);
   cursor: pointer;

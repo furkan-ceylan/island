@@ -61,7 +61,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'LeftSidebar',
+  name: 'SidebarLeft',
   data() {
     return {
       currentUser: '1',

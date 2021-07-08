@@ -3,26 +3,26 @@
     <TheHeader />
     <div class="home__content">
       <div class="home__left-sidebar">
-        <LeftSidebar />
+        <SidebarLeft />
       </div>
       <div class="home__container">
         <PostDetail :id="id" />
       </div>
       <div class="home__right-sidebar">
-        <RightSidebar />
+        <SidebarRight />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import LeftSidebar from '@/components/LeftSidebar'
-import RightSidebar from '@/components/RightSidebar'
+import SidebarLeft from '@/components/SidebarLeft'
+import SidebarRight from '@/components/SidebarRight'
 import PostDetail from '@/components/PostDetail'
 import TheHeader from '@/components/TheHeader'
 
 export default {
-  components: { LeftSidebar, RightSidebar, PostDetail, TheHeader },
+  components: { SidebarLeft, SidebarRight, PostDetail, TheHeader },
   props: ['id'],
   computed() {
     this.auth = localStorage.getItem('token')

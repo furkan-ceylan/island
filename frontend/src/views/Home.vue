@@ -3,33 +3,31 @@
     <TheHeader />
     <div class="home__content">
       <div class="home__left-sidebar">
-        <LeftSidebar />
+        <SidebarLeft />
       </div>
       <div class="home__container">
         <Timeline />
       </div>
       <div class="home__right-sidebar">
-        <RightSidebar />
+        <SidebarRight />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import LeftSidebar from '@/components/LeftSidebar'
-import RightSidebar from '@/components/RightSidebar'
+import SidebarRight from '@/components/SidebarRight'
+import SidebarLeft from '@/components/SidebarLeft'
 import Timeline from '@/components/Timeline'
 import TheHeader from '@/components/TheHeader'
 import axios from 'axios'
-import { useStore } from 'vuex'
 
 export default {
   name: 'Home',
-  components: { LeftSidebar, RightSidebar, Timeline, TheHeader },
+  components: { SidebarLeft, SidebarRight, Timeline, TheHeader },
   data() {
     return {
       user: [],
-      message: 'giriş yap',
     }
   },
   async mounted() {
