@@ -13,12 +13,19 @@ const CommentSchema = new mongoose.Schema(
     comment: {
       type: String,
       default: '',
-      required: true,
     },
     displayName: {
       type: String,
       default: '',
       required: true,
+    },
+    isTextComment: {
+      type: Boolean,
+      default: false,
+    },
+    file: {
+      type: String,
+      default: '',
     },
   },
   { timestamps: true }

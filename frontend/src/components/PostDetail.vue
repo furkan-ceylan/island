@@ -5,11 +5,18 @@
         <img
           src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
         />
-        <div class="text-post__user-post">
+        <div class="text-post__user-post" v-if="posts.isTextPost">
           <a>{{ posts.displayName }}</a>
           <p class="text-post__content">
             {{ posts.description }}
           </p>
+        </div>
+        <div class="image-post__user-post" v-else>
+          <a>{{ posts.displayName }}</a>
+          <img
+            class="image-post__img"
+            :src="`http://localhost:3000/uploads/${posts.file}`"
+          />
         </div>
       </div>
       <div class="comments">
@@ -17,18 +24,36 @@
           <img
             src="https://png.clipart.me/istock/previews/7063/70633839-person-avatar.jpg"
           />
-          <div class="text-post__user-post">
+          <div class="text-post__user-post" v-if="comment.isTextComment">
             <a>{{ comment.displayName }}</a>
             <p class="text-post__content">
               {{ comment.comment }}
             </p>
           </div>
+          <div class="image-post__user-post" v-else>
+            <a>{{ comment.displayName }}</a>
+            <img
+              class="image-post__img"
+              :src="`http://localhost:3000/uploads/${comment.file}`"
+            />
+          </div>
         </div>
       </div>
     </div>
-    <button @click="openAddComment = !openAddComment" class="btn btn-textadd">
-      Add a Comment
-    </button>
+    <div class="comment-buttons">
+      <button @click="openAddComment = !openAddComment" class="btn btn-textadd">
+        Add a Text Comment
+      </button>
+      <button
+        @click="
+          ;(openAddImageComment = !openAddImageComment),
+            (openAddComment = false)
+        "
+        class="btn btn-textadd"
+      >
+        Add an Image Comment
+      </button>
+    </div>
     <div class="add-post" v-if="openAddComment">
       <h2 class="add-post__title">
         Add a Comment
@@ -52,6 +77,49 @@
         </button>
       </div>
     </div>
+    <form
+      class="add-post"
+      @submit.prevent="addImageComment"
+      v-if="openAddImageComment"
+      enctype="multipart/form-data"
+    >
+      <h2 class="add-post__title">
+        Add an Image Comment
+      </h2>
+      <label class="input">
+        <input
+          class="input__field"
+          type="text"
+          placeholder=" "
+          v-model="imageTitle"
+        />
+        <span class="input__label">Title</span>
+      </label>
+      <label class="input">
+        <input
+          class="input__field"
+          type="file"
+          @change="onFileChange"
+          ref="file"
+          name="file"
+        />
+        <span class="input__label">Image</span>
+      </label>
+      <span class="input__label warn" v-if="fillError"
+        >Please fill in all fields</span
+      >
+      <div class="options">
+        <button type="submit" class="btn-addpost">
+          Add
+        </button>
+        <button
+          @click="openAddImageComment = !openAddImageComment"
+          class="btn-addpost"
+        >
+          Close
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -68,7 +136,11 @@ export default {
       user: [],
       commentModel: '',
       openAddComment: false,
+      openAddImageComment: false,
       fillError: false,
+      file: '',
+      imageTitle: '',
+      isTextComment: false,
     }
   },
   async mounted() {
@@ -95,6 +167,10 @@ export default {
     console.log(responseComment.data)
   },
   methods: {
+    onFileChange() {
+      const file = this.$refs.file.files[0]
+      this.file = file
+    },
     async addComment() {
       const responseId = await axios.get(
         'http://localhost:3000/api/auth/user',
@@ -119,10 +195,51 @@ export default {
             userId: currentUser,
             postId: this.id,
             displayName: this.user.displayName,
+            isTextComment: true,
           }
         )
         this.comments.push(response.data)
         this.commentModel = ''
+      }
+    },
+    async addImageComment() {
+      const responseId = await axios.get(
+        'http://localhost:3000/api/auth/user',
+        {
+          headers: { token: localStorage.getItem('token') },
+        }
+      )
+      const currentUser = responseId.data.user._id
+
+      const responseUser = await axios.get(
+        'http://localhost:3000/api/users/' + currentUser
+      )
+      this.user = responseUser.data
+
+      const formData = new FormData()
+      formData.append('file', this.file)
+
+      if (this.imageTitle === '' || this.file === '') {
+        this.fillError = true
+      } else {
+        const response = await axios.put(
+          'http://localhost:3000/api/posts/' + this.id + '/comment',
+          {
+            userId: currentUser,
+            postId: this.id,
+            displayName: this.user.displayName,
+            file: this.file.name,
+            isTextComment: false,
+          }
+        )
+        this.comments.push(response.data)
+        try {
+          await axios.post('http://localhost:3000/api/posts/upload', formData)
+          console.log('its ok')
+        } catch (err) {
+          console.log(err)
+        }
+        this.imageTitle = ''
       }
     },
   },
@@ -192,8 +309,7 @@ export default {
   background-color: var(--green);
   width: 8rem;
   font-size: 0.85rem;
-  right: 0;
-  margin-left: auto;
+  margin-right: 1rem;
 }
 
 .btn-textadd:hover {
@@ -300,5 +416,36 @@ export default {
 
 .warn {
   color: var(--red);
+}
+
+.image-post__user-post {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-post__user-post a {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.image-post__avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 35%;
+  margin-right: 1rem;
+}
+
+.image-post__user-post img {
+  width: 100%;
+  height: 100%;
+  margin-right: 1rem;
+  border-radius: 7px;
+  max-height: 350px;
+}
+
+.comment-buttons {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
