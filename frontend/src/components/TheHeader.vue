@@ -85,7 +85,11 @@
         </button>
       </div>
     </div>
-    <div class="add-post" v-if="openAddImagePost">
+    <form
+      class="add-post"
+      @submit.prevent="addImagePost"
+      v-if="openAddImagePost"
+    >
       <h2 class="add-post__title">
         Add an Image Post
       </h2>
@@ -105,6 +109,7 @@
           accept="image/*"
           placeholder=" "
           @change="onFileChange"
+          ref="file"
         />
         <span class="input__label">Image</span>
       </label>
@@ -112,7 +117,9 @@
         >Please fill in all fields</span
       >
       <div class="options">
-        <button class="btn-addpost" @click.prevent="addImagePost()">Add</button>
+        <button type="submit" class="btn-addpost">
+          Add
+        </button>
         <button
           @click="openAddImagePost = !openAddImagePost"
           class="btn-addpost"
@@ -120,7 +127,7 @@
           Close
         </button>
       </div>
-    </div>
+    </form>
   </header>
 </template>
 
@@ -136,19 +143,20 @@ export default {
       textTitle: '',
       imageTitle: '',
       textDescription: '',
-      image: '',
-      isTextPost: false,
-      isImagePost: false,
       openAddTextPost: false,
       openAddImagePost: false,
       fillError: false,
-      auth: false,
+      auth: '',
       username: '',
+      file: '',
     }
   },
   methods: {
     async addTextPost() {
-      const currentUser = '60df466844d54d0adc94f75e'
+      const response = await axios.get('http://localhost:3000/api/auth/user', {
+        headers: { token: localStorage.getItem('token') },
+      })
+      const currentUser = response.data.user._id
 
       if (this.textDescription === '' || this.textTitle === '') {
         this.fillError = true
@@ -162,7 +170,7 @@ export default {
           description: this.textDescription,
           title: this.textTitle,
           isTextPost: true,
-          userId: '60df466844d54d0adc94f75e',
+          userId: currentUser,
           displayName: this.user.displayName,
         })
 
@@ -172,31 +180,41 @@ export default {
         this.openAddTextPost = false
       }
     },
-    onFileChange(e) {
-      const files = e.target.files || e.dataTransfer.files
-      if (!files.length) return
-      this.createImage(files[0])
-    },
-    createImage(file) {
-      const image = new Image()
-      const reader = new FileReader()
-
-      reader.onload = (e) => {
-        this.image = e.target.result
-      }
-      reader.readAsDataURL(file)
+    onFileChange() {
+      this.file = this.$refs.file.files[0]
     },
     async addImagePost() {
-      if (this.imageTitle === '' || this.image === '') {
+      const response = await axios.get('http://localhost:3000/api/auth/user', {
+        headers: { token: localStorage.getItem('token') },
+      })
+      const currentUser = response.data.user._id
+
+      if (this.imageTitle === '' || this.file === '') {
         this.fillError = true
       } else {
-        const response = await axios.post('http://localhost:3000/api/posts/', {
-          title: this.imageTitle,
-          isTextPost: true,
-          userId: '60df467d44d54d0adc94f760',
-        })
+        const formData = new FormData()
+        formData.append('file', this.file)
+
+        const responseUsers = await axios.get(
+          'http://localhost:3000/api/users/' + currentUser
+        )
+        this.user = responseUsers.data
+
+        console.log(this.file)
+
+        const response = await axios.post(
+          'http://localhost:3000/api/posts/',
+          {
+            title: this.imageTitle,
+            isImagePost: true,
+            displayName: this.user.displayName,
+            userId: currentUser,
+          },
+          formData
+        )
         this.posts.push(response.data)
         this.imageTitle = ''
+        this.file = ''
       }
     },
     async logout() {
@@ -209,11 +227,9 @@ export default {
       headers: { token: localStorage.getItem('token') },
     })
     this.username = response.data.user.displayName
-    console.log(response.data.user)
   },
   computed() {
     this.auth = localStorage.getItem('token')
-    console.log(localStorage.getItem('token'))
   },
 }
 </script>
