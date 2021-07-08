@@ -47,7 +47,6 @@ export default {
   name: 'Login',
   data() {
     return {
-      user: [],
       email: '',
       password: '',
       error: false,
@@ -64,25 +63,22 @@ export default {
           email: this.email,
           password: this.password,
         }
-        const response = await axios.post(
-          'http://localhost:3000/api/auth/login',
-          data
-        )
-        if (
-          response.status === 404 ||
-          response.status === 401 ||
-          response.status === 400
-        ) {
+        try {
+          const response = await axios.post(
+            'http://localhost:3000/api/auth/login',
+            data
+          )
+          if (response.status === 200) {
+            this.error = false
+            localStorage.setItem('token', response.data.token)
+            await this.$router.push('/')
+          }
+        } catch (err) {
           this.error = true
-        } else if (response.status === 200) {
-          this.error = false
-          localStorage.setItem('token', response.data.token)
         }
 
-        this.user.push(response.data)
         this.password = ''
       }
-      await this.$router.push('/')
     },
   },
 }
