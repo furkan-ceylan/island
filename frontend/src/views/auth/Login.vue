@@ -17,7 +17,7 @@
       <label class="input">
         <input
           class="input__field"
-          type="text"
+          type="password"
           placeholder=" "
           v-model="password"
         />
@@ -33,6 +33,9 @@
           <router-link to="/signup"> <button>Sign Up</button></router-link>
         </div>
       </div>
+      <p class="warn" v-if="error">
+        Please check your email and password
+      </p>
     </div>
   </article>
 </template>
@@ -47,6 +50,7 @@ export default {
       user: [],
       email: '',
       password: '',
+      error: false,
     }
   },
   methods: {
@@ -64,9 +68,15 @@ export default {
           'http://localhost:3000/api/auth/login',
           data
         )
-        if (response.status === 200) {
-          console.log(response),
-            localStorage.setItem('token', response.data.token)
+        if (
+          response.status === 404 ||
+          response.status === 401 ||
+          response.status === 400
+        ) {
+          this.error = true
+        } else if (response.status === 200) {
+          this.error = false
+          localStorage.setItem('token', response.data.token)
         }
 
         this.user.push(response.data)
@@ -184,5 +194,10 @@ button + button {
 
 .hidden {
   display: none;
+}
+
+.warn {
+  color: var(--red);
+  margin-top: 1rem;
 }
 </style>

@@ -116,8 +116,7 @@ export default {
         this.description === '' ||
         this.displayName === '' ||
         this.birthDate === '' ||
-        this.hobbies === '' ||
-        this.emailError === true
+        this.hobbies === ''
       ) {
         this.fillError = true
       } else {
