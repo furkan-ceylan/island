@@ -187,10 +187,12 @@ export default {
 }
 
 .image-post__img {
-  width: 54px;
-  height: 54px;
-  margin-right: 1rem;
-  border-radius: 100%;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  max-height: 350px;
+  object-fit: cover;
+  margin-bottom: 1rem;
 }
 
 .skeletor {

@@ -455,9 +455,10 @@ export default {
 
 .image-post__user-post img {
   width: 500px;
-  height: 400px;
+  height: 100%;
   border-radius: 7px;
   max-height: 350px;
+  object-fit: cover;
 }
 
 .comment-buttons {
