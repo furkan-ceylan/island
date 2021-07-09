@@ -172,24 +172,18 @@ export default {
   async mounted() {
     this.isSkeletorLoading = true
 
-    const response = await axios.get('http://localhost:3000/api/auth/user', {
+    const response = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
     const currentUser = response.data.user._id
 
-    const responseUser = await axios.get(
-      'http://localhost:3000/api/users/' + currentUser
-    )
+    const responseUser = await axios.get('users/' + currentUser)
     this.user = responseUser.data
 
-    const responsePost = await axios.get(
-      'http://localhost:3000/api/posts/' + this.id
-    )
+    const responsePost = await axios.get('posts/' + this.id)
     this.posts = responsePost.data
 
-    const responseComment = await axios.get(
-      'http://localhost:3000/api/posts/' + this.id + '/comments'
-    )
+    const responseComment = await axios.get('posts/' + this.id + '/comments')
     this.comments = responseComment.data
 
     this.isSkeletorLoading = false
@@ -201,32 +195,24 @@ export default {
     },
     async addComment() {
       this.isLoading = true
-      const responseId = await axios.get(
-        'http://localhost:3000/api/auth/user',
-        {
-          headers: { token: localStorage.getItem('token') },
-        }
-      )
+      const responseId = await axios.get('auth/user', {
+        headers: { token: localStorage.getItem('token') },
+      })
       const currentUser = responseId.data.user._id
 
-      const responseUser = await axios.get(
-        'http://localhost:3000/api/users/' + currentUser
-      )
+      const responseUser = await axios.get('users/' + currentUser)
       this.user = responseUser.data
 
       if (this.commentModel === '') {
         this.fillError = true
       } else {
-        const response = await axios.put(
-          'http://localhost:3000/api/posts/' + this.id + '/comment',
-          {
-            comment: this.commentModel,
-            userId: currentUser,
-            postId: this.id,
-            displayName: this.user.displayName,
-            isTextComment: true,
-          }
-        )
+        const response = await axios.put('posts/' + this.id + '/comment', {
+          comment: this.commentModel,
+          userId: currentUser,
+          postId: this.id,
+          displayName: this.user.displayName,
+          isTextComment: true,
+        })
         this.comments.push(response.data)
         this.commentModel = ''
         this.isLoading = false
@@ -236,17 +222,12 @@ export default {
     async addImageComment() {
       this.isLoading = true
 
-      const responseId = await axios.get(
-        'http://localhost:3000/api/auth/user',
-        {
-          headers: { token: localStorage.getItem('token') },
-        }
-      )
+      const responseId = await axios.get('auth/user', {
+        headers: { token: localStorage.getItem('token') },
+      })
       const currentUser = responseId.data.user._id
 
-      const responseUser = await axios.get(
-        'http://localhost:3000/api/users/' + currentUser
-      )
+      const responseUser = await axios.get('users/' + currentUser)
       this.user = responseUser.data
 
       const formData = new FormData()
@@ -255,19 +236,16 @@ export default {
       if (this.imageTitle === '' || this.file === '') {
         this.fillError = true
       } else {
-        const response = await axios.put(
-          'http://localhost:3000/api/posts/' + this.id + '/comment',
-          {
-            userId: currentUser,
-            postId: this.id,
-            displayName: this.user.displayName,
-            file: this.file.name,
-            isTextComment: false,
-          }
-        )
+        const response = await axios.put('posts/' + this.id + '/comment', {
+          userId: currentUser,
+          postId: this.id,
+          displayName: this.user.displayName,
+          file: this.file.name,
+          isTextComment: false,
+        })
         this.comments.push(response.data)
         try {
-          await axios.post('http://localhost:3000/api/posts/upload', formData)
+          await axios.post('posts/upload', formData)
         } catch (err) {
           console.log(err)
         }

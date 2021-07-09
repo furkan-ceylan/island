@@ -74,11 +74,9 @@ export default {
     }
   },
   async mounted() {
-    const responseUser = await axios.get(
-      'http://localhost:3000/api/users/' + this.id
-    )
+    const responseUser = await axios.get('users/' + this.id)
 
-    const response = await axios.get('http://localhost:3000/api/auth/user', {
+    const response = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
     const currentUser = response.data.user._id
@@ -91,45 +89,38 @@ export default {
   },
   methods: {
     async followUser() {
-      const response = await axios.get('http://localhost:3000/api/auth/user', {
+      const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
       const currentUser = response.data.user._id
 
-      const responseUser = await axios.get(
-        'http://localhost:3000/api/users/' + this.id
-      )
+      const responseUser = await axios.get('users/' + this.id)
 
       const userData = responseUser.data
 
       const profileUser = response.data
 
-      const responseFollow = await axios.put(
-        'http://localhost:3000/api/users/' + this.id + '/follow',
-        {
-          userId: currentUser,
-        }
-      )
+      const responseFollow = await axios.put('users/' + this.id + '/follow', {
+        userId: currentUser,
+      })
 
       this.isFollowing = !profileUser.user.followers.includes(currentUser)
       this.followers++
       this.following = userData.followings.length
     },
     async unFollowUser() {
-      const response = await axios.get('http://localhost:3000/api/auth/user', {
+      const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
       const currentUser = response.data.user._id
 
-      const responseUser = await axios.get(
-        'http://localhost:3000/api/users/' + this.id
-      )
+      const responseUser = await axios.get('users/' + this.id)
       const userData = responseUser.data
 
       const profileUser = response.data
 
       const responseunFollow = await axios.put(
-        'http://localhost:3000/api/users/' + this.id + '/unfollow',
+        'users/' + this.id + '/unfollow',
         {
           userId: currentUser,
         }

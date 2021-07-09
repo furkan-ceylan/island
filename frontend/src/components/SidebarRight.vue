@@ -53,7 +53,7 @@ export default {
   display: flex;
   flex-direction: row;
   width: 17%;
-  height: 500px;
+  height: 650px;
   margin-left: 1rem;
   margin-top: 5rem;
   position: fixed;

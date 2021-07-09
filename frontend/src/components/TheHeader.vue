@@ -169,7 +169,7 @@ export default {
   methods: {
     async addTextPost() {
       this.isLoading = true
-      const response = await axios.get('http://localhost:3000/api/auth/user', {
+      const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
       const currentUser = response.data.user._id
@@ -177,12 +177,10 @@ export default {
       if (this.textDescription === '' || this.textTitle === '') {
         this.fillError = true
       } else {
-        const responseUsers = await axios.get(
-          'http://localhost:3000/api/users/' + currentUser
-        )
+        const responseUsers = await axios.get('users/' + currentUser)
         this.user = responseUsers.data
 
-        const response = await axios.post('http://localhost:3000/api/posts/', {
+        const response = await axios.post('posts/', {
           description: this.textDescription,
           title: this.textTitle,
           isTextPost: true,
@@ -203,7 +201,7 @@ export default {
     },
     async addImagePost() {
       this.isLoading = true
-      const response = await axios.get('http://localhost:3000/api/auth/user', {
+      const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
       const currentUser = response.data.user._id
@@ -214,12 +212,10 @@ export default {
       if (this.imageTitle === '' || this.file === '') {
         this.fillError = true
       } else {
-        const responseUsers = await axios.get(
-          'http://localhost:3000/api/users/' + currentUser
-        )
+        const responseUsers = await axios.get('users/' + currentUser)
         this.user = responseUsers.data
 
-        const response = await axios.post('http://localhost:3000/api/posts/', {
+        const response = await axios.post('posts/', {
           title: this.imageTitle,
           isImagePost: true,
           displayName: this.user.displayName,
@@ -227,7 +223,7 @@ export default {
           file: this.file.name,
         })
         try {
-          await axios.post('http://localhost:3000/api/posts/upload', formData)
+          await axios.post('posts/upload', formData)
           console.log('its ok')
         } catch (err) {
           console.log(err)
@@ -245,7 +241,7 @@ export default {
     },
   },
   async mounted() {
-    const response = await axios.get('http://localhost:3000/api/auth/user', {
+    const response = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
     this.username = response.data.user.displayName

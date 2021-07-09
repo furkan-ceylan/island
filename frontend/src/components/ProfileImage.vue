@@ -18,9 +18,7 @@ export default {
     }
   },
   async mounted() {
-    const responseUser = await axios.get(
-      'http://localhost:3000/api/users/' + this.id
-    )
+    const responseUser = await axios.get('users/' + this.id)
     this.user = responseUser.data
     this.profilePicture = this.user.profilePicture
   },

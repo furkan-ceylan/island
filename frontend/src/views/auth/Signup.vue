@@ -133,20 +133,17 @@ export default {
         const formData = new FormData()
         formData.append('file', this.file)
 
-        const response = await axios.post(
-          'http://localhost:3000/api/auth/register',
-          {
-            email: this.email,
-            password: this.password,
-            description: this.description,
-            displayName: this.displayName,
-            birthDate: this.birthDate,
-            hobbies: this.hobbies,
-            file: this.file.name,
-          }
-        )
+        const response = await axios.post('auth/register', {
+          email: this.email,
+          password: this.password,
+          description: this.description,
+          displayName: this.displayName,
+          birthDate: this.birthDate,
+          hobbies: this.hobbies,
+          file: this.file.name,
+        })
         try {
-          await axios.post('http://localhost:3000/api/auth/upload', formData)
+          await axios.post('auth/upload', formData)
           await this.$router.push('/login')
         } catch (err) {
           console.log(err)

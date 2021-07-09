@@ -68,7 +68,7 @@ export default {
     }
   },
   async mounted() {
-    const response = await axios.get('http://localhost:3000/api/auth/user', {
+    const response = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
     this.currentUser = response.data.user._id
@@ -83,7 +83,7 @@ export default {
   display: flex;
   flex-direction: row;
   width: 16%;
-  height: 500px;
+  height: 650px;
   margin-left: 1rem;
   margin-top: 5rem;
   position: fixed;

@@ -1,14 +1,14 @@
 <template>
   <div class="timeline">
     <Skeletor circle size="50" class="skeletor" v-if="isLoading" />
-    <Skeletor v-if="isLoading" class="skeletor" width="600" height="20" />
-    <Skeletor v-if="isLoading" class="skeletor" width="600" height="300" />
+    <Skeletor v-if="isLoading" class="skeletor" width="100%" height="20" />
+    <Skeletor v-if="isLoading" class="skeletor" width="100%" height="300" />
     <Skeletor circle size="50" class="skeletor" v-if="isLoading" />
-    <Skeletor v-if="isLoading" class="skeletor" width="600" height="20" />
-    <Skeletor v-if="isLoading" class="skeletor" width="600" height="300" />
+    <Skeletor v-if="isLoading" class="skeletor" width="100%" height="20" />
+    <Skeletor v-if="isLoading" class="skeletor" width="100%" height="300" />
     <Skeletor circle size="50" class="skeletor" v-if="isLoading" />
-    <Skeletor v-if="isLoading" class="skeletor" width="600" height="20" />
-    <Skeletor v-if="isLoading" class="skeletor" width="600" height="300" />
+    <Skeletor v-if="isLoading" class="skeletor" width="100%" height="20" />
+    <Skeletor v-if="isLoading" class="skeletor" width="100%" height="300" />
     <div class="timeline__post" v-for="post in posts" :key="post._id" v-else>
       <router-link
         :to="{
@@ -76,19 +76,17 @@ export default {
   },
   async mounted() {
     this.isLoading = true
-    const responseId = await axios.get('http://localhost:3000/api/auth/user', {
+    const responseId = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
     const currentUser = responseId.data.user._id
 
-    const responsePost = await axios.get(
-      'http://localhost:3000/api/posts/timeline/' + currentUser
-    )
+    const responsePost = await axios.get('posts/timeline/' + currentUser)
     this.posts = responsePost.data
 
     this.isLoading = false
 
-    const responseUsers = await axios.get('http://localhost:3000/api/users/')
+    const responseUsers = await axios.get('users/')
     this.users = responseUsers.data
   },
 }

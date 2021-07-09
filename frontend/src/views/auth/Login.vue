@@ -63,10 +63,7 @@ export default {
           password: this.password,
         }
         try {
-          const response = await axios.post(
-            'http://localhost:3000/api/auth/login',
-            data
-          )
+          const response = await axios.post('auth/login', data)
           if (response.status === 200) {
             this.error = false
             localStorage.setItem('token', response.data.token)
