@@ -1,6 +1,15 @@
 <template>
   <div class="timeline">
-    <div class="timeline__text-post" v-for="post in posts" :key="post._id">
+    <Skeletor circle size="50" class="skeletor" v-if="isLoading" />
+    <Skeletor v-if="isLoading" class="skeletor" width="600" height="20" />
+    <Skeletor v-if="isLoading" class="skeletor" width="600" height="300" />
+    <Skeletor circle size="50" class="skeletor" v-if="isLoading" />
+    <Skeletor v-if="isLoading" class="skeletor" width="600" height="20" />
+    <Skeletor v-if="isLoading" class="skeletor" width="600" height="300" />
+    <Skeletor circle size="50" class="skeletor" v-if="isLoading" />
+    <Skeletor v-if="isLoading" class="skeletor" width="600" height="20" />
+    <Skeletor v-if="isLoading" class="skeletor" width="600" height="300" />
+    <div class="timeline__post" v-for="post in posts" :key="post._id" v-else>
       <router-link
         :to="{
           name: 'PostDetail',
@@ -9,20 +18,34 @@
           },
         }"
       >
-        <div class="text-post">
-          <ProfileImage :id="post.userId" class="text-post__img" />
-          <div class="text-post__user-post" v-if="post.isTextPost">
-            <a>{{ post.displayName }}</a>
-            <p class="text-post__content">
-              {{ post.description }}
-            </p>
+        <div class="post">
+          <div class="user-post-img">
+            <ProfileImage :id="post.userId" class="post__img" />
+          </div>
+          <div class="post__user-post" v-if="post.isTextPost">
+            <div class="user-post-name">
+              <a>
+                {{ post.displayName }}
+              </a>
+            </div>
+            <div class="user-post-desc">
+              <p class="post__content">
+                {{ post.description }}
+              </p>
+            </div>
           </div>
           <div class="image-post__user-post" v-else>
-            <a>{{ post.displayName }}</a>
-            <img
-              class="image-post__img"
-              :src="`http://localhost:3000/uploads/${post.file}`"
-            />
+            <div class="user-post-name">
+              <a>
+                {{ post.displayName }}
+              </a>
+            </div>
+            <div class="user-post-image">
+              <img
+                class="image-post__img"
+                :src="`http://localhost:3000/uploads/${post.file}`"
+              />
+            </div>
           </div>
         </div>
       </router-link>
@@ -33,10 +56,12 @@
 <script>
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
+import 'vue-skeletor/dist/vue-skeletor.css'
+import { Skeletor } from 'vue-skeletor'
 
 export default {
   name: 'Timeline',
-  components: { ProfileImage },
+  components: { ProfileImage, Skeletor },
   data() {
     return {
       posts: [],
@@ -46,9 +71,11 @@ export default {
       displayName: '',
       isTextPost: false,
       isImagePost: false,
+      isLoading: false,
     }
   },
   async mounted() {
+    this.isLoading = true
     const responseId = await axios.get('http://localhost:3000/api/auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
@@ -59,19 +86,21 @@ export default {
     )
     this.posts = responsePost.data
 
+    this.isLoading = false
+
     const responseUsers = await axios.get('http://localhost:3000/api/users/')
     this.users = responseUsers.data
   },
 }
 </script>
 
-<style scoped>
+<style class="scss" scoped>
 .timeline {
   width: 100%;
   height: 100%;
 }
 
-.timeline__text-post {
+.timeline__post {
   padding: 1.5rem;
   display: flex;
   justify-content: flex-start;
@@ -82,7 +111,7 @@ export default {
   transition: 0.4s;
 }
 
-.timeline__text-post:hover {
+.timeline__post:hover {
   transition: 0.4s;
   box-shadow: rgb(211, 155, 155) 3px 3px 6px 0px inset,
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
@@ -97,19 +126,19 @@ export default {
   margin-right: 1rem;
 }
 
-.text-post {
+.post {
   display: flex;
   justify-content: flex-start;
   width: 700px;
 }
 
-.text-post__user-post a {
+.post__user-post a {
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
-.text-post__content {
-  font-size: 0.75rem;
+.post__content {
+  font-size: 0.9rem;
 }
 
 .timeline__image-post {
@@ -138,7 +167,7 @@ export default {
 
 .image-post__user-post a {
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -155,5 +184,24 @@ export default {
   margin-right: 1rem;
   border-radius: 7px;
   max-height: 350px;
+  max-width: 600px;
+  margin-top: 1rem;
+}
+
+.image-post__img {
+  width: 54px;
+  height: 54px;
+  margin-right: 1rem;
+  border-radius: 100%;
+}
+
+.skeletor {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.skeletor-content {
+  margin-left: 1rem;
 }
 </style>

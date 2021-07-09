@@ -1,7 +1,20 @@
 <template>
   <div class="post-detail">
     <div class="timeline__text-post">
-      <div class="main-post">
+      <Skeletor circle size="50" class="skeletor" v-if="isSkeletorLoading" />
+      <Skeletor
+        v-if="isSkeletorLoading"
+        class="skeletor"
+        width="600"
+        height="20"
+      />
+      <Skeletor
+        v-if="isSkeletorLoading"
+        class="skeletor"
+        width="600"
+        height="300"
+      />
+      <div class="main-post" v-else>
         <ProfileImage :id="posts.userId" class="text-post__img" />
         <div class="text-post__user-post" v-if="posts.isTextPost">
           <a>{{ posts.displayName }}</a>
@@ -132,11 +145,13 @@
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import 'vue-skeletor/dist/vue-skeletor.css'
+import { Skeletor } from 'vue-skeletor'
 
 export default {
   name: 'PostDetail',
   props: ['id'],
-  components: { ProfileImage, SyncLoader },
+  components: { ProfileImage, SyncLoader, Skeletor },
   data() {
     return {
       posts: [],
@@ -151,9 +166,12 @@ export default {
       isTextComment: false,
       userId: '',
       isLoading: false,
+      isSkeletorLoading: false,
     }
   },
   async mounted() {
+    this.isSkeletorLoading = true
+
     const response = await axios.get('http://localhost:3000/api/auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
@@ -173,6 +191,8 @@ export default {
       'http://localhost:3000/api/posts/' + this.id + '/comments'
     )
     this.comments = responseComment.data
+
+    this.isSkeletorLoading = false
   },
   methods: {
     onFileChange() {

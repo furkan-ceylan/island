@@ -2,8 +2,13 @@
   <div class="right-sidebar">
     <div class="friends">
       <h4 class="friends-title">People</h4>
-
-      <div class="friend" v-for="user in users" :key="user._id">
+      <Skeletor circle size="50" v-if="isLoading" />
+      <Skeletor v-if="isLoading" class="skeleton" width="150" height="20" />
+      <Skeletor circle size="50" v-if="isLoading" />
+      <Skeletor v-if="isLoading" class="skeleton" width="150" height="20" />
+      <Skeletor circle size="50" v-if="isLoading" />
+      <Skeletor v-if="isLoading" class="skeleton" width="150" height="20" />
+      <div class="friend" v-for="user in users" :key="user._id" v-else>
         <router-link :to="`/profile/${user._id}`">
           <div class="friend-info">
             <img
@@ -20,17 +25,23 @@
 
 <script>
 import axios from 'axios'
+import 'vue-skeletor/dist/vue-skeletor.css'
+import { Skeletor } from 'vue-skeletor'
 
 export default {
   name: 'SidebarRight',
+  components: { Skeletor },
   data() {
     return {
       users: [],
+      isLoading: false,
     }
   },
   async mounted() {
+    this.isLoading = true
     const responseUsers = await axios.get('http://localhost:3000/api/users/')
     this.users = responseUsers.data
+    this.isLoading = false
   },
 }
 </script>
@@ -90,5 +101,9 @@ export default {
   width: 35px;
   height: 35px;
   border-radius: 100%;
+}
+
+.skeleton {
+  margin-left: 3rem;
 }
 </style>
