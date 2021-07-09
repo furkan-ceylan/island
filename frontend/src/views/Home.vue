@@ -21,10 +21,12 @@ import SidebarLeft from '@/components/SidebarLeft'
 import Timeline from '@/components/Timeline'
 import TheHeader from '@/components/TheHeader'
 import axios from 'axios'
+import { checkAuth } from '../mixins/mixin'
 
 export default {
   name: 'Home',
   components: { SidebarLeft, SidebarRight, Timeline, TheHeader },
+  mixins: [checkAuth],
   data() {
     return {
       user: [],
@@ -35,14 +37,6 @@ export default {
       headers: { token: localStorage.getItem('token') },
     })
     this.username = response.data.user.displayName
-  },
-  computed() {
-    this.auth = localStorage.getItem('token')
-  },
-  created() {
-    if (localStorage.getItem('token') === null) {
-      this.$router.push('/login')
-    }
   },
 }
 </script>

@@ -18,20 +18,13 @@ import SidebarLeft from '@/components/SidebarLeft'
 import SidebarRight from '@/components/SidebarRight'
 import TheHeader from '@/components/TheHeader'
 import ProfileDetail from '@/components/ProfileDetail'
+import { checkAuth } from '../mixins/mixin'
 
 export default {
   name: 'Profile',
   props: ['id'],
   components: { SidebarLeft, SidebarRight, TheHeader, ProfileDetail },
-  computed() {
-    this.auth = localStorage.getItem('token')
-    console.log(localStorage.getItem('token'))
-  },
-  created() {
-    if (localStorage.getItem('token') === null) {
-      this.$router.push('/login')
-    }
-  },
+  mixins: [checkAuth],
 }
 </script>
 
