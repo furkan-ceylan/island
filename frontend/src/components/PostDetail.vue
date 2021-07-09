@@ -67,8 +67,15 @@
         >Please fill in all fields
       </span>
       <div class="options">
-        <button class="btn-addpost" @click="addComment">Add</button>
-        <button @click="openAddComment = !openAddComment" class="btn-addpost">
+        <button class="btn-addpost" @click="addComment" v-if="!isLoading">
+          Add
+        </button>
+        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
+        <button
+          @click="openAddComment = !openAddComment"
+          class="btn-addpost"
+          v-if="!isLoading"
+        >
           Close
         </button>
       </div>
@@ -105,12 +112,14 @@
         >Please fill in all fields</span
       >
       <div class="options">
-        <button type="submit" class="btn-addpost">
+        <button type="submit" class="btn-addpost" v-if="!isLoading">
           Add
         </button>
+        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
         <button
           @click="openAddImageComment = !openAddImageComment"
           class="btn-addpost"
+          v-if="!isLoading"
         >
           Close
         </button>
@@ -122,11 +131,12 @@
 <script>
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
+import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 export default {
   name: 'PostDetail',
   props: ['id'],
-  components: { ProfileImage },
+  components: { ProfileImage, SyncLoader },
   data() {
     return {
       posts: [],
@@ -140,6 +150,7 @@ export default {
       imageTitle: '',
       isTextComment: false,
       userId: '',
+      isLoading: false,
     }
   },
   async mounted() {
@@ -169,6 +180,7 @@ export default {
       this.file = file
     },
     async addComment() {
+      this.isLoading = true
       const responseId = await axios.get(
         'http://localhost:3000/api/auth/user',
         {
@@ -197,9 +209,13 @@ export default {
         )
         this.comments.push(response.data)
         this.commentModel = ''
+        this.isLoading = false
+        this.openAddComment = false
       }
     },
     async addImageComment() {
+      this.isLoading = true
+
       const responseId = await axios.get(
         'http://localhost:3000/api/auth/user',
         {
@@ -236,6 +252,8 @@ export default {
           console.log(err)
         }
         this.imageTitle = ''
+        this.isLoading = false
+        this.openAddImageComment = false
       }
     },
   },
@@ -297,6 +315,7 @@ export default {
 .comment {
   margin-top: 1rem;
   display: flex;
+  flex-direction: row;
 }
 
 .btn-textadd {

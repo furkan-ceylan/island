@@ -79,8 +79,15 @@
         >Please fill in all fields</span
       >
       <div class="options">
-        <button class="btn-addpost" @click="addTextPost">Add</button>
-        <button @click="openAddTextPost = !openAddTextPost" class="btn-addpost">
+        <button class="btn-addpost" @click="addTextPost" v-if="!isLoading">
+          Add
+        </button>
+        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
+        <button
+          @click="openAddTextPost = !openAddTextPost"
+          class="btn-addpost"
+          v-if="!isLoading"
+        >
           Close
         </button>
       </div>
@@ -117,12 +124,14 @@
         >Please fill in all fields</span
       >
       <div class="options">
-        <button type="submit" class="btn-addpost">
+        <button type="submit" class="btn-addpost" v-if="!isLoading">
           Add
         </button>
+        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
         <button
           @click="openAddImagePost = !openAddImagePost"
           class="btn-addpost"
+          v-if="!isLoading"
         >
           Close
         </button>
@@ -133,9 +142,13 @@
 
 <script>
 import axios from 'axios'
+import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 export default {
   name: 'TheHeader',
+  components: {
+    SyncLoader,
+  },
   data() {
     return {
       posts: [],
@@ -150,10 +163,12 @@ export default {
       username: '',
       file: null,
       profilePicture: '',
+      isLoading: false,
     }
   },
   methods: {
     async addTextPost() {
+      this.isLoading = true
       const response = await axios.get('http://localhost:3000/api/auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
@@ -179,6 +194,7 @@ export default {
         this.textDescription = ''
         this.textTitle = ''
         this.openAddTextPost = false
+        this.isLoading = false
       }
     },
     onFileChange() {
@@ -186,6 +202,7 @@ export default {
       this.file = file
     },
     async addImagePost() {
+      this.isLoading = true
       const response = await axios.get('http://localhost:3000/api/auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
@@ -217,6 +234,8 @@ export default {
         }
 
         this.posts.push(response.data)
+        this.isLoading = false
+        this.openAddImagePost = false
         this.imageTitle = ''
       }
     },
