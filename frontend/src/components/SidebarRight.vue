@@ -39,7 +39,7 @@ export default {
   },
   async mounted() {
     this.isLoading = true
-    const responseUsers = await axios.get('http://localhost:3000/api/users/')
+    const responseUsers = await axios.get('users/')
     this.users = responseUsers.data
     this.isLoading = false
   },

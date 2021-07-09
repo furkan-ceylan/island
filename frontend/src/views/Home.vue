@@ -31,15 +31,13 @@ export default {
     }
   },
   async mounted() {
-    const response = await axios.get('http://localhost:3000/api/auth/user', {
+    const response = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
     this.username = response.data.user.displayName
-    console.log(response.data.user)
   },
   computed() {
     this.auth = localStorage.getItem('token')
-    console.log(localStorage.getItem('token'))
   },
   created() {
     if (localStorage.getItem('token') === null) {
@@ -62,7 +60,7 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 800px;
+  min-height: 800px;
   margin-top: 6rem;
 }
 
