@@ -10,7 +10,7 @@
         }"
       >
         <div class="text-post">
-          <ProfileImage :id="post.userId" />
+          <ProfileImage :id="post.userId" class="image-post__avatar" />
           <div class="text-post__user-post">
             <a>{{ post.displayName }}</a>
             <p class="text-post__content" v-if="post.isTextPost">
@@ -47,14 +47,10 @@ export default {
     }
   },
   async mounted() {
-    const responsePosts = await axios.get(
-      'http://localhost:3000/api/posts/' + this.id + '/posts'
-    )
+    const responsePosts = await axios.get('posts/' + this.id + '/posts')
     this.posts = responsePosts.data
 
-    const responseUser = await axios.get(
-      'http://localhost:3000/api/users/' + this.userId
-    )
+    const responseUser = await axios.get('users/' + this.userId)
     this.user = responseUser.data
   },
 }
@@ -62,8 +58,8 @@ export default {
 
 <style scoped>
 .user-posts {
-  width: 100%;
-  height: 100%;
+  width: 800px;
+  min-height: 450px;
 }
 
 .user-posts__text-post {
@@ -89,16 +85,21 @@ export default {
   width: 54px;
   height: 54px;
   border-radius: 35%;
-  margin-right: 1rem;
+}
+
+.text-post__user-post {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
 }
 
 .text-post__user-post a {
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .text-post__content {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .user-posts__image-post {
@@ -135,13 +136,11 @@ export default {
   width: 54px;
   height: 54px;
   border-radius: 35%;
-  margin-right: 1rem;
 }
 
 .text-post__user-post img {
-  width: 100%;
-  height: 100%;
-  margin-right: 1rem;
+  width: 500px;
+  height: 400px;
   border-radius: 7px;
   max-height: 350px;
 }

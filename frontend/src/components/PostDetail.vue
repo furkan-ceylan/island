@@ -307,13 +307,17 @@ export default {
 
 .comments {
   margin-top: 1rem;
-  margin-left: 1.5rem;
+  margin-left: 2rem;
+  border-top: 2px solid var(--light);
 }
 
 .comment {
   margin-top: 1rem;
   display: flex;
   flex-direction: row;
+  border-bottom: 2px solid var(--light);
+  border-radius: 5%;
+  padding: 1rem;
 }
 
 .btn-textadd {
@@ -450,9 +454,8 @@ export default {
 }
 
 .image-post__user-post img {
-  width: 100%;
-  height: 100%;
-  margin-right: 1rem;
+  width: 500px;
+  height: 400px;
   border-radius: 7px;
   max-height: 350px;
 }

@@ -1,6 +1,6 @@
 <template>
   <img
-    class="image-post__img"
+    class="image-post__avatar"
     :src="`http://localhost:3000/uploads/user/${profilePicture}`"
   />
 </template>
@@ -25,4 +25,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.image-post__avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 35%;
+}
+</style>
