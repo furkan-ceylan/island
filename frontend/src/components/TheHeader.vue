@@ -30,7 +30,7 @@
           </button>
         </div>
       </div>
-      <div class="header__user" v-if="!auth">
+      <div class="header__user">
         <label class="header__user-username">{{ username }}</label>
         <img
           class="image-post__img"
@@ -40,161 +40,36 @@
           Logout
         </button>
       </div>
-      <div class="header__user" v-if="auth">
-        <router-link to="/login">
-          <button class="btn btn-imageadd">
-            Sign in
-          </button>
-        </router-link>
-        <router-link to="/signup">
-          <button class="btn btn-imageadd">
-            Sign Up
-          </button>
-        </router-link>
-      </div>
     </div>
-    <div class="add-post" v-if="openAddTextPost">
-      <h2 class="add-post__title">
-        Add a Text Post
-      </h2>
-      <label class="input">
-        <input
-          class="input__field"
-          type="text"
-          placeholder=" "
-          v-model="textTitle"
-        />
-        <span class="input__label">Title</span>
-      </label>
-      <label class="input">
-        <input
-          class="input__field"
-          type="text"
-          placeholder=" "
-          v-model="textDescription"
-        />
-        <span class="input__label">Description</span>
-      </label>
-      <span class="input__label warn" v-if="fillError"
-        >Please fill in all fields</span
-      >
-      <div class="options">
-        <button class="btn-addpost" @click="addTextPost" v-if="!isLoading">
-          Add
-        </button>
-        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
-        <button
-          @click="openAddTextPost = !openAddTextPost"
-          class="btn-addpost"
-          v-if="!isLoading"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-    <form
-      class="add-post"
-      @submit.prevent="addImagePost"
-      v-if="openAddImagePost"
-      enctype="multipart/form-data"
-    >
-      <h2 class="add-post__title">
-        Add an Image Post
-      </h2>
-      <label class="input">
-        <input
-          class="input__field"
-          type="text"
-          placeholder=" "
-          v-model="imageTitle"
-        />
-        <span class="input__label">Title</span>
-      </label>
-      <label class="input">
-        <input
-          class="input__field"
-          type="file"
-          @change="onFileChange"
-          ref="file"
-          name="file"
-        />
-        <span class="input__label">Image</span>
-      </label>
-      <span class="input__label warn" v-if="fillError"
-        >Please fill in all fields</span
-      >
-      <div class="options">
-        <button type="submit" class="btn-addpost" v-if="!isLoading">
-          Add
-        </button>
-        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
-        <button
-          @click="openAddImagePost = !openAddImagePost"
-          class="btn-addpost"
-          v-if="!isLoading"
-        >
-          Close
-        </button>
-      </div>
-    </form>
+    <AddTextPost v-if="openAddTextPost" />
+    <AddImagePost v-if="openAddImagePost" />
   </header>
 </template>
 
 <script>
 import axios from 'axios'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import AddTextPost from '@/components/AddTextPost'
+import AddImagePost from '@/components/AddImagePost'
 
 export default {
   name: 'TheHeader',
   components: {
     SyncLoader,
+    AddTextPost,
+    AddImagePost,
   },
   data() {
     return {
       posts: [],
       user: [],
-      textTitle: '',
-      imageTitle: '',
-      textDescription: '',
-      openAddTextPost: false,
       openAddImagePost: false,
-      fillError: false,
-      auth: '',
+      openAddTextPost: false,
       username: '',
-      file: null,
       profilePicture: '',
-      isLoading: false,
     }
   },
   methods: {
-    async addTextPost() {
-      this.isLoading = true
-      const response = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = response.data.user._id
-
-      if (this.textDescription === '' || this.textTitle === '') {
-        this.fillError = true
-      } else {
-        const responseUsers = await axios.get('users/' + currentUser)
-        this.user = responseUsers.data
-
-        const response = await axios.post('posts/', {
-          description: this.textDescription,
-          title: this.textTitle,
-          isTextPost: true,
-          userId: currentUser,
-          displayName: this.user.displayName,
-        })
-
-        this.posts.push(response.data)
-        this.textDescription = ''
-        this.textTitle = ''
-        this.openAddTextPost = false
-        this.isLoading = false
-      }
-    },
     onFileChange() {
       const file = this.$refs.file.files[0]
       this.file = file
@@ -224,7 +99,6 @@ export default {
         })
         try {
           await axios.post('posts/upload', formData)
-          console.log('its ok')
         } catch (err) {
           console.log(err)
         }
@@ -246,9 +120,6 @@ export default {
     })
     this.username = response.data.user.displayName
     this.profilePicture = response.data.user.profilePicture
-  },
-  computed() {
-    this.auth = localStorage.getItem('token')
   },
 }
 </script>
@@ -391,118 +262,9 @@ export default {
   transform: translate(0, -3px);
 }
 
-@keyframes slide {
-  from {
-    background-position: 0 0;
-  }
-
-  to {
-    background-position: -120px 60px;
-  }
-}
-
-.add-post {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: auto;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1.6rem 3rem;
-  border: 3px solid black;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  &__title {
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-  }
-}
-
-.description {
-  font-size: 1.1rem;
-  margin-bottom: 1.6rem;
-  margin-top: 0;
-}
-.btn-addpost {
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
-  background: white;
-  padding: 0.3rem 3.4rem;
-  border: 3px solid black;
-  margin-right: 2.6rem;
-  box-shadow: 0 0 0 black;
-  transition: all 0.2s;
-}
-
-.btn-addpost:last-child {
-  margin: 0;
-}
-
-.btn-addpost:hover {
-  box-shadow: 0.4rem 0.4rem 0 black;
-  transform: translate(-0.4rem, -0.4rem);
-}
-
-.btn-addpost:active {
-  box-shadow: 0 0 0 black;
-  transform: translate(0, 0);
-}
-
-.options {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.input {
-  position: relative;
-
-  &__label {
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * 0.5);
-    margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * 0.5);
-    white-space: nowrap;
-    transform: translate(0, 0);
-    transform-origin: 0 0;
-    transition: transform 120ms ease-in;
-    font-weight: bold;
-    line-height: 1.2;
-  }
-  &__field {
-    box-sizing: border-box;
-    display: block;
-    width: 300px;
-    border: 3px solid currentColor;
-    padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
-    color: currentColor;
-    background: transparent;
-    border-radius: var(--size-radius);
-    margin-bottom: 1rem;
-
-    &:focus,
-    &:not(:placeholder-shown) {
-      & + .input__label {
-        transform: translate(0.25rem, -90%) scale(0.8);
-        color: var(--pink);
-      }
-    }
-  }
-}
-
 .image-post__img {
   width: 40px;
   height: 40px;
   border-radius: 100%;
-}
-
-.warn {
-  color: var(--red);
 }
 </style>
