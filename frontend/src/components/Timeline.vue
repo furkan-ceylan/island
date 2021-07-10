@@ -58,14 +58,12 @@ import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
 import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
-
 export default {
   name: 'Timeline',
   components: { ProfileImage, Skeletor },
   data() {
     return {
       posts: [],
-      users: [],
       description: '',
       img: '',
       displayName: '',
@@ -76,18 +74,17 @@ export default {
   },
   async mounted() {
     this.isLoading = true
+
     const responseId = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })
+
     const currentUser = responseId.data.user._id
 
     const responsePost = await axios.get('posts/timeline/' + currentUser)
     this.posts = responsePost.data
 
     this.isLoading = false
-
-    const responseUsers = await axios.get('users/')
-    this.users = responseUsers.data
   },
 }
 </script>
