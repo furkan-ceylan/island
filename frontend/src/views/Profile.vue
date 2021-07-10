@@ -10,6 +10,7 @@
       </div>
       <div class="profile__right-sidebar"></div>
     </div>
+    <TheFooter />
   </div>
 </template>
 
@@ -19,11 +20,18 @@ import SidebarRight from '@/components/SidebarRight'
 import TheHeader from '@/components/TheHeader'
 import ProfileDetail from '@/components/ProfileDetail'
 import { checkAuth } from '../mixins/mixin'
+import TheFooter from '@/components/TheFooter'
 
 export default {
   name: 'Profile',
   props: ['id'],
-  components: { SidebarLeft, SidebarRight, TheHeader, ProfileDetail },
+  components: {
+    SidebarLeft,
+    SidebarRight,
+    TheHeader,
+    ProfileDetail,
+    TheFooter,
+  },
   mixins: [checkAuth],
 }
 </script>
