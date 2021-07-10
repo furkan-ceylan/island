@@ -78,7 +78,7 @@
         Please enter a valid email address
       </p>
       <div class="button-group">
-        <button @click="signUp">
+        <button @click="signUp, validateEmail">
           Sign Up
         </button>
       </div>
