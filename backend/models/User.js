@@ -41,6 +41,10 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    confirmed: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 )

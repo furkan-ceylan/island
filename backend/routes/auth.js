@@ -2,6 +2,41 @@ const router = require('express').Router()
 const User = require('../models/User.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+const xoauth2 = require('xoauth2')
+
+// const generator = xoauth2.createXOAuth2Generator({
+//   user: 'ceylan.furkan100@gmail.com',
+//   clientId:
+//     '1040856511849-hluqsqh4ern4ljpithisjj4i536bd9ja.apps.googleusercontent.com',
+//   clientSecret: 'v2z4G55N8kiN9SJoPMBmJWLu',
+//   refreshToken:
+//     '1//04zETUne01X74CgYIARAAGAQSNwF-L9IrmSGTHIcF1h0zfpv_azkOFJKCLBjg8hmdMUVEx106G_70RJbHYuXUjLIITgXKtQAJ2rE',
+//   accessToken:
+//     'ya29.a0ARrdaM-3kD9APS1pzCVsJ7oScIMkF4ECgFQTgR5EHb0p8MEIRUQKUfRUOPGtrkvzjJAtSGPb5f4G5aso240DKTe7rLG5D6TNFl5fhWwvOL6zUaCVFUuJy3v-n4aI4-lY0L5YsqsjDjwX4Qn_ebWL0TTyPSEc',
+// })
+
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     xoauth2: generator,
+//   },
+// })
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: 'ceylan.furkan100@gmail.com',
+    clientId:
+      '1040856511849-hluqsqh4ern4ljpithisjj4i536bd9ja.apps.googleusercontent.com',
+    clientSecret: 'v2z4G55N8kiN9SJoPMBmJWLu',
+    refreshToken:
+      '1//04zETUne01X74CgYIARAAGAQSNwF-L9IrmSGTHIcF1h0zfpv_azkOFJKCLBjg8hmdMUVEx106G_70RJbHYuXUjLIITgXKtQAJ2rE',
+    accessToken:
+      'ya29.a0ARrdaM-3kD9APS1pzCVsJ7oScIMkF4ECgFQTgR5EHb0p8MEIRUQKUfRUOPGtrkvzjJAtSGPb5f4G5aso240DKTe7rLG5D6TNFl5fhWwvOL6zUaCVFUuJy3v-n4aI4-lY0L5YsqsjDjwX4Qn_ebWL0TTyPSEc',
+  },
+})
 
 //REGISTER
 router.post('/register', async (req, res) => {
@@ -20,6 +55,51 @@ router.post('/register', async (req, res) => {
     })
 
     const user = await newUser.save()
+
+    // async email
+    jwt.sign(
+      {
+        userId: user._id,
+      },
+      process.env.EMAIL_SECRET,
+      {
+        expiresIn: '1d',
+      },
+      (err, emailToken) => {
+        const url = `http://localhost:3000/api/auth/confirmation/${emailToken}`
+
+        transporter.sendMail({
+          from: 'Island <ceylan.furkan100@gmail.com>',
+          to: user.email,
+          subject: 'Confirm Email',
+          html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
+        })
+      }
+    )
+
+    // try {
+    //   const emailToken = jwt.sign(
+    //     {
+    //       userId: user._id,
+    //     },
+    //     process.env.EMAIL_SECRET,
+    //     {
+    //       expiresIn: '1d',
+    //     }
+    //   )
+
+    //   const url = `http://localhost:3000/api/auth/confirmation/${emailToken}`
+
+    //   await transporter.sendMail({
+    //     from: 'Island <ceylan.furkan100@gmail.com>',
+    //     to: `${user.displayName} <${user.email}>`,
+    //     subject: 'Confirm Email',
+    //     html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
+    //   })
+    // } catch (e) {
+    //   console.log(e)
+    // }
+
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json(err)
@@ -47,6 +127,10 @@ router.post('/login', async (req, res) => {
       email: req.body.email,
     })
     !userLogin && res.status(404).json('User not found')
+
+    if (!userLogin.confirmed) {
+      res.status(400).json('User not found')
+    }
 
     const validPassword = await bcrypt.compare(
       req.body.password,
@@ -89,6 +173,22 @@ router.post('/logout', async (req, res) => {
 
   res.send({
     message: 'logout success',
+  })
+})
+
+router.get('/confirmation/:token', async (req, res) => {
+  const decoded = jwt.decode(req.params.token, process.env.EMAIL_SECRET)
+  User.findOne({ _id: decoded._id }).then((user) => {
+    if (!user) {
+      return res.status(401).json('Email confirmation failed')
+    }
+
+    user.confirmed = true
+    user.save().then((user) => {
+      res.send(user)
+    })
+
+    return res.redirect('http://localhost:8080/login')
   })
 })
 

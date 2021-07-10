@@ -78,7 +78,7 @@
         Please enter a valid email address
       </p>
       <div class="button-group">
-        <button @click="signUp, validateEmail">
+        <button @click="signUp">
           Sign Up
         </button>
       </div>
@@ -154,7 +154,6 @@ export default {
         this.displayName = ''
         this.birthDate = ''
         this.hobbies = ''
-        this.file.name = ''
       }
     },
   },
