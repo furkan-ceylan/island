@@ -1,58 +1,74 @@
 <template>
   <div class="profile">
-    <div class="profile-info">
-      <div class="profile-avatar">
-        <img
-          class="image-post__img"
-          :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
-        />
-      </div>
-      <div class="profile__detail">
-        <div class="detail__user">
-          <div class="detail__user-top">
-            <a class="user-top__name">{{ user.displayName }}</a>
-            <div class="user-top__birth">
-              <a>Birth Date:</a>
-              <span>{{ user.birthDate }}</span>
-            </div>
-            <div class="user-follow">
+    <Skeletor circle size="50" class="skeletor" v-if="isSkeletorLoading" />
+    <Skeletor
+      v-if="isSkeletorLoading"
+      class="skeletor"
+      width="600"
+      height="20"
+    />
+    <Skeletor
+      v-if="isSkeletorLoading"
+      class="skeletor"
+      width="600"
+      height="300"
+    />
+    <div class="profile-all" v-else>
+      <div class="profile-info">
+        <div class="profile-avatar">
+          <img
+            class="image-post__img"
+            v-if="user"
+            :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
+          />
+        </div>
+        <div class="profile__detail">
+          <div class="detail__user">
+            <div class="detail__user-top">
+              <a class="user-top__name">{{ user.displayName }}</a>
               <div class="user-top__birth">
-                <a>Followers:</a>
-                <span>{{ followers }}</span>
+                <a>Birth Date:</a>
+                <span>{{ user.birthDate }}</span>
               </div>
-              <div class="user-top__birth">
-                <a>Following:</a>
-                <span>{{ following }}</span>
-              </div>
-              <div class="user-top__birth" v-if="!isFollowing">
-                <button class="btn btn-imageadd" @click="followUser">
-                  Follow
-                </button>
-              </div>
-              <div class="user-top__birth" v-else>
-                <button class="btn btn-unfollow" @click="unFollowUser">
-                  Unfollow
-                </button>
+              <div class="user-follow">
+                <div class="user-top__birth">
+                  <a>Followers:</a>
+                  <span>{{ followers }}</span>
+                </div>
+                <div class="user-top__birth">
+                  <a>Following:</a>
+                  <span>{{ following }}</span>
+                </div>
+                <div class="user-top__birth" v-if="!isFollowing">
+                  <button class="btn btn-imageadd" @click="followUser">
+                    Follow
+                  </button>
+                </div>
+                <div class="user-top__birth" v-else>
+                  <button class="btn btn-unfollow" @click="unFollowUser">
+                    Unfollow
+                  </button>
+                </div>
               </div>
             </div>
+            <div class="detail__user-bot"></div>
           </div>
-          <div class="detail__user-bot"></div>
         </div>
       </div>
-    </div>
-    <div class="profile-desc">
-      <h5>About Me</h5>
-      <p class="detail__content">
-        {{ user.description }}
-      </p>
-      <h5 class="detail__hobbies">My Hobbies</h5>
-      <p class="detail__content">
-        {{ user.hobbies }}
-      </p>
-    </div>
-    <div class="profile-posts">
-      <h3>Posts</h3>
-      <ProfileUserPosts :id="id" />
+      <div class="profile-desc">
+        <h5>About Me</h5>
+        <p class="detail__content">
+          {{ user.description }}
+        </p>
+        <h5 class="detail__hobbies">My Hobbies</h5>
+        <p class="detail__content">
+          {{ user.hobbies }}
+        </p>
+      </div>
+      <div class="profile-posts">
+        <h3>Posts</h3>
+        <ProfileUserPosts :id="id" />
+      </div>
     </div>
   </div>
 </template>
@@ -60,20 +76,25 @@
 <script>
 import ProfileUserPosts from '@/components/ProfileUserPosts'
 import axios from 'axios'
+import 'vue-skeletor/dist/vue-skeletor.css'
+import { Skeletor } from 'vue-skeletor'
 
 export default {
   name: 'ProfileDetail',
   props: ['id'],
-  components: { ProfileUserPosts },
+  components: { ProfileUserPosts, Skeletor },
   data() {
     return {
       user: [],
       followers: '',
       following: '',
       isFollowing: true,
+      isSkeletorLoading: false,
     }
   },
   async mounted() {
+    this.isSkeletorLoading = true
+
     const responseUser = await axios.get('users/' + this.id)
 
     const response = await axios.get('auth/user', {
@@ -86,6 +107,7 @@ export default {
     this.followers = userData.followers.length
     this.following = userData.followings.length
     this.isFollowing = userData.followers.includes(currentUser)
+    this.isSkeletorLoading = false
   },
   methods: {
     async followUser() {

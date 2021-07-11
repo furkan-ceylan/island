@@ -1,6 +1,25 @@
 <template>
   <div class="user-posts">
-    <div class="user-posts__text-post" v-for="post in posts" :key="post._id">
+    <Skeletor circle size="50" class="skeletor" v-if="isSkeletorLoading" />
+    <Skeletor
+      v-if="isSkeletorLoading"
+      class="skeletor"
+      width="600"
+      height="100"
+    />
+    <Skeletor circle size="50" class="skeletor" v-if="isSkeletorLoading" />
+    <Skeletor
+      v-if="isSkeletorLoading"
+      class="skeletor"
+      width="600"
+      height="100"
+    />
+    <div
+      class="user-posts__text-post"
+      v-for="post in posts"
+      :key="post._id"
+      v-else
+    >
       <router-link
         :to="{
           name: 'PostDetail',
@@ -31,11 +50,14 @@
 <script>
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
+import 'vue-skeletor/dist/vue-skeletor.css'
+import { Skeletor } from 'vue-skeletor'
 
 export default {
   name: 'ProfileUserPosts',
   components: {
     ProfileImage,
+    Skeletor,
   },
   props: ['id'],
   data() {
@@ -44,14 +66,18 @@ export default {
       user: [],
       profilePicture: '',
       userId: '',
+      isSkeletorLoading: false,
     }
   },
   async mounted() {
+    this.isSkeletorLoading = true
+
     const responsePosts = await axios.get('posts/' + this.id + '/posts')
     this.posts = responsePosts.data
 
     const responseUser = await axios.get('users/' + this.userId)
     this.user = responseUser.data
+    this.isSkeletorLoading = false
   },
 }
 </script>
@@ -150,5 +176,9 @@ export default {
 .text-post {
   display: flex;
   flex-direction: row;
+}
+
+.skeletor {
+  margin-top: 1rem;
 }
 </style>
