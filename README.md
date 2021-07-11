@@ -6,19 +6,18 @@
 
 ### Sign up and Login Page
 
-<iframe src="https://giphy.com/embed/cnrM8LEcwGKdcOZXY3" width="480" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/cnrM8LEcwGKdcOZXY3"></a></p>
+<a href="https://giphy.com/gifs/cnrM8LEcwGKdcOZXY3"></a>
 
 ### Profile Page
 
 <a href="https://imgur.com/DiP1tgr"><img src="https://i.imgur.com/DiP1tgr.png" title="source: imgur.com" /></a>
 
 ### Follow/Unfollow
-
-<iframe src="https://giphy.com/embed/5fspnhnLOQxeCkC70q" width="480" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/5fspnhnLOQxeCkC70q">via GIPHY</a></p>
+<a href="https://giphy.com/gifs/5fspnhnLOQxeCkC70q"></a>
 
 ### Adding Text Post, Image Post, Comment and Image Comment
 
-<iframe src="https://giphy.com/embed/lD8QdkuS6221XmorKR" width="480" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/lD8QdkuS6221XmorKR">via GIPHY</a></p>
+<a href="https://giphy.com/gifs/lD8QdkuS6221XmorKR"></a>
 
 
 ## Installation
