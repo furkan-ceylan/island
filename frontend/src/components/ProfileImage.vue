@@ -1,5 +1,6 @@
 <template>
   <img
+    v-if="profilePicture"
     class="image-post__avatar"
     :src="`http://localhost:3000/uploads/user/${profilePicture}`"
   />

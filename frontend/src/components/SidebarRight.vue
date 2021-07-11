@@ -12,6 +12,7 @@
         <router-link :to="`/profile/${user._id}`">
           <div class="friend-info">
             <img
+              v-if="user"
               class="image-post__img"
               :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
             />
