@@ -17,8 +17,7 @@
 
 ### Adding Text Post, Image Post, Comment and Image Comment
 
-![img](https://i.imgur.com/DiP1tgr.png[/img])
-
+![img](https://media.giphy.com/media/lD8QdkuS6221XmorKR/giphy.gif)
 
 ## Installation
 
