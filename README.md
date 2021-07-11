@@ -17,7 +17,7 @@
 
 ### Adding Text Post, Image Post, Comment and Image Comment
 
-<a href="https://giphy.com/gifs/lD8QdkuS6221XmorKR"></a>
+[img]https://i.imgur.com/DiP1tgr.png[/img]
 
 
 ## Installation
