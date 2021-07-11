@@ -104,6 +104,11 @@ export default {
       emailError: false,
     }
   },
+  created() {
+    if (localStorage.getItem('token')) {
+      this.$router.push('/')
+    }
+  },
   methods: {
     validateEmail() {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
@@ -167,6 +172,7 @@ export default {
   border-radius: var(--size-radius);
   border: 3px solid var(--color-shadow, currentColor);
   box-shadow: 0.5rem 0.5rem 0 var(--color-shadow, currentColor);
+  margin-top: 2rem;
 
   &--inverted {
     --color-background: var(--color-dark);

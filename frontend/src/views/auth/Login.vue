@@ -33,7 +33,7 @@
         </div>
       </div>
       <p class="warn" v-if="error">
-        Please check your email and password
+        {{ error }}
       </p>
     </div>
   </article>
@@ -48,7 +48,12 @@ export default {
     return {
       email: '',
       password: '',
-      error: false,
+      error: '',
+    }
+  },
+  created() {
+    if (localStorage.getItem('token')) {
+      this.$router.push('/')
     }
   },
   methods: {
@@ -62,17 +67,19 @@ export default {
           email: this.email,
           password: this.password,
         }
-        try {
-          const response = await axios.post('auth/login', data)
-          if (response.status === 200) {
-            this.error = false
-            localStorage.setItem('token', response.data.token)
-            await this.$router.push('/')
+        await axios.post('auth/login', data).then(
+          (res) => {
+            if (res.status === 200) {
+              this.error = false
+              localStorage.setItem('token', res.data.token)
+              this.$router.push('/')
+            }
+          },
+          (err) => {
+            this.error = err.response.data.error
+            this.password = ''
           }
-        } catch (err) {
-          this.error = true
-          this.password = ''
-        }
+        )
       }
     },
   },
@@ -86,6 +93,7 @@ export default {
   border-radius: var(--size-radius);
   border: 3px solid var(--color-shadow, currentColor);
   box-shadow: 0.5rem 0.5rem 0 var(--color-shadow, currentColor);
+  margin-top: 5rem;
 
   &--inverted {
     --color-background: var(--color-dark);
