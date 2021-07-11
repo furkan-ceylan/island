@@ -6,7 +6,7 @@
 
 ### Sign up and Login Page
 
-![img](https://media.giphy.com/media/cnrM8LEcwGKdcOZXY3/giphy.gif)
+![img](https://media.giphy.com/media/7pUZf3QR7X7OqOi8jt/giphy.gif)
 
 ### Profile Page
 
@@ -14,11 +14,11 @@
 
 ### Follow/Unfollow
 
-![img](https://media.giphy.com/media/5fspnhnLOQxeCkC70q/giphy.gif)
+![img](https://media.giphy.com/media/LaqVl9azUqpfBI1gYs/giphy.gif)
 
 ### Adding Text Post, Image Post, Comment and Image Comment
 
-![img](https://media.giphy.com/media/lD8QdkuS6221XmorKR/giphy.gif)
+![img](https://media.giphy.com/media/ob20kayPBOBWy0UsVD/giphy.gif)
 
 ## Installation
 
