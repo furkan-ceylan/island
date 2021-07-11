@@ -2,6 +2,25 @@
 ### A Social Network App built with Vue.js, Node.js, Express and MongoDB
 ==============
 
+## Demo and Live application
+
+### Sign up and Login Page
+
+<iframe src="https://giphy.com/embed/cnrM8LEcwGKdcOZXY3" width="480" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/cnrM8LEcwGKdcOZXY3"></a></p>
+
+### Profile Page
+
+<a href="https://imgur.com/DiP1tgr"><img src="https://i.imgur.com/DiP1tgr.png" title="source: imgur.com" /></a>
+
+### Follow/Unfollow
+
+<iframe src="https://giphy.com/embed/5fspnhnLOQxeCkC70q" width="480" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/5fspnhnLOQxeCkC70q">via GIPHY</a></p>
+
+### Adding Text Post, Image Post, Comment and Image Comment
+
+<iframe src="https://giphy.com/embed/lD8QdkuS6221XmorKR" width="480" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/lD8QdkuS6221XmorKR">via GIPHY</a></p>
+
+
 ## Installation
 
 ### Step 1: Clone the repo
@@ -23,7 +42,7 @@ cd backend
 npm install (in backend directory)
 ```
 
-### Step 3: Run the project
+### Step 4: Run the project
 ```
 cd frontend
 npm run serve
@@ -32,13 +51,20 @@ cd backend
 npm start
 ```
 
-### Step 4: Configure environment variables
+### Step 5: Configure environment variables
 Configure environment variables and add keys for island.
 
 ```
 MONGO_URL=your mongodb connection string
+
 SECRET_KEY= your secret key
 EMAIL_SECRET= your email secret key
+
+AUTH_USER = your gmail account
+AUTH_CLIENT_ID = your client id
+AUTH_CLIENT_SECRET = your client secret
+AUTH_REFRESH_TOKEN = your refresh token
+AUTH_ACCESS_TOKEN = your access token
 
 ```
 
