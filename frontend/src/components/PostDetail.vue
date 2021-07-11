@@ -83,7 +83,11 @@
         <button class="btn-addpost" @click="addComment" v-if="!isLoading">
           Add
         </button>
-        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
+        <sync-loader
+          :color="color"
+          :loading="loading"
+          v-if="isLoading"
+        ></sync-loader>
         <button
           @click="openAddComment = !openAddComment"
           class="btn-addpost"
@@ -128,7 +132,11 @@
         <button type="submit" class="btn-addpost" v-if="!isLoading">
           Add
         </button>
-        <sync-loader :loading="loading" v-if="isLoading"></sync-loader>
+        <sync-loader
+          :color="color"
+          :loading="loading"
+          v-if="isLoading"
+        ></sync-loader>
         <button
           @click="openAddImageComment = !openAddImageComment"
           class="btn-addpost"
@@ -167,6 +175,7 @@ export default {
       userId: '',
       isLoading: false,
       isSkeletorLoading: false,
+      color: 'pink',
     }
   },
   async mounted() {
@@ -308,16 +317,16 @@ export default {
 .comments {
   margin-top: 1rem;
   margin-left: 2rem;
-  border-top: 2px solid var(--light);
 }
 
 .comment {
   margin-top: 1rem;
   display: flex;
   flex-direction: row;
-  border-bottom: 2px solid var(--light);
-  border-radius: 5%;
-  padding: 1rem;
+  border: 1px solid rgb(214, 214, 214);
+  border-radius: 35px;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
 }
 
 .btn-textadd {
