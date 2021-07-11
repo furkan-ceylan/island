@@ -27,14 +27,11 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     type: 'OAuth2',
-    user: 'ceylan.furkan100@gmail.com',
-    clientId:
-      '1040856511849-hluqsqh4ern4ljpithisjj4i536bd9ja.apps.googleusercontent.com',
-    clientSecret: 'v2z4G55N8kiN9SJoPMBmJWLu',
-    refreshToken:
-      '1//04QTpDS7ZBnlECgYIARAAGAQSNwF-L9IrocmFQLqZStXQVUJDstXfnK2f2-NgkOw4nGv53873b6AXFKkD4qJglUaVMCHob3hT4Z4',
-    accessToken:
-      'ya29.a0ARrdaM-CKEVHkBAOGp1ff9vEOMNRarfJEGKVODjuivJTeA9RNab37hy1Aj6hMVGXk6ymlyfqXDSKIxiYEstKGmy3QvrjVQ8eKYeLtWI1zEhYD6LauV8GFY2RoyJEVMQDyONbJVthVSpNedzhcPdauRBpPbjg',
+    user: process.env.AUTH_USER,
+    clientId: process.env.AUTH_CLIENT_ID,
+    clientSecret: process.env.AUTH_CLIENT_SECRET,
+    refreshToken: process.env.AUTH_REFRESH_TOKEN,
+    accessToken: process.env.AUTH_ACCESS_TOKEN,
   },
 })
 
