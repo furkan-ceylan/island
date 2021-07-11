@@ -8,10 +8,6 @@
 
 ![img](https://media.giphy.com/media/7pUZf3QR7X7OqOi8jt/giphy.gif)
 
-### Profile Page
-
-<a href="https://imgur.com/DiP1tgr"><img src="https://i.imgur.com/DiP1tgr.png" title="source: imgur.com" /></a>
-
 ### Follow/Unfollow
 
 ![img](https://media.giphy.com/media/LaqVl9azUqpfBI1gYs/giphy.gif)
