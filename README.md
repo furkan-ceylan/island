@@ -1,5 +1,5 @@
 # island
-A Social Network App built with Vue.js, Node.js, Express and MongoDB
+### A Social Network App built with Vue.js, Node.js, Express and MongoDB
 ==============
 
 ## Installation
