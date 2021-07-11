@@ -1,14 +1,22 @@
 import { Commit, createStore } from 'vuex'
+import axios from 'axios'
 
 export default createStore({
   state: {
-    // authenticated: false,
+    userId: '',
   },
-  mutations: {
-    // SET_AUTH: (state, auth) => (state.authenticated = auth),
+  getters: {
+    setUserId: (state, userId) => state.userId,
   },
   actions: {
-    // setAuth: ({ commit }, auth) => commit('SET_AUTH', auth),
+    async fetchUserId({ commit }) {
+      await axios.get('auth/user', {
+        headers: { token: localStorage.getItem('token') },
+      }),
+        then((response) => {
+          commit('setUserId', response.data.user._id)
+        })
+    },
   },
-  modules: {},
+  mutations: {},
 })
