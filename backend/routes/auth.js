@@ -32,9 +32,9 @@ const transporter = nodemailer.createTransport({
       '1040856511849-hluqsqh4ern4ljpithisjj4i536bd9ja.apps.googleusercontent.com',
     clientSecret: 'v2z4G55N8kiN9SJoPMBmJWLu',
     refreshToken:
-      '1//04zETUne01X74CgYIARAAGAQSNwF-L9IrmSGTHIcF1h0zfpv_azkOFJKCLBjg8hmdMUVEx106G_70RJbHYuXUjLIITgXKtQAJ2rE',
+      '1//04QTpDS7ZBnlECgYIARAAGAQSNwF-L9IrocmFQLqZStXQVUJDstXfnK2f2-NgkOw4nGv53873b6AXFKkD4qJglUaVMCHob3hT4Z4',
     accessToken:
-      'ya29.a0ARrdaM-3kD9APS1pzCVsJ7oScIMkF4ECgFQTgR5EHb0p8MEIRUQKUfRUOPGtrkvzjJAtSGPb5f4G5aso240DKTe7rLG5D6TNFl5fhWwvOL6zUaCVFUuJy3v-n4aI4-lY0L5YsqsjDjwX4Qn_ebWL0TTyPSEc',
+      'ya29.a0ARrdaM-CKEVHkBAOGp1ff9vEOMNRarfJEGKVODjuivJTeA9RNab37hy1Aj6hMVGXk6ymlyfqXDSKIxiYEstKGmy3QvrjVQ8eKYeLtWI1zEhYD6LauV8GFY2RoyJEVMQDyONbJVthVSpNedzhcPdauRBpPbjg',
   },
 })
 
@@ -77,29 +77,6 @@ router.post('/register', async (req, res) => {
       }
     )
 
-    // try {
-    //   const emailToken = jwt.sign(
-    //     {
-    //       userId: user._id,
-    //     },
-    //     process.env.EMAIL_SECRET,
-    //     {
-    //       expiresIn: '1d',
-    //     }
-    //   )
-
-    //   const url = `http://localhost:3000/api/auth/confirmation/${emailToken}`
-
-    //   await transporter.sendMail({
-    //     from: 'Island <ceylan.furkan100@gmail.com>',
-    //     to: `${user.displayName} <${user.email}>`,
-    //     subject: 'Confirm Email',
-    //     html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
-    //   })
-    // } catch (e) {
-    //   console.log(e)
-    // }
-
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json(err)
@@ -126,17 +103,18 @@ router.post('/login', async (req, res) => {
     const userLogin = await User.findOne({
       email: req.body.email,
     })
-    !userLogin && res.status(404).json('User not found')
+
+    !userLogin && res.status(404).json({ error: 'User not found' })
 
     if (!userLogin.confirmed) {
-      res.status(400).json('User not found')
+      res.status(400).json({ error: 'Email not confirmed' })
     }
 
     const validPassword = await bcrypt.compare(
       req.body.password,
       userLogin.password
     )
-    !validPassword && res.status(400).json('Wrong password')
+    !validPassword && res.status(400).json({ error: 'Wrong password' })
 
     const token = jwt.sign({ userId: userLogin._id }, process.env.SECRET_KEY)
 
@@ -178,7 +156,7 @@ router.post('/logout', async (req, res) => {
 
 router.get('/confirmation/:token', async (req, res) => {
   const decoded = jwt.decode(req.params.token, process.env.EMAIL_SECRET)
-  User.findOne({ _id: decoded._id }).then((user) => {
+  await User.findOne({ _id: decoded.userId }).then((user) => {
     if (!user) {
       return res.status(401).json('Email confirmation failed')
     }
