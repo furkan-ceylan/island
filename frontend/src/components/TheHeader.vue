@@ -33,6 +33,7 @@
       <div class="header__user">
         <label class="header__user-username">{{ username }}</label>
         <img
+          v-if="profilePicture"
           class="image-post__img"
           :src="`http://localhost:3000/uploads/user/${profilePicture}`"
         />
@@ -134,7 +135,7 @@ export default {
   z-index: 9999;
   width: 95%;
   height: 65px;
-  background-color: var(--lightest);
+  background-color: #fffaf9;
 }
 
 .header__left {
