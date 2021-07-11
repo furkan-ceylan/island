@@ -6,14 +6,15 @@
 
 ### Sign up and Login Page
 
-<a href="https://giphy.com/gifs/cnrM8LEcwGKdcOZXY3"></a>
+![img](https://giphy.com/gifs/cnrM8LEcwGKdcOZXY3)
 
 ### Profile Page
 
 <a href="https://imgur.com/DiP1tgr"><img src="https://i.imgur.com/DiP1tgr.png" title="source: imgur.com" /></a>
 
 ### Follow/Unfollow
-<a href="https://giphy.com/gifs/5fspnhnLOQxeCkC70q"></a>
+
+![img](https://giphy.com/gifs/5fspnhnLOQxeCkC70q)
 
 ### Adding Text Post, Image Post, Comment and Image Comment
 
