@@ -6,15 +6,17 @@
 
 ### Sign up and Login Page
 
-![img](https://media.giphy.com/media/7pUZf3QR7X7OqOi8jt/giphy.gif)
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/32003938/125349152-dcc48200-e365-11eb-9f21-1807009c4a46.gif)
+
 
 ### Follow/Unfollow
 
-![img](https://media.giphy.com/media/LaqVl9azUqpfBI1gYs/giphy.gif)
+![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/32003938/125349173-e1893600-e365-11eb-8fe8-d5a0b2e0eae5.gif)
+
 
 ### Adding Text Post, Image Post, Comment and Image Comment
 
-![img](https://media.giphy.com/media/ob20kayPBOBWy0UsVD/giphy.gif)
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/32003938/125349181-e3eb9000-e365-11eb-9e10-ceb242b9f4aa.gif)
 
 
 ## Installation
