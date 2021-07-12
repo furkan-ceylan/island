@@ -16,7 +16,7 @@
 
 ### Adding Text Post, Image Post, Comment and Image Comment
 
-![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/32003938/125349181-e3eb9000-e365-11eb-9e10-ceb242b9f4aa.gif)
+![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/32003938/125349400-3167fd00-e366-11eb-9325-cf2704046081.gif)
 
 
 ## Installation
@@ -27,7 +27,7 @@ git clone https://github.com/fcyln/island
 ```
 
 ### Step 2: Prerequisites(Frontend)
-This will install the dependencies of this website' frontend. It will pull in several packages like Vue, vue-router, vuex, axios, vue-skeletor, vue-spinner and sass-loader
+This will install the dependencies of this website's frontend. It will pull in several packages like Vue, vue-router, vuex, axios, vue-skeletor, vue-spinner and sass-loader
 ```
 cd frontend
 npm install (in frontend directory)
