@@ -24,6 +24,7 @@
         @change="onFileChange"
         ref="file"
         name="file"
+        accept="image/*"
       />
       <span class="input__label">Image</span>
     </label>
@@ -34,11 +35,7 @@
       <button type="submit" class="btn-addpost" v-if="!isLoading">
         Add
       </button>
-      <sync-loader
-        :color="color"
-        :loading="loading"
-        v-if="isLoading"
-      ></sync-loader>
+      <sync-loader :color="color" v-if="isLoading"></sync-loader>
       <button
         @click="openAddPost = !openAddPost"
         class="btn-addpost"
@@ -69,6 +66,7 @@ export default {
       color: 'pink',
       openAddPost: true,
       textDescription: '',
+      fillError: false,
     }
   },
   methods: {
@@ -85,7 +83,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
 
-      if (this.file === '' || this.textDescription === '') {
+      if (this.file === null || this.textDescription === '') {
         this.fillError = true
       } else {
         this.isLoading = true
@@ -109,7 +107,7 @@ export default {
         this.posts.push(response.data)
         this.isLoading = false
         this.textDescription = ''
-        this.openAddImagePost = false
+        this.openAddPost = false
       }
     },
   },
