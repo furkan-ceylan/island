@@ -33,7 +33,7 @@
         />
         <span class="input__label">Display Name</span>
       </label>
-      <label class="input">
+      <!-- <label class="input">
         <input
           class="input__field"
           type="date"
@@ -70,7 +70,7 @@
           accept="image/*"
         />
         <span class="input__label">Upload a Profile Picture</span>
-      </label>
+      </label> -->
       <p class="warn" v-if="fillError">
         Please fill in all fields
       </p>
@@ -95,11 +95,7 @@ export default {
     return {
       email: '',
       password: '',
-      description: '',
-      file: '',
       displayName: '',
-      birthDate: '',
-      hobbies: '',
       fillError: false,
       emailError: false,
     }
@@ -117,48 +113,26 @@ export default {
         this.emailError = false
       }
     },
-    onFileChange() {
-      const file = this.$refs.file.files[0]
-      this.file = file
-    },
     async signUp() {
       if (
         this.email === '' ||
         this.password === '' ||
-        this.description === '' ||
-        this.displayName === '' ||
-        this.birthDate === '' ||
-        this.hobbies === '' ||
-        this.file.name === ''
+        this.displayName === ''
       ) {
         this.fillError = true
       } else {
         this.fillError = false
 
-        const formData = new FormData()
-        formData.append('file', this.file)
-
         const response = await axios.post('auth/register', {
           email: this.email,
           password: this.password,
-          description: this.description,
           displayName: this.displayName,
-          birthDate: this.birthDate,
-          hobbies: this.hobbies,
-          file: this.file.name,
         })
         try {
-          await axios.post('auth/upload', formData)
           await this.$router.push('/login')
         } catch (err) {
           console.log(err)
         }
-        this.email = ''
-        this.password = ''
-        this.description = ''
-        this.displayName = ''
-        this.birthDate = ''
-        this.hobbies = ''
       }
     },
   },
