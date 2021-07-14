@@ -6,11 +6,6 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    title: {
-      type: String,
-      default: '',
-      required: true,
-    },
     description: {
       type: String,
       max: 500,
