@@ -40,14 +40,24 @@
                   <span>{{ following }}</span>
                 </div>
                 <div class="user-top__birth" v-if="!isFollowing">
-                  <button class="btn btn-imageadd" @click="followUser">
-                    Follow
-                  </button>
+                  <div class="add-button-wrapper" v-if="!followLoading">
+                    <button class="btn btn-imageadd" @click="followUser">
+                      Follow
+                    </button>
+                  </div>
+                  <div class="add-button-loader" v-else>
+                    <SyncLoader class="follow-loader" :color="color" />
+                  </div>
                 </div>
                 <div class="user-top__birth" v-else>
-                  <button class="btn btn-unfollow" @click="unFollowUser">
-                    Unfollow
-                  </button>
+                  <div class="add-button-wrapper" v-if="!followLoading">
+                    <button class="btn btn-unfollow" @click="unFollowUser">
+                      Unfollow
+                    </button>
+                  </div>
+                  <div class="add-button-loader" v-else>
+                    <SyncLoader class="follow-loader" :color="color" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -78,18 +88,21 @@ import ProfileUserPosts from '@/components/ProfileUserPosts'
 import axios from 'axios'
 import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
+import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 export default {
   name: 'ProfileDetail',
   props: ['id'],
-  components: { ProfileUserPosts, Skeletor },
+  components: { ProfileUserPosts, Skeletor, SyncLoader },
   data() {
     return {
       user: [],
+      color: 'pink',
       followers: '',
       following: '',
       isFollowing: true,
       isSkeletorLoading: false,
+      followLoading: false,
     }
   },
   async mounted() {
@@ -111,6 +124,8 @@ export default {
   },
   methods: {
     async followUser() {
+      this.followLoading = true
+
       const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
@@ -125,12 +140,14 @@ export default {
       const responseFollow = await axios.put('users/' + this.id + '/follow', {
         userId: currentUser,
       })
-
+      this.followLoading = false
       this.isFollowing = !profileUser.user.followers.includes(currentUser)
       this.followers++
       this.following = userData.followings.length
     },
     async unFollowUser() {
+      this.followLoading = true
+
       const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
@@ -147,6 +164,7 @@ export default {
           userId: currentUser,
         }
       )
+      this.followLoading = false
       this.isFollowing = profileUser.user.followers.includes(currentUser)
       this.followers--
       this.following = userData.followings.length
@@ -273,5 +291,9 @@ export default {
   transition: 0.4s;
   box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
   transform: translate(0, -3px);
+}
+
+.follow-loader {
+  margin-left: 3rem;
 }
 </style>
