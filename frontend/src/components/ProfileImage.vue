@@ -4,6 +4,7 @@
     class="image-post__avatar"
     :src="`http://localhost:3000/uploads/user/${profilePicture}`"
   />
+  <img v-else class="image-post__avatar" src="../assets/defaultProfile.png" />
 </template>
 
 <script>

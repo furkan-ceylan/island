@@ -37,6 +37,11 @@
           class="image-post__img"
           :src="`http://localhost:3000/uploads/user/${profilePicture}`"
         />
+        <img
+          v-else
+          class="image-post__img"
+          src="../assets/defaultProfile.png"
+        />
         <button @click="logout" class="btn btn-logout">
           Logout
         </button>

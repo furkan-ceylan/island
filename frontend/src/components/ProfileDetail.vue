@@ -18,8 +18,13 @@
         <div class="profile-avatar">
           <img
             class="image-post__img"
-            v-if="user"
+            v-if="user.profilePicture"
             :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
+          />
+          <img
+            v-else
+            class="image-post__img"
+            src="../assets/defaultProfile.png"
           />
         </div>
         <div class="profile__detail">
