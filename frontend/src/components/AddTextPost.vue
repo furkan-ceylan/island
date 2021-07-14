@@ -8,15 +8,6 @@
         class="input__field"
         type="text"
         placeholder=" "
-        v-model="textTitle"
-      />
-      <span class="input__label">Title</span>
-    </label>
-    <label class="input">
-      <input
-        class="input__field"
-        type="text"
-        placeholder=" "
         v-model="textDescription"
       />
       <span class="input__label">Description</span>
@@ -58,7 +49,6 @@ export default {
     return {
       posts: [],
       user: [],
-      textTitle: '',
       textDescription: '',
       openAddPost: true,
       fillError: false,
@@ -68,21 +58,21 @@ export default {
   },
   methods: {
     async addTextPost() {
-      this.isLoading = true
       const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
       const currentUser = response.data.user._id
 
-      if (this.textDescription === '' || this.textTitle === '') {
+      if (this.textDescription === '') {
         this.fillError = true
       } else {
+        this.isLoading = true
+
         const responseUsers = await axios.get('users/' + currentUser)
         this.user = responseUsers.data
 
         const response = await axios.post('posts/', {
           description: this.textDescription,
-          title: this.textTitle,
           isTextPost: true,
           userId: currentUser,
           displayName: this.user.displayName,
@@ -90,7 +80,6 @@ export default {
 
         this.posts.push(response.data)
         this.textDescription = ''
-        this.textTitle = ''
         this.openAddTextPost = false
         this.isLoading = false
       }

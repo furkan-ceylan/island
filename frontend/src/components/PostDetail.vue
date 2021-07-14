@@ -109,15 +109,6 @@
       <label class="input">
         <input
           class="input__field"
-          type="text"
-          placeholder=" "
-          v-model="imageTitle"
-        />
-        <span class="input__label">Title</span>
-      </label>
-      <label class="input">
-        <input
-          class="input__field"
           type="file"
           @change="onFileChange"
           ref="file"
@@ -170,7 +161,6 @@ export default {
       openAddImageComment: false,
       fillError: false,
       file: '',
-      imageTitle: '',
       isTextComment: false,
       userId: '',
       isLoading: false,
@@ -242,7 +232,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
 
-      if (this.imageTitle === '' || this.file === '') {
+      if (this.file === '') {
         this.fillError = true
       } else {
         const response = await axios.put('posts/' + this.id + '/comment', {
@@ -258,7 +248,6 @@ export default {
         } catch (err) {
           console.log(err)
         }
-        this.imageTitle = ''
         this.isLoading = false
         this.openAddImageComment = false
       }

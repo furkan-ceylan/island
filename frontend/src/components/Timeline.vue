@@ -40,6 +40,11 @@
                 {{ post.displayName }}
               </a>
             </div>
+            <div class="user-post-desc img-desc">
+              <p class="post__content">
+                {{ post.description }}
+              </p>
+            </div>
             <div class="user-post-image">
               <img
                 class="image-post__img"
@@ -153,6 +158,10 @@ export default {
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
   transform: translate(0, -3px);
   cursor: pointer;
+}
+
+.img-desc {
+  margin-top: 1rem;
 }
 
 .image-post__user-post {

@@ -85,14 +85,13 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
 
-      if (this.imageTitle === '' || this.file === '') {
+      if (this.file === '') {
         this.fillError = true
       } else {
         const responseUsers = await axios.get('users/' + currentUser)
         this.user = responseUsers.data
 
         const response = await axios.post('posts/', {
-          title: this.imageTitle,
           isImagePost: true,
           displayName: this.user.displayName,
           userId: currentUser,
@@ -107,7 +106,6 @@ export default {
         this.posts.push(response.data)
         this.isLoading = false
         this.openAddImagePost = false
-        this.imageTitle = ''
       }
     },
     logout() {

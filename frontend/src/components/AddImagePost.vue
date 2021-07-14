@@ -13,9 +13,9 @@
         class="input__field"
         type="text"
         placeholder=" "
-        v-model="imageTitle"
+        v-model="textDescription"
       />
-      <span class="input__label">Title</span>
+      <span class="input__label">Description</span>
     </label>
     <label class="input">
       <input
@@ -64,11 +64,11 @@ export default {
     return {
       posts: [],
       user: [],
-      imageTitle: '',
       file: null,
       isLoading: false,
       color: 'pink',
       openAddPost: true,
+      textDescription: '',
     }
   },
   methods: {
@@ -77,7 +77,6 @@ export default {
       this.file = file
     },
     async addImagePost() {
-      this.isLoading = true
       const response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
       })
@@ -86,18 +85,20 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
 
-      if (this.imageTitle === '' || this.file === '') {
+      if (this.file === '' || this.textDescription === '') {
         this.fillError = true
       } else {
+        this.isLoading = true
+
         const responseUsers = await axios.get('users/' + currentUser)
         this.user = responseUsers.data
 
         const response = await axios.post('posts/', {
-          title: this.imageTitle,
           isImagePost: true,
           displayName: this.user.displayName,
           userId: currentUser,
           file: this.file.name,
+          description: this.textDescription,
         })
         try {
           await axios.post('posts/upload', formData)
@@ -107,8 +108,8 @@ export default {
 
         this.posts.push(response.data)
         this.isLoading = false
+        this.textDescription = ''
         this.openAddImagePost = false
-        this.imageTitle = ''
       }
     },
   },
