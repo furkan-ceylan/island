@@ -32,13 +32,13 @@
           <ProfileImage :id="post.userId" class="image-post__avatar" />
           <div class="text-post__user-post">
             <a>{{ post.displayName }}</a>
-            <p class="text-post__content" v-if="post.isTextPost">
+            <p class="text-post__content">
               {{ post.description }}
             </p>
             <img
               class="image-post__img"
               :src="`http://localhost:3000/uploads/${post.file}`"
-              v-else
+              v-if="post.file"
             />
           </div>
         </div>
@@ -89,7 +89,6 @@ export default {
 }
 
 .user-posts__text-post {
-  padding: 1.5rem;
   display: flex;
   justify-content: flex-start;
   background-color: white;
@@ -176,6 +175,8 @@ export default {
 .text-post {
   display: flex;
   flex-direction: row;
+  width: 750px;
+  padding: 1.5rem;
 }
 
 .skeletor {

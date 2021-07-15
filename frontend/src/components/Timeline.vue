@@ -47,6 +47,7 @@
             </div>
             <div class="user-post-image">
               <img
+                v-if="post.file"
                 class="image-post__img"
                 :src="`http://localhost:3000/uploads/${post.file}`"
               />
@@ -101,7 +102,6 @@ export default {
 }
 
 .timeline__post {
-  padding: 1.5rem;
   display: flex;
   justify-content: flex-start;
   background-color: white;
@@ -130,6 +130,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   width: 700px;
+  padding: 1.5rem;
 }
 
 .post__user-post a {
@@ -142,7 +143,6 @@ export default {
 }
 
 .timeline__image-post {
-  padding: 1.5rem;
   display: flex;
   justify-content: flex-start;
   background-color: white;
