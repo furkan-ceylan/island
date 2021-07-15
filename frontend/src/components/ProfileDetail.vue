@@ -32,7 +32,7 @@
             <div class="detail__user-top">
               <a class="user-top__name">{{ user.displayName }}</a>
               <div class="user-top__birth">
-                <a>Birth Date:</a>
+                <a v-if="user.birthDate">Birth Date:</a>
                 <span>{{ user.birthDate }}</span>
               </div>
               <div class="user-follow">
@@ -44,25 +44,35 @@
                   <a>Following:</a>
                   <span>{{ following }}</span>
                 </div>
-                <div class="user-top__birth" v-if="!isFollowing">
-                  <div class="add-button-wrapper" v-if="!followLoading">
-                    <button class="btn btn-imageadd" @click="followUser">
-                      Follow
-                    </button>
+                <div class="user-functions" v-if="!currentUser">
+                  <div class="user-top__birth" v-if="!isFollowing">
+                    <div class="add-button-wrapper" v-if="!followLoading">
+                      <button class="btn btn-imageadd" @click="followUser">
+                        Follow
+                      </button>
+                    </div>
+                    <div class="add-button-loader" v-else>
+                      <SyncLoader class="follow-loader" :color="color" />
+                    </div>
                   </div>
-                  <div class="add-button-loader" v-else>
-                    <SyncLoader class="follow-loader" :color="color" />
+                  <div class="user-top__birth" v-else>
+                    <div class="add-button-wrapper" v-if="!followLoading">
+                      <button class="btn btn-unfollow" @click="unFollowUser">
+                        Unfollow
+                      </button>
+                    </div>
+                    <div class="add-button-loader" v-else>
+                      <SyncLoader class="follow-loader" :color="color" />
+                    </div>
                   </div>
                 </div>
-                <div class="user-top__birth" v-else>
-                  <div class="add-button-wrapper" v-if="!followLoading">
-                    <button class="btn btn-unfollow" @click="unFollowUser">
-                      Unfollow
-                    </button>
-                  </div>
-                  <div class="add-button-loader" v-else>
-                    <SyncLoader class="follow-loader" :color="color" />
-                  </div>
+                <div class="user-edit-profile" v-else>
+                  <button
+                    class="btn btn-imageadd edit-profile"
+                    @click="openEditProfile = !openEditProfile"
+                  >
+                    Edit Profile
+                  </button>
                 </div>
               </div>
             </div>
@@ -84,12 +94,14 @@
         <h3>Posts</h3>
         <ProfileUserPosts :id="id" />
       </div>
+      <ProfileEdit v-if="openEditProfile" />
     </div>
   </div>
 </template>
 
 <script>
 import ProfileUserPosts from '@/components/ProfileUserPosts'
+import ProfileEdit from '@/components/ProfileEdit'
 import axios from 'axios'
 import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
@@ -98,7 +110,7 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 export default {
   name: 'ProfileDetail',
   props: ['id'],
-  components: { ProfileUserPosts, Skeletor, SyncLoader },
+  components: { ProfileUserPosts, Skeletor, SyncLoader, ProfileEdit },
   data() {
     return {
       user: [],
@@ -108,6 +120,8 @@ export default {
       isFollowing: true,
       isSkeletorLoading: false,
       followLoading: false,
+      currentUser: false,
+      openEditProfile: false,
     }
   },
   async mounted() {
@@ -126,6 +140,7 @@ export default {
     this.following = userData.followings.length
     this.isFollowing = userData.followers.includes(currentUser)
     this.isSkeletorLoading = false
+    if (response.data.user._id === userData._id) this.currentUser = true
   },
   methods: {
     async followUser() {
@@ -137,9 +152,7 @@ export default {
       const currentUser = response.data.user._id
 
       const responseUser = await axios.get('users/' + this.id)
-
       const userData = responseUser.data
-
       const profileUser = response.data
 
       const responseFollow = await axios.put('users/' + this.id + '/follow', {
@@ -160,10 +173,9 @@ export default {
 
       const responseUser = await axios.get('users/' + this.id)
       const userData = responseUser.data
-
       const profileUser = response.data
 
-      const responseunFollow = await axios.put(
+      const responseUnFollow = await axios.put(
         'users/' + this.id + '/unfollow',
         {
           userId: currentUser,
@@ -198,7 +210,7 @@ export default {
   border-radius: 0.3rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  width: 350px;
+  width: 360px;
   height: 80px;
   left: 7.8rem;
   top: 1.2rem;
@@ -284,6 +296,10 @@ export default {
   transform: translate(0, -3px);
 }
 
+.edit-profile {
+  width: 100px;
+}
+
 .btn-unfollow {
   transform: translate(0, 3px);
   transition: 0.4s;
@@ -299,6 +315,6 @@ export default {
 }
 
 .follow-loader {
-  margin-left: 3rem;
+  margin-left: 4rem;
 }
 </style>

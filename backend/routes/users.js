@@ -64,4 +64,15 @@ router.put('/:id/unfollow', async (req, res) => {
   }
 })
 
+//UPDATE A USER
+router.put('/:id/edit', async (req, res) => {
+  try {
+    const getUser = await User.findById(req.params.id)
+    await getUser.updateOne({ $set: req.body })
+    return res.status(200).json({ msg: 'user has been updated' })
+  } catch (err) {
+    return res.status(500).json(err)
+  }
+})
+
 module.exports = router
