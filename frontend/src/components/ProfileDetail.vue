@@ -94,7 +94,7 @@
         <h3>Posts</h3>
         <ProfileUserPosts :id="id" />
       </div>
-      <ProfileEdit v-if="openEditProfile" />
+      <ProfileEdit @updateUser="updateUser($event)" v-if="openEditProfile" />
     </div>
   </div>
 </template>
@@ -185,6 +185,9 @@ export default {
       this.isFollowing = profileUser.user.followers.includes(currentUser)
       this.followers--
       this.following = userData.followings.length
+    },
+    updateUser(user) {
+      this.user = user || []
     },
   },
 }

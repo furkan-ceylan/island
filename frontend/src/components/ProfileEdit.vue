@@ -41,7 +41,6 @@
         placeholder=" "
         v-model="birthDate"
       />
-      <span class="input__label">Birth Date</span>
       <label class="input">
         <input
           class="input__field"
@@ -136,7 +135,10 @@ export default {
           console.log(err)
         }
 
-        this.user.push(responseUser.data)
+        const getUser = await axios.get('users/' + currentUser)
+
+        const user = getUser.data
+        this.$emit('updateUser', user)
         this.displayName = ''
         this.description = ''
         this.birthDate = ''
