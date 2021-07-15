@@ -124,7 +124,7 @@ export default {
       openEditProfile: false,
     }
   },
-  async mounted() {
+  async created() {
     this.isSkeletorLoading = true
 
     const responseUser = await axios.get('users/' + this.id)

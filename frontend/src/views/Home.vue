@@ -32,7 +32,7 @@ export default {
       user: [],
     }
   },
-  async mounted() {
+  async created() {
     const response = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })

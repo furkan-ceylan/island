@@ -43,7 +43,7 @@ export default {
       isLoading: false,
     }
   },
-  async mounted() {
+  async created() {
     this.isLoading = true
     const responseUsers = await axios.get('users/')
     this.users = responseUsers.data

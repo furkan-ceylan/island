@@ -69,7 +69,7 @@ export default {
       isSkeletorLoading: false,
     }
   },
-  async mounted() {
+  async created() {
     this.isSkeletorLoading = true
 
     const responsePosts = await axios.get('posts/' + this.id + '/posts')

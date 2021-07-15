@@ -25,6 +25,7 @@
         <div class="image-post__user-post" v-else>
           <a>{{ posts.displayName }}</a>
           <img
+            v-if="posts.file"
             class="image-post__img"
             :src="`http://localhost:3000/uploads/${posts.file}`"
           />
@@ -42,6 +43,7 @@
           <div class="image-post__user-post" v-else>
             <a>{{ comment.displayName }}</a>
             <img
+              v-if="comment.file"
               class="image-post__img"
               :src="`http://localhost:3000/uploads/${comment.file}`"
             />
@@ -168,7 +170,7 @@ export default {
       color: 'pink',
     }
   },
-  async mounted() {
+  async created() {
     this.isSkeletorLoading = true
 
     const response = await axios.get('auth/user', {

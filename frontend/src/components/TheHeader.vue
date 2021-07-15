@@ -118,7 +118,7 @@ export default {
       this.$router.push('/login')
     },
   },
-  async mounted() {
+  async created() {
     const response = await axios.get('auth/user', {
       headers: { token: localStorage.getItem('token') },
     })

@@ -77,7 +77,7 @@ export default {
       isLoading: false,
     }
   },
-  async mounted() {
+  async created() {
     this.isLoading = true
 
     const responseId = await axios.get('auth/user', {
