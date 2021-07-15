@@ -23,12 +23,10 @@ import Timeline from '@/components/Timeline'
 import TheHeader from '@/components/TheHeader'
 import TheFooter from '@/components/TheFooter'
 import axios from 'axios'
-import { checkAuth } from '../mixins/mixin'
 
 export default {
   name: 'Home',
   components: { SidebarLeft, SidebarRight, Timeline, TheHeader, TheFooter },
-  mixins: [checkAuth],
   data() {
     return {
       user: [],

@@ -21,12 +21,10 @@ import SidebarLeft from '@/components/SidebarLeft'
 import SidebarRight from '@/components/SidebarRight'
 import PostDetail from '@/components/PostDetail'
 import TheHeader from '@/components/TheHeader'
-import { checkAuth } from '../mixins/mixin'
 import TheFooter from '@/components/TheFooter'
 
 export default {
   components: { SidebarLeft, SidebarRight, PostDetail, TheHeader, TheFooter },
-  mixins: [checkAuth],
   props: ['id'],
 }
 </script>

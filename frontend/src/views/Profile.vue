@@ -19,7 +19,6 @@ import SidebarLeft from '@/components/SidebarLeft'
 import SidebarRight from '@/components/SidebarRight'
 import TheHeader from '@/components/TheHeader'
 import ProfileDetail from '@/components/ProfileDetail'
-import { checkAuth } from '../mixins/mixin'
 import TheFooter from '@/components/TheFooter'
 
 export default {
@@ -32,7 +31,6 @@ export default {
     ProfileDetail,
     TheFooter,
   },
-  mixins: [checkAuth],
 }
 </script>
 
