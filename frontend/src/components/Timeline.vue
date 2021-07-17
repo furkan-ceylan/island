@@ -88,7 +88,10 @@ export default {
     const currentUser = responseId.data.user._id
 
     const responsePost = await axios.get('posts/timeline/' + currentUser)
-    this.posts = responsePost.data
+
+    this.posts = responsePost.data.sort((p1, p2) => {
+      return new Date(p2.createdAt) - new Date(p1.createdAt)
+    })
 
     this.isLoading = false
   },
