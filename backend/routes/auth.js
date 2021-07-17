@@ -5,24 +5,6 @@ const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const xoauth2 = require('xoauth2')
 
-// const generator = xoauth2.createXOAuth2Generator({
-//   user: 'ceylan.furkan100@gmail.com',
-//   clientId:
-//     '1040856511849-hluqsqh4ern4ljpithisjj4i536bd9ja.apps.googleusercontent.com',
-//   clientSecret: 'v2z4G55N8kiN9SJoPMBmJWLu',
-//   refreshToken:
-//     '1//04zETUne01X74CgYIARAAGAQSNwF-L9IrmSGTHIcF1h0zfpv_azkOFJKCLBjg8hmdMUVEx106G_70RJbHYuXUjLIITgXKtQAJ2rE',
-//   accessToken:
-//     'ya29.a0ARrdaM-3kD9APS1pzCVsJ7oScIMkF4ECgFQTgR5EHb0p8MEIRUQKUfRUOPGtrkvzjJAtSGPb5f4G5aso240DKTe7rLG5D6TNFl5fhWwvOL6zUaCVFUuJy3v-n4aI4-lY0L5YsqsjDjwX4Qn_ebWL0TTyPSEc',
-// })
-
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     xoauth2: generator,
-//   },
-// })
-
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -74,9 +56,9 @@ router.post('/register', async (req, res) => {
       }
     )
 
-    res.status(200).json(user)
+    return res.status(200).json(user)
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -90,7 +72,7 @@ router.post('/upload', (req, res) => {
       console.log('uploaded')
     }
   })
-  res.json({ file: req.body.file })
+  return res.json({ file: req.body.file })
   console.log('file:' + req.body.file)
 })
 
@@ -103,9 +85,11 @@ router.post('/login', async (req, res) => {
 
     !userLogin && res.status(404).json({ error: 'User not found' })
 
-    if (!userLogin.confirmed) {
-      res.status(400).json({ error: 'Email not confirmed' })
-    }
+    // if (!userLogin.confirmed) {
+    //   res.status(400).json({ error: 'Email not confirmed' })
+    // }
+
+    // error durumunda return
 
     const validPassword = await bcrypt.compare(
       req.body.password,
@@ -115,9 +99,9 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: userLogin._id }, process.env.SECRET_KEY)
 
-    res.status(200).json({ user: userLogin, token: token })
+    return res.status(200).json({ user: userLogin, token: token })
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -126,7 +110,7 @@ router.get('/user', async (req, res) => {
 
   jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
     if (err) {
-      res.status(401).json({
+      return res.status(401).json({
         title: 'unauthorized',
       })
     }
@@ -142,11 +126,11 @@ router.get('/user', async (req, res) => {
 })
 
 router.post('/logout', async (req, res) => {
-  res.cookie('jwt', '', {
+  return res.cookie('jwt', '', {
     maxAge: 0,
   })
 
-  res.send({
+  return res.send({
     message: 'logout success',
   })
 })
@@ -160,7 +144,7 @@ router.get('/confirmation/:token', async (req, res) => {
 
     user.confirmed = true
     user.save().then((user) => {
-      res.send(user)
+      return res.send(user)
     })
 
     return res.redirect('http://localhost:8080/login')

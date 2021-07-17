@@ -5,9 +5,9 @@ const User = require('../models/User.js')
 router.get('/', async (req, res) => {
   try {
     const getUsers = await User.find() //find all
-    res.status(200).json(getUsers)
+    return res.status(200).json(getUsers)
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -16,9 +16,9 @@ router.get('/:userId', async (req, res) => {
   try {
     const getUser = await User.findById(req.params.userId) //findById by params
     const { password, updatedAt, ...other } = getUser._doc //do not show password and upadtedAt datas
-    res.status(200).json(other)
+    return res.status(200).json(other)
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -31,15 +31,15 @@ router.put('/:id/follow', async (req, res) => {
       if (!user.followers.includes(req.body.userId)) {
         await user.updateOne({ $push: { followers: req.body.userId } }) //add current user to user's followers
         await currentUser.updateOne({ $push: { followings: req.params.id } }) //add user to current user's followings
-        res.status(200).json('user has been followed')
+        return res.status(200).json('user has been followed')
       } else {
-        res.status(403).json('you already follow this user')
+        return res.status(403).json('you already follow this user')
       }
     } catch (err) {
-      res.status(500).json(err)
+      return res.status(500).json(err)
     }
   } else {
-    res.status(403).json('you cant follow yourself')
+    return res.status(403).json('you cant follow yourself')
   }
 })
 
@@ -52,15 +52,15 @@ router.put('/:id/unfollow', async (req, res) => {
       if (user.followers.includes(req.body.userId)) {
         await user.updateOne({ $pull: { followers: req.body.userId } }) //delete current user from user's followers
         await currentUser.updateOne({ $pull: { followings: req.params.id } }) //delete user from current user's followings
-        res.status(200).json('user has been unfollowed')
+        return res.status(200).json('user has been unfollowed')
       } else {
-        res.status(403).json('you dont follow this user')
+        return res.status(403).json('you dont follow this user')
       }
     } catch (err) {
-      res.status(500).json(err)
+      return res.status(500).json(err)
     }
   } else {
-    res.status(403).json('you cant unfollow yourself')
+    return res.status(403).json('you cant unfollow yourself')
   }
 })
 

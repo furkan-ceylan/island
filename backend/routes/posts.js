@@ -15,9 +15,9 @@ router.post('/', async (req, res) => {
 
   try {
     const createPost = await newPost.save()
-    res.status(200).json({ createPost })
+    return res.status(200).json({ createPost })
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -31,7 +31,7 @@ router.post('/upload', (req, res) => {
       console.log('uploaded')
     }
   })
-  res.json({ file: req.body.file })
+  return res.json({ file: req.body.file })
   console.log('file:' + req.body.file)
 })
 
@@ -51,9 +51,9 @@ router.put('/:id/comment', async (req, res) => {
     })
     await post.updateOne({ $push: { comments: req.body } })
     const addComment = await comment.save()
-    res.status(200).json(addComment)
+    return res.status(200).json(addComment)
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -62,9 +62,9 @@ router.get('/:id/comments', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     const comment = await Comment.find({ postId: post._id })
-    res.status(200).json(comment)
+    return res.status(200).json(comment)
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -72,9 +72,9 @@ router.get('/:id/comments', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    res.status(200).json(post)
+    return res.status(200).json(post)
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -88,9 +88,9 @@ router.get('/timeline/:userId', async (req, res) => {
         return Post.find({ userId: friendId })
       })
     )
-    res.json(userPosts.concat(...friendPosts))
+    return res.json(userPosts.concat(...friendPosts))
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 
@@ -100,9 +100,9 @@ router.get('/:userId/posts', async (req, res) => {
     const currentUser = await User.findById(req.params.userId)
     const userPosts = await Post.find({ userId: currentUser._id })
 
-    res.status(200).json(userPosts)
+    return res.status(200).json(userPosts)
   } catch (err) {
-    res.status(500).json(err)
+    return res.status(500).json(err)
   }
 })
 module.exports = router
