@@ -32,7 +32,14 @@
             <span class="nav-icon">Profile</span>
           </div>
         </router-link>
-        <router-link to="/messages">
+        <router-link
+          :to="{
+            name: 'Profile',
+            params: {
+              id: currentUser,
+            },
+          }"
+        >
           <div v-if="$route.name === 'messages'" class="on-page">
             <span class="material-icons w3-xxlarge">message</span>
             <span class="nav-icon">Messages</span>
@@ -42,7 +49,14 @@
             <span class="nav-icon">Messages</span>
           </div>
         </router-link>
-        <router-link to="/settings">
+        <router-link
+          :to="{
+            name: 'Profile',
+            params: {
+              id: currentUser,
+            },
+          }"
+        >
           <div v-if="$route.name === 'settings'" class="on-page">
             <span class="material-icons w3-xxlarge">settings</span>
             <span class="nav-icon">Settings</span>
@@ -58,21 +72,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'SidebarLeft',
-  data() {
-    return {
-      currentUser: '1',
-    }
-  },
-  async mounted() {
-    const response = await axios.get('auth/user', {
-      headers: { token: localStorage.getItem('token') },
-    })
-    this.currentUser = response.data.user._id
-  },
+  props: ['currentUser'],
 }
 </script>
 
