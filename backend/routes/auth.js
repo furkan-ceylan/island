@@ -73,7 +73,24 @@ router.post('/upload', (req, res) => {
     }
   })
   return res.json({ file: req.body.file })
-  console.log('file:' + req.body.file)
+})
+
+let refreshTokens = []
+
+//REFRESH TOKENS
+router.post('/token', async (req, res) => {
+  const refreshToken = req.body.token
+  if (refreshToken == null) return res.sendStatus(401)
+  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
+    if (err) return res.sendStatus(403)
+    const accessToken = jwt.sign(
+      { userId: userLogin._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '1d' }
+    )
+    res.json({ token: accessToken })
+  })
 })
 
 //LOGIN
@@ -83,23 +100,32 @@ router.post('/login', async (req, res) => {
       email: req.body.email,
     })
 
-    !userLogin && res.status(404).json({ error: 'User not found' })
+    if (!userLogin) return res.status(404).json({ error: 'User not found' })
 
-    // if (!userLogin.confirmed) {
-    //   res.status(400).json({ error: 'Email not confirmed' })
-    // }
-
-    // error durumunda return
+    // if (!userLogin.confirmed) return res.status(400).json({ error: 'Email not confirmed' })
 
     const validPassword = await bcrypt.compare(
       req.body.password,
       userLogin.password
     )
-    !validPassword && res.status(400).json({ error: 'Wrong password' })
+    if (!validPassword) return res.status(400).json({ error: 'Wrong password' })
 
-    const token = jwt.sign({ userId: userLogin._id }, process.env.SECRET_KEY)
+    const accessToken = jwt.sign(
+      { userId: userLogin._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '1d' }
+    )
 
-    return res.status(200).json({ user: userLogin, token: token })
+    const refreshToken = jwt.sign(
+      { userId: userLogin._id },
+      process.env.REFRESH_TOKEN_SECRET
+    )
+
+    refreshTokens.push(refreshToken)
+
+    return res
+      .status(200)
+      .json({ user: userLogin, token: accessToken, refreshToken: refreshToken })
   } catch (err) {
     return res.status(500).json(err)
   }
@@ -126,11 +152,13 @@ router.get('/user', async (req, res) => {
 })
 
 router.post('/logout', async (req, res) => {
-  return res.cookie('jwt', '', {
+  refreshTokens = refreshTokens.filter((token) => token !== req.body.token)
+
+  res.cookie('jwt', '', {
     maxAge: 0,
   })
 
-  return res.send({
+  res.send({
     message: 'logout success',
   })
 })
