@@ -31,11 +31,11 @@
         </div>
       </div>
       <div class="header__user">
-        <label class="header__user-username">{{ username }}</label>
+        <label class="header__user-username">{{ user.displayName }}</label>
         <img
-          v-if="profilePicture"
+          v-if="user.profilePicture"
           class="image-post__img"
-          :src="`http://localhost:3000/uploads/user/${profilePicture}`"
+          :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
         />
         <img
           v-else
@@ -68,12 +68,16 @@ export default {
   data() {
     return {
       posts: [],
-      user: [],
       openAddImagePost: false,
       openAddTextPost: false,
       username: '',
       profilePicture: '',
     }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
   },
   methods: {
     onFileChange() {
@@ -90,11 +94,9 @@ export default {
       if (this.file === '') {
         this.fillError = true
       } else {
-        this.user = this.$store.state.user
-
         const response = await axios.post('posts/', {
           isImagePost: true,
-          displayName: this.user.displayName,
+          displayName: this.$store.state.user.displayName,
           userId: currentUser,
           file: this.file.name,
         })
@@ -116,8 +118,6 @@ export default {
   },
   async created() {
     this.$store.dispatch('fetchUser')
-    this.username = this.$store.state.user.displayName
-    this.profilePicture = this.$store.state.user.profilePicture
   },
 }
 </script>

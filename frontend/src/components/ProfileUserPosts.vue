@@ -31,7 +31,7 @@
         <div class="text-post">
           <ProfileImage :id="post.userId" class="image-post__avatar" />
           <div class="text-post__user-post">
-            <a>{{ post.displayName }}</a>
+            <a>{{ user.displayName }}</a>
             <p class="text-post__content">
               {{ post.description }}
             </p>
@@ -75,7 +75,7 @@ export default {
     const responsePosts = await axios.get('posts/' + this.id + '/posts')
     this.posts = responsePosts.data
 
-    const responseUser = await axios.get('users/' + this.userId)
+    const responseUser = await axios.get('users/' + this.id)
     this.user = responseUser.data
     this.isSkeletorLoading = false
   },
