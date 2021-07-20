@@ -134,7 +134,7 @@ router.post('/login', async (req, res) => {
 router.get('/user', async (req, res) => {
   let token = req.headers.token
 
-  jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
     if (err) {
       return res.status(401).json({
         title: 'unauthorized',
