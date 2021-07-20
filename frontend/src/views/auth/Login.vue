@@ -58,8 +58,6 @@ export default {
   },
   methods: {
     async login() {
-      axios.defaults.withCredentials = true
-
       if (this.email === '' || this.password === '') {
         this.fillError = true
       } else {
