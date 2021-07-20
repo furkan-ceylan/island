@@ -3,7 +3,7 @@
     <TheHeader />
     <div class="home__content">
       <div class="home__left-sidebar">
-        <SidebarLeft :currentUser="currentUser" />
+        <SidebarLeft :currentUser="user._id" />
       </div>
       <div class="home__container">
         <Timeline />
@@ -22,25 +22,26 @@ import SidebarLeft from '@/components/SidebarLeft'
 import Timeline from '@/components/Timeline'
 import TheHeader from '@/components/TheHeader'
 import TheFooter from '@/components/TheFooter'
-import axios from 'axios'
 
 export default {
   name: 'Home',
   components: { SidebarLeft, SidebarRight, Timeline, TheHeader, TheFooter },
   data() {
     return {
-      currentUser: null,
+      currentUser: this.$store.state.user._id,
     }
   },
-  async created() {
-    const response = await axios.get('auth/user', {
-      headers: { token: localStorage.getItem('token') },
-    })
-    this.currentUser = response.data.user._id
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
+  },
+  mounted() {
+    this.$store.dispatch('fetchUser')
   },
   provide() {
     return {
-      id: this.currentUser,
+      id: this.$store.state.user._id,
     }
   },
 }

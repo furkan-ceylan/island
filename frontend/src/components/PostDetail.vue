@@ -85,11 +85,7 @@
         <button class="btn-addpost" @click="addComment" v-if="!isLoading">
           Add
         </button>
-        <sync-loader
-          :color="color"
-          :loading="loading"
-          v-if="isLoading"
-        ></sync-loader>
+        <sync-loader :color="color" v-if="isLoading"></sync-loader>
         <button
           @click="openAddComment = !openAddComment"
           class="btn-addpost"
@@ -125,11 +121,7 @@
         <button type="submit" class="btn-addpost" v-if="!isLoading">
           Add
         </button>
-        <sync-loader
-          :color="color"
-          :loading="loading"
-          v-if="isLoading"
-        ></sync-loader>
+        <sync-loader :color="color" v-if="isLoading"></sync-loader>
         <button
           @click="openAddImageComment = !openAddImageComment"
           class="btn-addpost"
@@ -173,13 +165,8 @@ export default {
   async created() {
     this.isSkeletorLoading = true
 
-    const response = await axios.get('auth/user', {
-      headers: { token: localStorage.getItem('token') },
-    })
-    const currentUser = response.data.user._id
-
-    const responseUser = await axios.get('users/' + currentUser)
-    this.user = responseUser.data
+    this.$store.dispatch('fetchUser')
+    this.user = this.$store.state.user
 
     const responsePost = await axios.get('posts/' + this.id)
     this.posts = responsePost.data
@@ -196,20 +183,13 @@ export default {
     },
     async addComment() {
       this.isLoading = true
-      const responseId = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = responseId.data.user._id
-
-      const responseUser = await axios.get('users/' + currentUser)
-      this.user = responseUser.data
 
       if (this.commentModel === '') {
         this.fillError = true
       } else {
         const response = await axios.put('posts/' + this.id + '/comment', {
           comment: this.commentModel,
-          userId: currentUser,
+          userId: this.$store.state.user._id,
           postId: this.id,
           displayName: this.user.displayName,
           isTextComment: true,
@@ -223,14 +203,6 @@ export default {
     async addImageComment() {
       this.isLoading = true
 
-      const responseId = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = responseId.data.user._id
-
-      const responseUser = await axios.get('users/' + currentUser)
-      this.user = responseUser.data
-
       const formData = new FormData()
       formData.append('file', this.file)
 
@@ -238,7 +210,7 @@ export default {
         this.fillError = true
       } else {
         const response = await axios.put('posts/' + this.id + '/comment', {
-          userId: currentUser,
+          userId: this.$store.state.user._id,
           postId: this.id,
           displayName: this.user.displayName,
           file: this.file.name,

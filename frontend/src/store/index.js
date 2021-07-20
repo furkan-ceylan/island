@@ -3,20 +3,20 @@ import axios from 'axios'
 
 export default createStore({
   state: {
-    userId: '',
+    user: '',
   },
-  getters: {
-    setUserId: (state, userId) => state.userId,
-  },
+  getters: {},
   actions: {
-    async fetchUserId({ commit }) {
-      await axios.get('auth/user', {
+    async fetchUser({ commit }) {
+      let response = await axios.get('auth/user', {
         headers: { token: localStorage.getItem('token') },
-      }),
-        then((response) => {
-          commit('setUserId', response.data.user._id)
-        })
+      })
+      commit('SET_USER', response.data.user)
     },
   },
-  mutations: {},
+  mutations: {
+    SET_USER(state, user) {
+      state.user = user
+    },
+  },
 })

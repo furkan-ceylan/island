@@ -8,20 +8,25 @@
       <Skeletor v-if="isLoading" class="skeleton" width="150" height="20" />
       <Skeletor circle size="50" v-if="isLoading" />
       <Skeletor v-if="isLoading" class="skeleton" width="150" height="20" />
-      <div class="friend" v-for="user in users" :key="user._id" v-else>
-        <router-link :to="`/profile/${user._id}`">
+      <div
+        class="friend"
+        v-for="profileUser in users"
+        :key="profileUser._id"
+        v-else
+      >
+        <router-link :to="`/profile/${profileUser._id}`">
           <div class="friend-info">
             <img
-              v-if="user.profilePicture"
+              v-if="profileUser.profilePicture"
               class="image-post__img"
-              :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
+              :src="`http://localhost:3000/uploads/user/${profileUser.profilePicture}`"
             />
             <img
               v-else
               class="image-post__img"
               src="../assets/defaultProfile.png"
             />
-            <label>{{ user.displayName }}</label>
+            <label>{{ profileUser.displayName }}</label>
           </div>
         </router-link>
       </div>

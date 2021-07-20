@@ -82,10 +82,7 @@ export default {
     },
     async addImagePost() {
       this.isLoading = true
-      const response = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = response.data.user._id
+      const currentUser = this.$store.state.user._id
 
       const formData = new FormData()
       formData.append('file', this.file)
@@ -93,8 +90,7 @@ export default {
       if (this.file === '') {
         this.fillError = true
       } else {
-        const responseUsers = await axios.get('users/' + currentUser)
-        this.user = responseUsers.data
+        this.user = this.$store.state.user
 
         const response = await axios.post('posts/', {
           isImagePost: true,
@@ -119,11 +115,9 @@ export default {
     },
   },
   async created() {
-    const response = await axios.get('auth/user', {
-      headers: { token: localStorage.getItem('token') },
-    })
-    this.username = response.data.user.displayName
-    this.profilePicture = response.data.user.profilePicture
+    this.$store.dispatch('fetchUser')
+    this.username = this.$store.state.user.displayName
+    this.profilePicture = this.$store.state.user.profilePicture
   },
 }
 </script>

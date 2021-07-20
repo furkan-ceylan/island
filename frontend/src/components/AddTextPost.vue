@@ -19,11 +19,7 @@
       <button class="btn-addpost" type="submit" v-if="!isLoading">
         Add
       </button>
-      <sync-loader
-        :color="color"
-        :loading="loading"
-        v-if="isLoading"
-      ></sync-loader>
+      <sync-loader :color="color" v-if="isLoading"></sync-loader>
       <button
         @click="openAddPost = !openAddPost"
         class="btn-addpost"
@@ -58,10 +54,8 @@ export default {
   },
   methods: {
     async addTextPost() {
-      const response = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = response.data.user._id
+      this.$store.dispatch('fetchUser')
+      const currentUser = this.$store.state.user._id
 
       if (this.textDescription === '') {
         this.fillError = true

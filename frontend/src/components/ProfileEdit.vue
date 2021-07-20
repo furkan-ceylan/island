@@ -101,10 +101,8 @@ export default {
       this.file = file
     },
     async editProfile() {
-      const response = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = response.data.user._id
+      this.$store.dispatch('fetchUser')
+      const currentUser = this.$store.state.user._id
 
       const formData = new FormData()
       formData.append('file', this.file)

@@ -129,10 +129,8 @@ export default {
 
     const responseUser = await axios.get('users/' + this.id)
 
-    const response = await axios.get('auth/user', {
-      headers: { token: localStorage.getItem('token') },
-    })
-    const currentUser = response.data.user._id
+    this.$store.dispatch('fetchUser')
+    const currentUser = this.$store.state.user._id
 
     const userData = responseUser.data
     this.user = userData
@@ -140,20 +138,16 @@ export default {
     this.following = userData.followings.length
     this.isFollowing = userData.followers.includes(currentUser)
     this.isSkeletorLoading = false
-    if (response.data.user._id === userData._id) this.currentUser = true
+    if (currentUser === userData._id) this.currentUser = true
   },
   methods: {
     async followUser() {
       this.followLoading = true
 
-      const response = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = response.data.user._id
-
+      const currentUser = this.$store.state.user._id
       const responseUser = await axios.get('users/' + this.id)
       const userData = responseUser.data
-      const profileUser = response.data
+      const profileUser = this.$store.state.user
 
       const responseFollow = await axios.put('users/' + this.id + '/follow', {
         userId: currentUser,
@@ -166,14 +160,10 @@ export default {
     async unFollowUser() {
       this.followLoading = true
 
-      const response = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = response.data.user._id
-
+      const currentUser = this.$store.state.user._id
       const responseUser = await axios.get('users/' + this.id)
       const userData = responseUser.data
-      const profileUser = response.data
+      const profileUser = this.$store.state.user
 
       const responseUnFollow = await axios.put(
         'users/' + this.id + '/unfollow',

@@ -75,10 +75,9 @@ export default {
       this.file = file
     },
     async addImagePost() {
-      const response = await axios.get('auth/user', {
-        headers: { token: localStorage.getItem('token') },
-      })
-      const currentUser = response.data.user._id
+      this.$store.dispatch('fetchUser')
+      const currentUser = this.$store.state.user._id
+      this.user = this.$store.state.user
 
       const formData = new FormData()
       formData.append('file', this.file)
@@ -87,9 +86,6 @@ export default {
         this.fillError = true
       } else {
         this.isLoading = true
-
-        const responseUsers = await axios.get('users/' + currentUser)
-        this.user = responseUsers.data
 
         const response = await axios.post('posts/', {
           isImagePost: true,
