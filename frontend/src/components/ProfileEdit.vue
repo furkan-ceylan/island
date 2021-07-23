@@ -108,16 +108,14 @@ export default {
       formData.append('file', this.file)
 
       if (
+        this.file == null ||
         this.displayName === '' ||
         this.description === '' ||
         this.birthDate === '' ||
-        this.hobbies === '' ||
-        this.file === null
+        this.hobbies === ''
       ) {
         this.fillError = true
       } else {
-        this.fillError = false
-
         this.isLoading = true
         const responseUser = await axios.put('users/' + currentUser + '/edit', {
           displayName: this.displayName,
