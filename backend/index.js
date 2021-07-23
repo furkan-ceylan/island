@@ -6,9 +6,8 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const cors = require('cors')
 const fileupload = require('express-fileupload')
-const mongoSanitize = require('express-mongo-sanitize')
-const xss = require('xss')
 const expressSanitizer = require('express-sanitizer')
+const sanitize = require('mongo-sanitize')
 
 const userRoute = require('./routes/users')
 const authRoute = require('./routes/auth')
@@ -33,12 +32,6 @@ app.use(morgan('common'))
 app.use(cors({ credentials: true, origin: 'http://localhost:8080' }))
 app.use(fileupload())
 app.use('/uploads', express.static('uploads'))
-app.use(mongoSanitize())
-app.use(
-  mongoSanitize({
-    replaceWith: '_',
-  })
-)
 app.use(expressSanitizer())
 
 app.use('/api/users', userRoute)

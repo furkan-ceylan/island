@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const User = require('../models/User.js')
+const sanitize = require('mongo-sanitize')
 
 //GET ALL USERS
 router.get('/', async (req, res) => {
@@ -67,11 +68,13 @@ router.put('/:id/unfollow', async (req, res) => {
 //UPDATE A USER
 router.put('/:id/edit', async (req, res) => {
   try {
-    const sanitizedDisplayName = req.sanitize(req.body.displayName)
-    const sanitizedDesc = req.sanitize(req.body.description)
-    const sanitizedBirthDate = req.sanitize(req.body.birthDate)
-    const sanitizedHobbies = req.sanitize(req.body.hobbies)
-    const sanitizedProfilePicture = req.sanitize(req.body.profilePicture)
+    const sanitizedDisplayName = sanitize(req.sanitize(req.body.displayName))
+    const sanitizedDesc = sanitize(req.sanitize(req.body.description))
+    const sanitizedBirthDate = sanitize(req.sanitize(req.body.birthDate))
+    const sanitizedHobbies = sanitize(req.sanitize(req.body.hobbies))
+    const sanitizedProfilePicture = sanitize(
+      req.sanitize(req.body.profilePicture)
+    )
 
     const getUser = await User.findById(req.params.id)
 

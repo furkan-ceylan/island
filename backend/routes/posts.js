@@ -3,20 +3,15 @@ const Post = require('../models/Post.js')
 const User = require('../models/User.js')
 const Comment = require('../models/Comment.js')
 const mongoSanitize = require('express-mongo-sanitize')
+const sanitize = require('mongo-sanitize')
 
 //CREATE POST
 router.post('/', async (req, res) => {
-  const sanitizedDesc = mongoSanitize.sanitize(
-    req.sanitize(req.body.description)
-  )
-  const sanitizedisText = mongoSanitize.sanitize(
-    req.sanitize(req.body.isTextPost)
-  )
-  const sanitizedUserId = mongoSanitize.sanitize(req.sanitize(req.body.userId))
-  const sanitizedDisplayName = mongoSanitize.sanitize(
-    req.sanitize(req.body.displayName)
-  )
-  const sanitizedFile = mongoSanitize.sanitize(req.sanitize(req.body.file))
+  const sanitizedDesc = sanitize(req.sanitize(req.body.description))
+  const sanitizedisText = sanitize(req.sanitize(req.body.isTextPost))
+  const sanitizedUserId = sanitize(req.sanitize(req.body.userId))
+  const sanitizedDisplayName = sanitize(req.sanitize(req.body.displayName))
+  const sanitizedFile = sanitize(req.sanitize(req.body.file))
   const newPost = await new Post({
     description: sanitizedDesc,
     isTextPost: sanitizedisText,
@@ -49,12 +44,12 @@ router.post('/upload', (req, res) => {
 //COMMENT POST
 router.put('/:id/comment', async (req, res) => {
   try {
-    const sanitizedUserId = req.sanitize(req.body.userId)
-    const sanitizedPostId = req.sanitize(req.params.id)
-    const sanitizedComment = req.sanitize(req.body.comment)
-    const sanitizedDisplayName = req.sanitize(req.body.displayName)
-    const sanitizedFile = req.sanitize(req.body.file)
-    const sanitizedisText = req.sanitize(req.body.isTextComment)
+    const sanitizedUserId = sanitize(req.sanitize(req.body.userId))
+    const sanitizedPostId = sanitize(req.sanitize(req.params.id))
+    const sanitizedComment = sanitize(req.sanitize(req.body.comment))
+    const sanitizedDisplayName = sanitize(req.sanitize(req.body.displayName))
+    const sanitizedFile = sanitize(req.sanitize(req.body.file))
+    const sanitizedisText = sanitize(req.sanitize(req.body.isTextComment))
 
     const post = await Post.findById(req.params.id)
 

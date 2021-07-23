@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const xoauth2 = require('xoauth2')
+const sanitize = require('mongo-sanitize')
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -20,9 +21,9 @@ const transporter = nodemailer.createTransport({
 //REGISTER
 router.post('/register', async (req, res) => {
   try {
-    const sanitizedEmail = req.sanitize(req.body.email)
-    const sanitizedPassword = req.sanitize(req.body.password)
-    const sanitizedDisplayName = req.sanitize(req.body.displayName)
+    const sanitizedEmail = sanitize(req.sanitize(req.body.email))
+    const sanitizedPassword = sanitize(req.sanitize(req.body.password))
+    const sanitizedDisplayName = sanitize(req.sanitize(req.body.displayName))
 
     const salt = await bcrypt.genSalt(10)
     const hashedPass = await bcrypt.hash(sanitizedPassword, salt)
