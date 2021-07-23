@@ -31,7 +31,7 @@
         <div class="text-post">
           <ProfileImage :id="post.userId" class="image-post__avatar" />
           <div class="text-post__user-post">
-            <a>{{ user.displayName }}</a>
+            <PostDisplayName :id="post.userId" />
             <p class="text-post__content">
               {{ post.description }}
             </p>
@@ -50,6 +50,7 @@
 <script>
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
+import PostDisplayName from '@/components/PostDisplayName'
 import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
 
@@ -58,6 +59,7 @@ export default {
   components: {
     ProfileImage,
     Skeletor,
+    PostDisplayName,
   },
   props: ['id'],
   data() {
