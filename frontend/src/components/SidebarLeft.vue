@@ -74,7 +74,15 @@
 <script>
 export default {
   name: 'SidebarLeft',
-  props: ['currentUser'],
+  data() {
+    return {
+      currentUser: '',
+    }
+  },
+  async created() {
+    this.$store.dispatch('fetchUser')
+    this.currentUser = this.$store.state.user._id
+  },
 }
 </script>
 
