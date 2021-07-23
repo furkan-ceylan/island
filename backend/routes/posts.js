@@ -2,15 +2,27 @@ const router = require('express').Router()
 const Post = require('../models/Post.js')
 const User = require('../models/User.js')
 const Comment = require('../models/Comment.js')
+const mongoSanitize = require('express-mongo-sanitize')
 
 //CREATE POST
 router.post('/', async (req, res) => {
-  const newPost = new Post(req.body)
-  await newPost.updateOne({
-    $push: {
-      displayName: req.body.displayName,
-      file: req.body.file,
-    },
+  const sanitizedDesc = mongoSanitize.sanitize(
+    req.sanitize(req.body.description)
+  )
+  const sanitizedisText = mongoSanitize.sanitize(
+    req.sanitize(req.body.isTextPost)
+  )
+  const sanitizedUserId = mongoSanitize.sanitize(req.sanitize(req.body.userId))
+  const sanitizedDisplayName = mongoSanitize.sanitize(
+    req.sanitize(req.body.displayName)
+  )
+  const sanitizedFile = mongoSanitize.sanitize(req.sanitize(req.body.file))
+  const newPost = await new Post({
+    description: sanitizedDesc,
+    isTextPost: sanitizedisText,
+    userId: sanitizedUserId,
+    displayName: sanitizedDisplayName,
+    file: sanitizedFile,
   })
 
   try {
@@ -32,22 +44,27 @@ router.post('/upload', (req, res) => {
     }
   })
   return res.json({ file: req.body.file })
-  console.log('file:' + req.body.file)
 })
 
 //COMMENT POST
 router.put('/:id/comment', async (req, res) => {
   try {
+    const sanitizedUserId = req.sanitize(req.body.userId)
+    const sanitizedPostId = req.sanitize(req.params.id)
+    const sanitizedComment = req.sanitize(req.body.comment)
+    const sanitizedDisplayName = req.sanitize(req.body.displayName)
+    const sanitizedFile = req.sanitize(req.body.file)
+    const sanitizedisText = req.sanitize(req.body.isTextComment)
+
     const post = await Post.findById(req.params.id)
-    const comment = new Comment(req.body)
-    await comment.updateOne({
-      $push: {
-        userId: req.body.userId,
-        postId: req.params.id,
-        comment: req.body.comment,
-        displayName: req.body.displayName,
-        file: req.body.file,
-      },
+
+    const comment = await new Comment({
+      userId: sanitizedUserId,
+      postId: sanitizedPostId,
+      comment: sanitizedComment,
+      isTextComment: sanitizedisText,
+      displayName: sanitizedDisplayName,
+      file: sanitizedFile,
     })
     await post.updateOne({ $push: { comments: req.body } })
     const addComment = await comment.save()

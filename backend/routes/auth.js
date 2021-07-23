@@ -20,17 +20,17 @@ const transporter = nodemailer.createTransport({
 //REGISTER
 router.post('/register', async (req, res) => {
   try {
+    const sanitizedEmail = req.sanitize(req.body.email)
+    const sanitizedPassword = req.sanitize(req.body.password)
+    const sanitizedDisplayName = req.sanitize(req.body.displayName)
+
     const salt = await bcrypt.genSalt(10)
-    const hashedPass = await bcrypt.hash(req.body.password, salt)
+    const hashedPass = await bcrypt.hash(sanitizedPassword, salt)
 
     const newUser = new User({
-      email: req.body.email,
+      email: sanitizedEmail,
       password: hashedPass,
-      displayName: req.body.displayName,
-      profilePicture: req.body.file,
-      description: req.body.description,
-      birthDate: req.body.birthDate,
-      hobbies: req.body.hobbies,
+      displayName: sanitizedDisplayName,
     })
 
     const user = await newUser.save()
