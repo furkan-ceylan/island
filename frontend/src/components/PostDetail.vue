@@ -17,13 +17,13 @@
       <div class="main-post" v-else>
         <ProfileImage :id="posts.userId" class="text-post__img" />
         <div class="text-post__user-post" v-if="posts.isTextPost">
-          <a>{{ posts.displayName }}</a>
+          <PostDisplayName :id="posts.userId" />
           <p class="text-post__content">
             {{ posts.description }}
           </p>
         </div>
         <div class="image-post__user-post" v-else>
-          <a>{{ posts.displayName }}</a>
+          <PostDisplayName :id="posts.userId" />
           <img
             v-if="posts.file"
             class="image-post__img"
@@ -35,13 +35,13 @@
         <div class="comment" v-for="comment in comments" :key="comment._id">
           <ProfileImage :id="comment.userId" class="text-post__img" />
           <div class="text-post__user-post" v-if="comment.isTextComment">
-            <a>{{ comment.displayName }}</a>
+            <PostDisplayName :id="comment.userId" />
             <p class="text-post__content">
               {{ comment.comment }}
             </p>
           </div>
           <div class="image-post__user-post" v-else>
-            <a>{{ comment.displayName }}</a>
+            <PostDisplayName :id="comment.userId" />
             <img
               v-if="comment.file"
               class="image-post__img"
@@ -137,6 +137,7 @@
 <script>
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
+import PostDisplayName from '@/components/PostDisplayName'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
@@ -144,7 +145,7 @@ import { Skeletor } from 'vue-skeletor'
 export default {
   name: 'PostDetail',
   props: ['id'],
-  components: { ProfileImage, SyncLoader, Skeletor },
+  components: { ProfileImage, SyncLoader, Skeletor, PostDisplayName },
   data() {
     return {
       posts: [],
@@ -182,11 +183,11 @@ export default {
       this.file = file
     },
     async addComment() {
-      this.isLoading = true
-
       if (this.commentModel === '') {
         this.fillError = true
       } else {
+        this.isLoading = true
+
         const response = await axios.put('posts/' + this.id + '/comment', {
           comment: this.commentModel,
           userId: this.$store.state.user._id,
@@ -201,14 +202,14 @@ export default {
       }
     },
     async addImageComment() {
-      this.isLoading = true
-
       const formData = new FormData()
       formData.append('file', this.file)
 
-      if (this.file === '') {
+      if (!this.file) {
         this.fillError = true
       } else {
+        this.isLoading = true
+
         const response = await axios.put('posts/' + this.id + '/comment', {
           userId: this.$store.state.user._id,
           postId: this.id,
@@ -266,11 +267,11 @@ export default {
 
 .text-post__user-post a {
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .text-post__content {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .main-post {

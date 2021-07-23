@@ -23,11 +23,7 @@
             <ProfileImage :id="post.userId" class="post__img" />
           </div>
           <div class="post__user-post" v-if="post.isTextPost">
-            <div class="user-post-name">
-              <a>
-                {{ post.displayName }}
-              </a>
-            </div>
+            <PostDisplayName :id="post.userId" />
             <div class="user-post-desc">
               <p class="post__content">
                 {{ post.description }}
@@ -35,11 +31,7 @@
             </div>
           </div>
           <div class="image-post__user-post" v-else>
-            <div class="user-post-name">
-              <a>
-                {{ post.displayName }}
-              </a>
-            </div>
+            <PostDisplayName :id="post.userId" />
             <div class="user-post-desc img-desc">
               <p class="post__content">
                 {{ post.description }}
@@ -62,11 +54,12 @@
 <script>
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
+import PostDisplayName from '@/components/PostDisplayName'
 import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
 export default {
   name: 'Timeline',
-  components: { ProfileImage, Skeletor },
+  components: { ProfileImage, Skeletor, PostDisplayName },
   data() {
     return {
       posts: [],
