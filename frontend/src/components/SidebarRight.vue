@@ -36,7 +36,6 @@
 
 <script>
 import axios from 'axios'
-import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
 
 export default {

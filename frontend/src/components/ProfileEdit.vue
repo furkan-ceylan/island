@@ -84,7 +84,6 @@ export default {
   },
   data() {
     return {
-      user: [],
       displayName: '',
       description: '',
       birthDate: '',
@@ -94,6 +93,11 @@ export default {
       fillError: false,
       color: 'pink',
     }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
   },
   methods: {
     onFileChange() {
@@ -133,13 +137,13 @@ export default {
 
         const getUser = await axios.get('users/' + currentUser)
 
-        const user = getUser.data
-        this.$emit('updateUser', user)
+        const userData = getUser.data
+        this.$emit('updateUser', userData)
         this.displayName = ''
         this.description = ''
         this.birthDate = ''
         this.hobbies = ''
-        this.openAddTextPost = true
+        this.openEditProfile = false
         this.isLoading = false
       }
     },

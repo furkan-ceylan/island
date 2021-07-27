@@ -75,6 +75,7 @@
           type="text"
           placeholder=" "
           v-model="commentModel"
+          data-test="span"
         />
         <span class="input__label">Comment</span>
       </label>
@@ -82,7 +83,13 @@
         >Please fill in all fields
       </span>
       <div class="options">
-        <button class="btn-addpost" @click="addComment" v-if="!isLoading">
+        <button
+          class="btn-addpost"
+          id="btn-comment"
+          type="button"
+          @click="addComment"
+          v-if="!isLoading"
+        >
           Add
         </button>
         <sync-loader :color="color" v-if="isLoading"></sync-loader>
@@ -139,7 +146,6 @@ import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
 import PostDisplayName from '@/components/PostDisplayName'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
-import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
 
 export default {

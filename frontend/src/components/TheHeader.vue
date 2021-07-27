@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import AddTextPost from '@/components/AddTextPost'
 import AddImagePost from '@/components/AddImagePost'
@@ -80,37 +79,6 @@ export default {
     },
   },
   methods: {
-    onFileChange() {
-      const file = this.$refs.file.files[0]
-      this.file = file
-    },
-    async addImagePost() {
-      this.isLoading = true
-      const currentUser = this.$store.state.user._id
-
-      const formData = new FormData()
-      formData.append('file', this.file)
-
-      if (this.file === '') {
-        this.fillError = true
-      } else {
-        const response = await axios.post('posts/', {
-          isImagePost: true,
-          displayName: this.$store.state.user.displayName,
-          userId: currentUser,
-          file: this.file.name,
-        })
-        try {
-          await axios.post('posts/upload', formData)
-        } catch (err) {
-          console.log(err)
-        }
-
-        this.posts.push(response.data)
-        this.isLoading = false
-        this.openAddImagePost = false
-      }
-    },
     logout() {
       localStorage.clear()
       this.$router.push('/login')

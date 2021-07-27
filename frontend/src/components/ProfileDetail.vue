@@ -103,7 +103,6 @@
 import ProfileUserPosts from '@/components/ProfileUserPosts'
 import ProfileEdit from '@/components/ProfileEdit'
 import axios from 'axios'
-import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
@@ -133,12 +132,12 @@ export default {
     const currentUser = this.$store.state.user._id
 
     const userData = responseUser.data
+    if (currentUser === userData._id) this.currentUser = true
     this.user = userData
     this.followers = userData.followers.length
     this.following = userData.followings.length
     this.isFollowing = userData.followers.includes(currentUser)
     this.isSkeletorLoading = false
-    if (currentUser === userData._id) this.currentUser = true
   },
   methods: {
     async followUser() {

@@ -51,7 +51,6 @@
 import axios from 'axios'
 import ProfileImage from '@/components/ProfileImage'
 import PostDisplayName from '@/components/PostDisplayName'
-import 'vue-skeletor/dist/vue-skeletor.css'
 import { Skeletor } from 'vue-skeletor'
 
 export default {

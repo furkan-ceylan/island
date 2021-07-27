@@ -16,18 +16,19 @@
       >Please fill in all fields</span
     >
     <div class="options">
-      <button class="btn-addpost" type="submit" v-if="!isLoading">
+      <button class="btn-add" id="btn-post" type="submit" v-if="!isLoading">
         Add
       </button>
       <sync-loader :color="color" v-if="isLoading"></sync-loader>
       <button
         @click="openAddPost = !openAddPost"
-        class="btn-addpost"
+        class="btn-add btn-close"
         v-if="!isLoading"
         type="button"
       >
         Close
       </button>
+      {{ postAdded }}
     </div>
   </form>
 </template>
@@ -50,6 +51,7 @@ export default {
       fillError: false,
       isLoading: false,
       color: 'pink',
+      postAdded: '',
     }
   },
   methods: {
@@ -71,8 +73,7 @@ export default {
           userId: currentUser,
           displayName: this.user.displayName,
         })
-
-        this.posts.push(response.data)
+        this.posts.push(response.data.createPost)
         this.textDescription = ''
         this.openAddTextPost = false
         this.isLoading = false
@@ -82,7 +83,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @keyframes slide {
   from {
     background-position: 0 0;
@@ -119,7 +120,7 @@ export default {
   margin-bottom: 1.6rem;
   margin-top: 0;
 }
-.btn-addpost {
+.btn-add {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
@@ -131,16 +132,16 @@ export default {
   transition: all 0.2s;
 }
 
-.btn-addpost:last-child {
+.btn-add:last-child {
   margin: 0;
 }
 
-.btn-addpost:hover {
+.btn-add:hover {
   box-shadow: 0.4rem 0.4rem 0 black;
   transform: translate(-0.4rem, -0.4rem);
 }
 
-.btn-addpost:active {
+.btn-add:active {
   box-shadow: 0 0 0 black;
   transform: translate(0, 0);
 }
