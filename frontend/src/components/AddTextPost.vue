@@ -28,7 +28,6 @@
       >
         Close
       </button>
-      {{ postAdded }}
     </div>
   </form>
 </template>
@@ -36,6 +35,7 @@
 <script>
 import axios from 'axios'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import { createToast } from 'mosha-vue-toastify'
 
 export default {
   name: 'AddTextPost',
@@ -51,7 +51,7 @@ export default {
       fillError: false,
       isLoading: false,
       color: 'pink',
-      postAdded: '',
+      postingSuccess: '',
     }
   },
   methods: {
@@ -75,8 +75,18 @@ export default {
         })
         this.posts.push(response.data.createPost)
         this.textDescription = ''
-        this.openAddTextPost = false
         this.isLoading = false
+        this.postingSuccess = 'Your post was successfully added!'
+        this.openAddPost = false
+        createToast(
+          {
+            title: this.postingSuccess,
+          },
+          {
+            type: 'success',
+            showIcon: true,
+          }
+        )
       }
     },
   },

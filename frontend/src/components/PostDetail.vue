@@ -147,6 +147,7 @@ import ProfileImage from '@/components/ProfileImage'
 import PostDisplayName from '@/components/PostDisplayName'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 import { Skeletor } from 'vue-skeletor'
+import { createToast } from 'mosha-vue-toastify'
 
 export default {
   name: 'PostDetail',
@@ -167,6 +168,7 @@ export default {
       isLoading: false,
       isSkeletorLoading: false,
       color: 'pink',
+      commentingSuccess: '',
     }
   },
   async created() {
@@ -205,6 +207,16 @@ export default {
         this.commentModel = ''
         this.isLoading = false
         this.openAddComment = false
+        this.commentingSuccess = 'Your comment was successfully added!'
+        createToast(
+          {
+            title: this.commentingSuccess,
+          },
+          {
+            type: 'success',
+            showIcon: true,
+          }
+        )
       }
     },
     async addImageComment() {
@@ -231,6 +243,16 @@ export default {
         }
         this.isLoading = false
         this.openAddImageComment = false
+        this.commentingSuccess = 'Your comment was successfully added!'
+        createToast(
+          {
+            title: this.commentingSuccess,
+          },
+          {
+            type: 'success',
+            showIcon: true,
+          }
+        )
       }
     },
   },

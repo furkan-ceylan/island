@@ -76,6 +76,7 @@
 <script>
 import axios from 'axios'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import { createToast } from 'mosha-vue-toastify'
 
 export default {
   name: 'ProfileEdit',
@@ -92,6 +93,7 @@ export default {
       isLoading: false,
       fillError: false,
       color: 'pink',
+      editingSuccess: '',
     }
   },
   computed: {
@@ -145,6 +147,16 @@ export default {
         this.hobbies = ''
         this.openEditProfile = false
         this.isLoading = false
+        this.editingSuccess = 'Your profile was successfully edited!'
+        createToast(
+          {
+            title: this.editingSuccess,
+          },
+          {
+            type: 'success',
+            showIcon: true,
+          }
+        )
       }
     },
   },

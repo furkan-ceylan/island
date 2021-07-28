@@ -32,7 +32,7 @@
       >Please fill in all fields</span
     >
     <div class="options">
-      <button type="submit" class="btn-add" v-if="!isLoading">
+      <button type="submit" id="btn-post" class="btn-add" v-if="!isLoading">
         Add
       </button>
       <sync-loader :color="color" v-if="isLoading"></sync-loader>
@@ -51,6 +51,7 @@
 <script>
 import axios from 'axios'
 import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
+import { createToast } from 'mosha-vue-toastify'
 
 export default {
   name: 'AddImagePost',
@@ -67,6 +68,7 @@ export default {
       openAddPost: true,
       textDescription: '',
       fillError: false,
+      postingSuccess: '',
     }
   },
   methods: {
@@ -101,9 +103,19 @@ export default {
         }
 
         this.posts.push(response.data)
-        this.isLoading = false
         this.textDescription = ''
+        this.isLoading = false
         this.openAddPost = false
+        this.postingSuccess = 'Your post was successfully added!'
+        createToast(
+          {
+            title: this.postingSuccess,
+          },
+          {
+            type: 'success',
+            showIcon: true,
+          }
+        )
       }
     },
   },
