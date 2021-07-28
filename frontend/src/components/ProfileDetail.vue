@@ -47,7 +47,7 @@
                 <div class="user-functions" v-if="!currentUser">
                   <div class="user-top__birth" v-if="!isFollowing">
                     <div class="add-button-wrapper" v-if="!followLoading">
-                      <button class="btn btn-imageadd" @click="followUser">
+                      <button class="btn" id="btnFollow" @click="followUser">
                         Follow
                       </button>
                     </div>
@@ -57,7 +57,11 @@
                   </div>
                   <div class="user-top__birth" v-else>
                     <div class="add-button-wrapper" v-if="!followLoading">
-                      <button class="btn btn-unfollow" @click="unFollowUser">
+                      <button
+                        class="btn btn-unfollow"
+                        id="btnUnfollow"
+                        @click="unFollowUser"
+                      >
                         Unfollow
                       </button>
                     </div>
@@ -68,7 +72,7 @@
                 </div>
                 <div class="user-edit-profile" v-else>
                   <button
-                    class="btn btn-imageadd edit-profile"
+                    class="btn edit-profile"
                     @click="openEditProfile = !openEditProfile"
                   >
                     Edit Profile
@@ -114,9 +118,9 @@ export default {
     return {
       user: [],
       color: 'pink',
-      followers: '',
-      following: '',
-      isFollowing: true,
+      followers: 0,
+      following: 0,
+      isFollowing: false,
       isSkeletorLoading: false,
       followLoading: false,
       currentUser: false,
@@ -142,6 +146,7 @@ export default {
   methods: {
     async followUser() {
       this.followLoading = true
+      this.followers++
 
       const currentUser = this.$store.state.user._id
       const responseUser = await axios.get('users/' + this.id)
@@ -152,12 +157,12 @@ export default {
         userId: currentUser,
       })
       this.followLoading = false
-      this.isFollowing = !profileUser.user.followers.includes(currentUser)
-      this.followers++
+      this.isFollowing = !profileUser.followers.includes(currentUser)
       this.following = userData.followings.length
     },
     async unFollowUser() {
       this.followLoading = true
+      this.followers--
 
       const currentUser = this.$store.state.user._id
       const responseUser = await axios.get('users/' + this.id)
@@ -171,8 +176,7 @@ export default {
         }
       )
       this.followLoading = false
-      this.isFollowing = profileUser.user.followers.includes(currentUser)
-      this.followers--
+      this.isFollowing = profileUser.followers.includes(currentUser)
       this.following = userData.followings.length
     },
     updateUser(user) {
@@ -274,14 +278,14 @@ export default {
   margin-bottom: 1rem;
 }
 
-.btn-imageadd {
+.btn {
   transform: translate(0, 3px);
   transition: 0.4s;
   background-color: var(--green);
   margin-left: 2rem;
 }
 
-.btn-imageadd:hover {
+.btn:hover {
   background-color: #6dc271;
   transition: 0.4s;
   box-shadow: 0px 15px 15px -5px rgba(0, 0, 0, 0.2);
@@ -307,6 +311,6 @@ export default {
 }
 
 .follow-loader {
-  margin-left: 4rem;
+  margin-left: 3rem;
 }
 </style>

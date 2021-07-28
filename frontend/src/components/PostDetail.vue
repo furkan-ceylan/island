@@ -75,7 +75,7 @@
           type="text"
           placeholder=" "
           v-model="commentModel"
-          data-test="span"
+          data-test="comment"
         />
         <span class="input__label">Comment</span>
       </label>
