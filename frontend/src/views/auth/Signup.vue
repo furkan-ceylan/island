@@ -33,44 +33,6 @@
         />
         <span class="input__label">Display Name</span>
       </label>
-      <!-- <label class="input">
-        <input
-          class="input__field"
-          type="date"
-          placeholder=" "
-          v-model="birthDate"
-        />
-        <span class="input__label">Birth Date</span>
-      </label>
-      <label class="input">
-        <textarea
-          class="input__field"
-          type="text"
-          placeholder=" "
-          v-model="description"
-        />
-        <span class="input__label">About You</span>
-      </label>
-      <label class="input">
-        <input
-          class="input__field"
-          type="text"
-          placeholder=" "
-          v-model="hobbies"
-        />
-        <span class="input__label">Hobbies</span>
-      </label>
-      <label class="input">
-        <input
-          class="input__field"
-          type="file"
-          @change="onFileChange"
-          ref="file"
-          name="file"
-          accept="image/*"
-        />
-        <span class="input__label">Upload a Profile Picture</span>
-      </label> -->
       <p class="warn" v-if="fillError">
         Please fill in all fields
       </p>
@@ -78,9 +40,12 @@
         Please enter a valid email address
       </p>
       <div class="button-group">
-        <button @click="signUp">
-          Sign Up
-        </button>
+        <div class="signup-button-loader" v-if="!signupLoading">
+          <button @click="signUp">Sign Up</button>
+        </div>
+        <div class="signup-button-loader" v-else>
+          <SyncLoader class="signup-loader" :color="color" />
+        </div>
       </div>
     </div>
   </article>
@@ -88,9 +53,11 @@
 
 <script>
 import axios from 'axios'
+import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 export default {
   name: 'Signup',
+  components: { SyncLoader },
   data() {
     return {
       email: '',
@@ -98,6 +65,8 @@ export default {
       displayName: '',
       fillError: false,
       emailError: false,
+      signupLoading: false,
+      color: 'pink',
     }
   },
   created() {
@@ -114,12 +83,10 @@ export default {
       }
     },
     async signUp() {
-      if (
-        this.email === '' ||
-        this.password === '' ||
-        this.displayName === ''
-      ) {
+      this.signupLoading = true
+      if (!this.email || !this.password || !this.displayName) {
         this.fillError = true
+        this.signupLoading = false
       } else {
         this.fillError = false
 
@@ -133,6 +100,7 @@ export default {
         } catch (err) {
           console.log(err)
         }
+        this.signupLoading = false
       }
     },
   },

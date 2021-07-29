@@ -25,15 +25,23 @@
       </label>
       <div class="button-group">
         <div class="button-group-left">
-          <button @click="login">Login</button>
-          <button type="reset">Forgot Password?</button>
+          <div class="login-button-loader" v-if="!loginLoading">
+            <button @click="login">Login</button>
+          </div>
+          <div class="login-button-loader" v-else>
+            <SyncLoader class="login-loader" :color="color" />
+          </div>
+          <button type="reset" v-if="!loginLoading">Forgot Password?</button>
         </div>
-        <div class="button-group-right">
+        <div class="button-group-right" v-if="!loginLoading">
           <router-link to="/signup"> <button>Sign Up</button></router-link>
         </div>
       </div>
       <p class="warn" v-if="error">
         {{ error }}
+      </p>
+      <p class="warn" v-if="fillError">
+        Please fill in all fields
       </p>
     </div>
   </article>
@@ -41,14 +49,19 @@
 
 <script>
 import axios from 'axios'
+import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 export default {
   name: 'Login',
+  components: { SyncLoader },
   data() {
     return {
       email: '',
       password: '',
       error: '',
+      color: 'pink',
+      loginLoading: false,
+      fillError: false,
     }
   },
   created() {
@@ -58,9 +71,13 @@ export default {
   },
   methods: {
     async login() {
-      if (this.email === '' || this.password === '') {
+      this.loginLoading = true
+
+      if (!this.email || !this.password) {
         this.fillError = true
+        this.loginLoading = false
       } else {
+        this.fillError = false
         const data = {
           email: this.email,
           password: this.password,
@@ -78,6 +95,7 @@ export default {
             this.password = ''
           }
         )
+        this.loginLoading = false
       }
     },
   },
@@ -196,5 +214,13 @@ button + button {
 .warn {
   color: var(--red);
   margin-top: 1rem;
+}
+
+.button-group-left {
+  display: flex;
+}
+
+.login-button-loader {
+  margin-right: 2em;
 }
 </style>
