@@ -73,7 +73,6 @@ export default {
   data() {
     return {
       posts: [],
-      user: [],
       profilePicture: '',
       userId: '',
       isSkeletorLoading: false,
@@ -90,8 +89,6 @@ export default {
     const responsePosts = await axios.get('posts/' + this.id + '/posts')
     this.posts = responsePosts.data
 
-    const responseUser = await axios.get('users/' + this.id)
-    this.user = responseUser.data
     this.isSkeletorLoading = false
   },
   async mounted() {
