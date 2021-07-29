@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <TheHeader />
+    <TheHeader :currentUser="user._id" />
     <div class="home__content">
       <div class="home__left-sidebar">
         <SidebarLeft :currentUser="user._id" />

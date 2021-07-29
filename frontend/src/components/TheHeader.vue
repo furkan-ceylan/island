@@ -64,6 +64,7 @@ export default {
     AddTextPost,
     AddImagePost,
   },
+  props: ['currentUser'],
   data() {
     return {
       posts: [],
@@ -71,7 +72,7 @@ export default {
       openAddTextPost: false,
       username: '',
       profilePicture: '',
-      currentUser: '',
+      id: '',
     }
   },
   computed: {
@@ -85,9 +86,8 @@ export default {
       this.$router.push('/login')
     },
   },
-  async created() {
+  async mounted() {
     this.$store.dispatch('fetchUser')
-    this.currentUser = this.$store.state.user._id
   },
 }
 </script>

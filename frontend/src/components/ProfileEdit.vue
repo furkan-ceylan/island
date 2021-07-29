@@ -96,19 +96,14 @@ export default {
       editingSuccess: '',
     }
   },
-  computed: {
-    user() {
-      return this.$store.state.user
-    },
-  },
+  props: ['id'],
   methods: {
     onFileChange() {
       const file = this.$refs.file.files[0]
       this.file = file
     },
     async editProfile() {
-      this.$store.dispatch('fetchUser')
-      const currentUser = this.$store.state.user._id
+      const currentUser = this.id
 
       const formData = new FormData()
       formData.append('file', this.file)

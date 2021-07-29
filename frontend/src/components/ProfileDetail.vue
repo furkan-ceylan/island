@@ -98,7 +98,11 @@
         <h3>Posts</h3>
         <ProfileUserPosts :id="id" />
       </div>
-      <ProfileEdit @updateUser="updateUser($event)" v-if="openEditProfile" />
+      <ProfileEdit
+        @updateUser="updateUser($event)"
+        v-if="openEditProfile"
+        :id="id"
+      />
     </div>
   </div>
 </template>
