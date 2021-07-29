@@ -58,6 +58,7 @@ export default {
   components: {
     SyncLoader,
   },
+  props: ['id'],
   data() {
     return {
       posts: [],
@@ -77,24 +78,20 @@ export default {
       this.file = file
     },
     async addImagePost() {
-      this.$store.dispatch('fetchUser')
-      const currentUser = this.$store.state.user._id
-      this.user = this.$store.state.user
-
-      const formData = new FormData()
-      formData.append('file', this.file)
-
-      if (this.file === null || this.textDescription === '') {
+      if (!this.file || !this.textDescription) {
         this.fillError = true
       } else {
         this.isLoading = true
+        this.postingSuccess = 'Your post was successfully added!'
+
+        const formData = new FormData()
+        formData.append('file', this.file)
 
         const response = await axios.post('posts/', {
           isImagePost: true,
-          displayName: this.user.displayName,
-          userId: currentUser,
-          file: this.file.name,
           description: this.textDescription,
+          file: this.file.name,
+          userId: this.id,
         })
         try {
           await axios.post('posts/upload', formData)
@@ -102,11 +99,9 @@ export default {
           console.log(err)
         }
 
-        this.posts.push(response.data)
-        this.textDescription = ''
+        // this.posts.push(response.data)
         this.isLoading = false
         this.openAddPost = false
-        this.postingSuccess = 'Your post was successfully added!'
         createToast(
           {
             title: this.postingSuccess,

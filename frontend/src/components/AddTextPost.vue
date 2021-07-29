@@ -42,6 +42,7 @@ export default {
   components: {
     SyncLoader,
   },
+  props: ['id'],
   data() {
     return {
       posts: [],
@@ -56,27 +57,19 @@ export default {
   },
   methods: {
     async addTextPost() {
-      this.$store.dispatch('fetchUser')
-      const currentUser = this.$store.state.user._id
-
-      if (this.textDescription === '') {
+      if (!this.textDescription) {
         this.fillError = true
       } else {
         this.isLoading = true
-
-        const responseUsers = await axios.get('users/' + currentUser)
-        this.user = responseUsers.data
+        this.postingSuccess = 'Your post was successfully added!'
 
         const response = await axios.post('posts/', {
           description: this.textDescription,
           isTextPost: true,
-          userId: currentUser,
-          displayName: this.user.displayName,
+          userId: this.id,
         })
-        this.posts.push(response.data.createPost)
-        this.textDescription = ''
+        // this.posts.push(response.data.createPost)
         this.isLoading = false
-        this.postingSuccess = 'Your post was successfully added!'
         this.openAddPost = false
         createToast(
           {

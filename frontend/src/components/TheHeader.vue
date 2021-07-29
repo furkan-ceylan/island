@@ -47,8 +47,8 @@
         </button>
       </div>
     </div>
-    <AddTextPost v-if="openAddTextPost" />
-    <AddImagePost v-if="openAddImagePost" />
+    <AddTextPost v-if="openAddTextPost" :id="currentUser" />
+    <AddImagePost v-if="openAddImagePost" :id="currentUser" />
   </header>
 </template>
 
@@ -71,6 +71,7 @@ export default {
       openAddTextPost: false,
       username: '',
       profilePicture: '',
+      currentUser: '',
     }
   },
   computed: {
@@ -86,6 +87,7 @@ export default {
   },
   async created() {
     this.$store.dispatch('fetchUser')
+    this.currentUser = this.$store.state.user._id
   },
 }
 </script>
