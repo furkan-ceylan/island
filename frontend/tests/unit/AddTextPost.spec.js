@@ -4,24 +4,26 @@ import AddTextPost from '@/components/AddTextPost.vue'
 describe('AddTextPost.vue', () => {
   it('should add a post', async () => {
     const wrapper = mount(AddTextPost)
+    await wrapper.setData({
+      textDescription: 'post',
+    })
     const button = wrapper.find('#btn-post')
-    await button.trigger('submit')
-    expect(wrapper.vm.postingSuccess).toContain(
-      'Your post was successfully added!'
-    )
+    await button.trigger('submit.prevent')
+    expect(wrapper.vm.postingSuccess).toBe('Your post was successfully added!')
   })
 
   it('should stop the loader after adding a post', async () => {
     const wrapper = mount(AddTextPost)
     const button = wrapper.find('#btn-post')
-    await button.trigger('submit')
-    expect(wrapper.vm.isLoading).toEqual(false)
+    await button.trigger('submit.prevent')
+    expect(wrapper.vm.isLoading).toBe(false)
   })
 
-  it('should close add text post pop up after adding a post', async () => {
+  it('should fill error if user does not enter a post description', async () => {
     const wrapper = mount(AddTextPost)
     const button = wrapper.find('#btn-post')
-    await button.trigger('submit')
-    expect(wrapper.vm.openAddPost).toBe(false)
+    await button.trigger('submit.prevent')
+    expect(wrapper.vm.textDescription).toBe('')
+    expect(wrapper.vm.fillError).toBe(true)
   })
 })
