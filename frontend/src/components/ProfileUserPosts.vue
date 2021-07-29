@@ -29,9 +29,22 @@
         }"
       >
         <div class="text-post">
-          <ProfileImage :id="post.userId" class="image-post__avatar" />
+          <img
+            v-if="user.profilePicture"
+            class="image-post__avatar"
+            :src="`http://localhost:3000/uploads/user/${user.profilePicture}`"
+          />
+          <img
+            v-else
+            class="image-post__avatar"
+            src="../assets/defaultProfile.png"
+          />
           <div class="text-post__user-post">
-            <PostDisplayName :id="post.userId" />
+            <div class="user-post-name">
+              <a>
+                {{ user.displayName }}
+              </a>
+            </div>
             <p class="text-post__content">
               {{ post.description }}
             </p>
@@ -49,16 +62,12 @@
 
 <script>
 import axios from 'axios'
-import ProfileImage from '@/components/ProfileImage'
-import PostDisplayName from '@/components/PostDisplayName'
 import { Skeletor } from 'vue-skeletor'
 
 export default {
   name: 'ProfileUserPosts',
   components: {
-    ProfileImage,
     Skeletor,
-    PostDisplayName,
   },
   props: ['id'],
   data() {
@@ -70,6 +79,11 @@ export default {
       isSkeletorLoading: false,
     }
   },
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
+  },
   async created() {
     this.isSkeletorLoading = true
 
@@ -79,6 +93,9 @@ export default {
     const responseUser = await axios.get('users/' + this.id)
     this.user = responseUser.data
     this.isSkeletorLoading = false
+  },
+  async mounted() {
+    this.$store.dispatch('fetchUser')
   },
 }
 </script>
