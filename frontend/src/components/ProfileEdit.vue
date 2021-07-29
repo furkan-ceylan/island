@@ -136,6 +136,7 @@ export default {
 
         const userData = getUser.data
         this.$emit('updateUser', userData)
+        this.$store.dispatch('fetchUser')
         this.displayName = ''
         this.description = ''
         this.birthDate = ''
