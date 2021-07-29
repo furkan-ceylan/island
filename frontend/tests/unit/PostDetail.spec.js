@@ -18,13 +18,12 @@ describe('PostDetail', () => {
   })
 
   it('should add a comment', async () => {
-    const wrapper = mount(PostDetail, {
-        data() {
-          return {
-            commentModel: 'Test Comment'
-          }
-        }
-      })
+    const wrapper = mount(PostDetail)
+    await wrapper.setData({
+      openAddComment: true,
+    })
+    const input = wrapper.find('[data-test="comment"]')
+    await input.setValue('Test Comment')
     const button = wrapper.find('button')
     await button.trigger('click')
     expect(wrapper.vm.commentModel).toBe('Test Comment')
