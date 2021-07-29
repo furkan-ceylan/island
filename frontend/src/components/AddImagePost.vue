@@ -1,7 +1,7 @@
 <template>
   <form
     class="add-post"
-    @submit.prevent="addImagePost"
+    @submit="addImagePost"
     enctype="multipart/form-data"
     v-if="openAddPost"
   >

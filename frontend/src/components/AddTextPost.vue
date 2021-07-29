@@ -1,5 +1,5 @@
 <template>
-  <form class="add-post" @submit.prevent="addTextPost" v-if="openAddPost">
+  <form class="add-post" @submit="addTextPost" v-if="openAddPost">
     <h2 class="add-post__title">
       Add a Text Post
     </h2>
