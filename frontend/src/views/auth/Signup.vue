@@ -40,11 +40,18 @@
         Please enter a valid email address
       </p>
       <div class="button-group">
-        <div class="signup-button-loader" v-if="!signupLoading">
-          <button @click="signUp">Sign Up</button>
+        <div class="button-group-left">
+          <div class="signup-button-loader" v-if="!signupLoading">
+            <button @click="signUp">Sign Up</button>
+          </div>
+          <div class="signup-button-loader" v-else>
+            <SyncLoader class="signup-loader" :color="color" />
+          </div>
         </div>
-        <div class="signup-button-loader" v-else>
-          <SyncLoader class="signup-loader" :color="color" />
+        <div class="button-group-right">
+          <router-link to="/login" v-if="!signupLoading">
+            <button>Already Signed Up?</button></router-link
+          >
         </div>
       </div>
     </div>
