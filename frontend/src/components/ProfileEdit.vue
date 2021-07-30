@@ -97,6 +97,18 @@ export default {
     }
   },
   props: ['id'],
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
+  },
+  async mounted() {
+    this.$store.dispatch('fetchUser')
+    this.displayName = this.user.displayName
+    this.description = this.user.description
+    this.birthDate = this.user.birthDate
+    this.hobbies = this.user.hobbies
+  },
   methods: {
     onFileChange() {
       const file = this.$refs.file.files[0]
@@ -171,9 +183,9 @@ export default {
 }
 
 .edit-profile {
-  position: absolute;
-  left: 30%;
-  top: 40%;
+  position: fixed;
+  left: 45%;
+  top: 50%;
   transform: translate(-50%, -50%);
 
   &__title {
