@@ -13,6 +13,17 @@ export default createStore({
       })
       commit('SET_USER', response.data.user)
     },
+    async refreshToken() {
+      await axios
+        .get('auth/token')
+        .then((response) => {
+          localStorage.setItem('token', response.data.refreshToken)
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    },
   },
   mutations: {
     SET_USER(state, user) {
