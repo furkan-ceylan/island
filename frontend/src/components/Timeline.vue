@@ -61,7 +61,6 @@ export default {
   components: { ProfileImage, Skeletor, PostDisplayName },
   data() {
     return {
-      posts: [],
       description: '',
       img: '',
       displayName: '',
@@ -70,22 +69,15 @@ export default {
       isLoading: false,
     }
   },
-  async created() {
+  async mounted() {
     this.isLoading = true
-
-    const responseId = await axios.get('auth/user', {
-      headers: { token: localStorage.getItem('token') },
-    })
-
-    const currentUser = responseId.data.user._id
-
-    const responsePost = await axios.get('posts/timeline/' + currentUser)
-
-    this.posts = responsePost.data.sort((p1, p2) => {
-      return new Date(p2.createdAt) - new Date(p1.createdAt)
-    })
-
+    this.$store.dispatch('fetchPosts')
     this.isLoading = false
+  },
+  computed: {
+    posts() {
+      return this.$store.state.posts
+    },
   },
 }
 </script>
