@@ -76,11 +76,6 @@ export default {
       color: 'pink',
     }
   },
-  created() {
-    if (localStorage.getItem('token')) {
-      this.$router.push('/')
-    }
-  },
   methods: {
     validateEmail() {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {

@@ -64,11 +64,6 @@ export default {
       fillError: false,
     }
   },
-  created() {
-    if (localStorage.getItem('token')) {
-      this.$router.push('/')
-    }
-  },
   methods: {
     async login() {
       this.loginLoading = true
