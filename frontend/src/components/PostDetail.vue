@@ -338,9 +338,9 @@ export default {
 }
 
 .add-post {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 25%;
+  top: 40%;
   transform: translate(-50%, -50%);
   width: auto;
   display: inline-flex;
