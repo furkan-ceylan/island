@@ -90,7 +90,7 @@ router.post('/token', async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '1d' }
     )
-    res.json({ token: accessToken })
+    res.status(200).json({ token: accessToken })
   })
 })
 
@@ -138,7 +138,7 @@ router.get('/user', async (req, res) => {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
     if (err) {
       return res.status(401).json({
-        title: 'unauthorized',
+        message: 'unauthorized',
       })
     }
 
