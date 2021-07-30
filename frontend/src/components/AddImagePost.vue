@@ -1,7 +1,7 @@
 <template>
   <form
     class="add-post"
-    @submit="addImagePost"
+    @submit.prevent="addImagePost"
     enctype="multipart/form-data"
     v-if="openAddPost"
   >
@@ -87,19 +87,16 @@ export default {
         const formData = new FormData()
         formData.append('file', this.file)
 
-        const response = await axios.post('posts/', {
-          isImagePost: true,
+        const post = {
           description: this.textDescription,
-          file: this.file.name,
+          isImagePost: true,
           userId: this.id,
-        })
-        try {
-          await axios.post('posts/upload', formData)
-        } catch (err) {
-          console.log(err)
+          file: this.file.name,
         }
 
-        // this.posts.push(response.data)
+        this.$store.dispatch('addImagePost', { post, formData })
+        this.$store.dispatch('fetchPosts')
+
         this.isLoading = false
         this.openAddPost = false
         createToast(

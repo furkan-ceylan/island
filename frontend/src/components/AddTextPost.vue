@@ -1,5 +1,5 @@
 <template>
-  <form class="add-post" @submit="addTextPost" v-if="openAddPost">
+  <form class="add-post" @submit.prevent="addTextPost" v-if="openAddPost">
     <h2 class="add-post__title">
       Add a Text Post
     </h2>
@@ -63,12 +63,15 @@ export default {
         this.isLoading = true
         this.postingSuccess = 'Your post was successfully added!'
 
-        const response = await axios.post('posts/', {
+        const post = {
           description: this.textDescription,
           isTextPost: true,
           userId: this.id,
-        })
-        // this.posts.push(response.data.createPost)
+        }
+
+        this.$store.dispatch('addPost', post)
+        this.$store.dispatch('fetchPosts')
+
         this.isLoading = false
         this.openAddPost = false
         createToast(
