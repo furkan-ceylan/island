@@ -28,7 +28,7 @@
           },
         }"
       >
-        <div class="text-post">
+        <div class="text-post" v-if="currentUser">
           <img
             v-if="user.profilePicture"
             class="image-post__avatar"
@@ -55,6 +55,20 @@
             />
           </div>
         </div>
+        <div class="text-post" v-else>
+          <ProfileImage :id="post.userId" class="image-post__avatar" />
+          <div class="text-post__user-post">
+            <PostDisplayName :id="post.userId" />
+            <p class="text-post__content">
+              {{ post.description }}
+            </p>
+            <img
+              class="image-post__img"
+              :src="`http://localhost:3000/uploads/${post.file}`"
+              v-if="post.file"
+            />
+          </div>
+        </div>
       </router-link>
     </div>
   </div>
@@ -63,11 +77,15 @@
 <script>
 import axios from 'axios'
 import { Skeletor } from 'vue-skeletor'
+import ProfileImage from '@/components/ProfileImage'
+import PostDisplayName from '@/components/PostDisplayName'
 
 export default {
   name: 'ProfileUserPosts',
   components: {
     Skeletor,
+    PostDisplayName,
+    ProfileImage,
   },
   props: ['id'],
   data() {
@@ -76,6 +94,7 @@ export default {
       profilePicture: '',
       userId: '',
       isSkeletorLoading: false,
+      currentUser: false,
     }
   },
   computed: {
@@ -89,6 +108,8 @@ export default {
     const responsePosts = await axios.get('posts/' + this.id + '/posts')
     this.posts = responsePosts.data
 
+    //is current user
+    if (this.id === this.user._id) this.currentUser = true
     this.isSkeletorLoading = false
   },
   async mounted() {
