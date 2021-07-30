@@ -9,14 +9,15 @@ const sanitize = require('mongo-sanitize')
 router.post('/', async (req, res) => {
   const sanitizedDesc = sanitize(req.sanitize(req.body.description))
   const sanitizedisText = sanitize(req.sanitize(req.body.isTextPost))
+  const sanitizedisImage = sanitize(req.sanitize(req.body.isImagePost))
   const sanitizedUserId = sanitize(req.sanitize(req.body.userId))
-  const sanitizedDisplayName = sanitize(req.sanitize(req.body.displayName))
   const sanitizedFile = sanitize(req.sanitize(req.body.file))
+
   const newPost = await new Post({
     description: sanitizedDesc,
     isTextPost: sanitizedisText,
+    isImagePost: sanitizedisImage,
     userId: sanitizedUserId,
-    displayName: sanitizedDisplayName,
     file: sanitizedFile,
   })
 
